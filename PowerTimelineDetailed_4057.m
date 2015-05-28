@@ -18,6 +18,10 @@ load('TOWDRAG')
 D_wtelem1 = Dnew1+mean(abs(TOWDRAG(21).mn_dragN));
 D_wtelem2 = Dnew2+mean(abs(TOWDRAG(21).mn_dragN));
 
+%% Buoyancy
+% Estimate from Bob Bowman is net 156.8 N
+buoy = 156.8;
+
 %% create timeline -- based on cues from DTAG
 Timeline = [0; ... % prior to orion arrival on scene
     8571;... % orion on scene, removed 104 m, added telemetry
@@ -26,20 +30,21 @@ Timeline = [0; ... % prior to orion arrival on scene
     13270]; % tag off
 
 %% interpolate points in timeline for plotting
-Tplot(1,:) = [Timeline(1) Dtot]; % baseline
-Tplot(2,:) = [Timeline(2) Dtot]; 
-Tplot(3,:) = [Timeline(2) Dnew1]; % decrease @ orion on scene disentangling
-Tplot(4,:) = [Timeline(2)+100 Dnew1]; 
-Tplot(5,:) = [Timeline(2)+100 D_wtelem1]; % added telemetry buoy
-Tplot(6,:) = [Timeline(3) D_wtelem1]; 
-Tplot(7,:) = [Timeline(3) Dnew2]; % removed line
-Tplot(8,:) = [Timeline(3)+100 Dnew2]; 
-Tplot(9,:) = [Timeline(3)+100 D_wtelem2]; 
-Tplot(10,:) = [Timeline(4) D_wtelem2]; 
-Tplot(11,:) = [Timeline(5) D_wtelem2];
+Tplot(1,:) = [Timeline(1) Dtot 0]; % baseline
+Tplot(2,:) = [Timeline(2) Dtot 0]; 
+Tplot(3,:) = [Timeline(2) Dnew1 0]; % decrease @ orion on scene disentangling
+Tplot(4,:) = [Timeline(2)+100 Dnew1 0]; 
+Tplot(5,:) = [Timeline(2)+100 D_wtelem1 buoy]; % added telemetry buoy
+Tplot(6,:) = [Timeline(3) D_wtelem1 buoy]; 
+Tplot(7,:) = [Timeline(3) Dnew2 0]; % removed line
+Tplot(8,:) = [Timeline(3)+100 Dnew2 0]; 
+Tplot(9,:) = [Timeline(3)+100 D_wtelem2 buoy]; 
+Tplot(10,:) = [Timeline(4) D_wtelem2 buoy]; 
+Tplot(11,:) = [Timeline(5) D_wtelem2 buoy];
 
 figure(2); clf; hold on
 plot(Tplot(:,1),Tplot(:,2))
+plot(Tplot(:,1),Tplot(:,3),':')
 
 %% load in DTAG and plot
 load_eg047a
@@ -47,7 +52,7 @@ load_eg047a
 t = (1:length(eg047a.p))/fs;
 plot(t,-eg047a.p,'k') % plot depth
 
-xlabel('Time since tag on (s)'); ylabel('Depth                 Estimated Drag (N)')
+xlabel('Time since tag on (s)'); ylabel('        Depth (m)            Estimated Drag and Buoyancy (N)')
 
 %% add cues
 % known time cues
