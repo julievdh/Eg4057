@@ -47,7 +47,7 @@ load_eg047a
 t = (1:length(eg047a.p))/fs;
 plot(t,-eg047a.p,'k') % plot depth
 
-xlabel('Time since tag on (s)'); ylabel('Depth                 Estimated Drag (N)')
+xlabel('Time since tag on (s)'); ylabel({'Depth';'Estimated Drag (N)'})
 
 %% add cues
 % known time cues
@@ -67,11 +67,6 @@ FWC_1251_cue = etime(FWC_1251,tagstart);
 orion_cue = etime(orion,tagstart);
 buoyon_cue = etime(buoyon,tagstart);
 tagoff_cue = etime(tagoff,tagstart);
-
-plot([tagon_cue tagon_cue],[-40 140],'k--')
-plot([orion_cue orion_cue],[-40 140],'r-')
-plot([buoyon_cue buoyon_cue],[-40 140],'r-')
-plot([tagoff_cue tagoff_cue],[-40 140],'k--')
 
 
 
