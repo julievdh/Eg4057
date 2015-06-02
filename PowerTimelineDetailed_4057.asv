@@ -1,6 +1,8 @@
 % Power Timeline Detailed
 % Detailed timeline of entanglement/disentanglement of EG 4057
- 
+
+warning off
+
 % gear on animal = 115 m estimate
 Dtot = EstDrag(155,0);
 
@@ -43,8 +45,8 @@ Tplot(10,:) = [Timeline(4) D_wtelem2 buoy];
 Tplot(11,:) = [Timeline(5) D_wtelem2 buoy];
 
 figure(2); clf; hold on
-plot(Tplot(:,1),Tplot(:,2))
-plot(Tplot(:,1),Tplot(:,3),':')
+plot(Tplot(:,1)/3600,Tplot(:,2))
+plot(Tplot(:,1)/3600,Tplot(:,3),':')
 
 %% load in DTAG and plot
 load_eg047a
@@ -80,4 +82,14 @@ plot([tagoff_cue/3600 tagoff_cue/3600],[-40 140],'k--')
 
 adjustfigurefont
 
-
+%% try with plotyy
+figure(5); clf; hold on
+set(gcf,'position',[120 240 915 420])
+[hAx,hLine1,hLine2] = plotyy(t/3600,-eg047a.p,[Tplot(:,1)/3600 Tplot(:,1)/3600],[Tplot(:,2),Tplot(:,3)]);
+set(hAx(1),'ylim',[-32 30],'ytick',[-30:5:0],...
+    'yticklabels',{'30','25','20','15','10','5','0'})
+set(hAx(2),'ylim',[-181 170],'ytick',[0:40:160])
+xlabel('Time since tag on (hours)'); 
+ylabel(hAx(1),'Depth (m)                       ') % left y-axis
+ylabel(hAx(2),'                             Force (N)') % right y-axis
+adjustfigurefont

@@ -80,4 +80,11 @@ plot([tagoff_cue/3600 tagoff_cue/3600],[-40 140],'k--')
 
 adjustfigurefont
 
-
+%% try with plotyy
+figure(5); clf; hold on
+[hAx,hLine1,hLine2] = plotyy(t/3600,-eg047a.p,[Tplot(:,1)/3600 Tplot(:,1)/3600],[Tplot(:,2),Tplot(:,3)]);
+set(hAx(1),'ylim',[-32 30],'ytick',[-30:5:0]); set(hAx(2),'ylim',[-181 170])
+xlabel('Time since tag on (hours)'); 
+ylabel(hAx(1),'Depth (m)                       ') % left y-axis
+ylabel(hAx(2),'                             Force (N)') % right y-axis
+adjustfigurefont

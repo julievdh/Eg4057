@@ -20,6 +20,7 @@ buoy2 = (121-6.8)*4.448;
 buoys = buoy1+buoy2;
 
 %% create timeline -- based on cues from DTAG
+load_rw015a
 Timeline = rw015a.p1; % entangled period
 
 %% interpolate points in timeline for plotting
@@ -50,6 +51,10 @@ plot([rw015a.p1(2) rw015a.p1(2)],[-40 140],'k--')
 ylim([-40 1100])
 
 %% plot on separate axes (depth, forces)
-figure(5)
-[hAx,hLine1,hLine2] = plotyy(t,-rw015a.p,[Tplot(:,1) Tplot(:,1)],[Tplot(:,2),Tplot(:,3)]);
-set(hAx(1),'ylim',[-25 30]); set(hAx(2),'ylim',[-1200 1200])
+figure(5); set(gcf,'position',[120 240 915 420])
+[hAx,hLine1,hLine2] = plotyy(t/3600,-rw015a.p,[Tplot(:,1)/3600 Tplot(:,1)/3600],[Tplot(:,2),Tplot(:,3)]);
+set(hAx(1),'ylim',[-25 30],'ytick',[-25:5:0]); set(hAx(2),'ylim',[-1000 1200])
+xlabel('Time since tag on (hours)'); 
+ylabel(hAx(1),'Depth (m)                       ') % left y-axis
+ylabel(hAx(2),'                             Force (N)') % right y-axis
+adjustfigurefont
