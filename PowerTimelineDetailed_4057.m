@@ -43,14 +43,14 @@ Tplot(10,:) = [Timeline(4) D_wtelem2 buoy];
 Tplot(11,:) = [Timeline(5) D_wtelem2 buoy];
 
 figure(2); clf; hold on
-plot(Tplot(:,1),Tplot(:,2))
-plot(Tplot(:,1),Tplot(:,3),':')
+plot(Tplot(:,1)/3600,Tplot(:,2))
+plot(Tplot(:,1)/3600,Tplot(:,3),':')
 
 %% load in DTAG and plot
 load_eg047a
 
 t = (1:length(eg047a.p))/fs;
-plot(t,-eg047a.p,'k') % plot depth
+plot(t/3600,-eg047a.p,'k') % plot depth
 
 xlabel('Time since tag on (s)'); ylabel('        Depth (m)            Estimated Drag and Buoyancy (N)')
 
@@ -73,11 +73,11 @@ orion_cue = etime(orion,tagstart);
 buoyon_cue = etime(buoyon,tagstart);
 tagoff_cue = etime(tagoff,tagstart);
 
-plot([tagon_cue tagon_cue],[-40 140],'k--')
-plot([orion_cue orion_cue],[-40 140],'r-')
-plot([buoyon_cue buoyon_cue],[-40 140],'r-')
-plot([tagoff_cue tagoff_cue],[-40 140],'k--')
+plot([tagon_cue/3600 tagon_cue/3600],[-40 140],'k--')
+plot([orion_cue/3600 orion_cue/3600],[-40 140],'r-')
+plot([buoyon_cue/3600 buoyon_cue/3600],[-40 140],'r-')
+plot([tagoff_cue/3600 tagoff_cue/3600],[-40 140],'k--')
 
-
+adjustfigurefont
 
 

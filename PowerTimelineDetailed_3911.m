@@ -49,4 +49,7 @@ plot([rw015a.p1(2) rw015a.p1(2)],[-40 140],'k--')
 
 ylim([-40 1100])
 
-
+%% plot on separate axes (depth, forces)
+figure(5)
+[hAx,hLine1,hLine2] = plotyy(t,-rw015a.p,[Tplot(:,1) Tplot(:,1)],[Tplot(:,2),Tplot(:,3)]);
+set(hAx(1),'ylim',[-25 30]); set(hAx(2),'ylim',[-1200 1200])
