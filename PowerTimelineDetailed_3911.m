@@ -1,14 +1,14 @@
 % Power Timeline Detailed
-% Detailed timeline of entanglement/disentanglement of EG 4057
+% Detailed timeline of entanglement/disentanglement of EG 3911
  
-% How much gear was there initially? 
-Dtot = 400; % THIS IS JUST A FILLER
-
-% Portion of entangled gear towed with buoys = 159.2 N (van der Hoop et al.
+% drag on removed gear = 159.2 N as measured from tensiometer (van der Hoop et al.
 % 2013 Marine Mammal Science)
 Ddiff = 159.2;
-
-Dnew = Dtot-Ddiff;
+ 
+% approx. 21 m of line and a 35 cm gangion was left on animal, collected
+% from carcass at necropsy on 3 Feb 2011
+Dleft = EstDrag(22,0); % drag left on animal 
+Dtot = Ddiff+Dleft;
 
 %% Buoyancy
 % 1 lb force = 4.448 N
@@ -25,8 +25,8 @@ Timeline = rw015a.p1; % entangled period
 %% interpolate points in timeline for plotting
 Tplot(1,:) = [Timeline(1) Dtot buoys]; % baseline
 Tplot(2,:) = [Timeline(2) Dtot buoys]; 
-Tplot(3,:) = [Timeline(2) Dnew 0]; % decrease at disentanglement
-Tplot(4,:) = [22268 Dnew 0]; % until end of tag
+Tplot(3,:) = [Timeline(2) Dleft 0]; % decrease at disentanglement
+Tplot(4,:) = [22268 Dleft 0]; % until end of tag
 
 figure(2); clf; hold on
 plot(Tplot(:,1),Tplot(:,2))
@@ -44,6 +44,8 @@ xlabel('Time since tag on (s)'); ylabel('        Depth (m)            Estimated 
 % known time cues
 plot([rw015a.p1(2) rw015a.p1(2)],[-40 1100],'k--')
 plot([rw015a.p2(2) rw015a.p2(2)],[-40 1100],'k--')
+plot([rw015a.p1(2) rw015a.p1(2)],[-40 140],'r-')
+plot([rw015a.p1(2) rw015a.p1(2)],[-40 140],'k--')
 
 ylim([-40 1100])
 
