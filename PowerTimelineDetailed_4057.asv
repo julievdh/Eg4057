@@ -10,7 +10,7 @@ Dtot = EstDrag(155,0);
 Ddiff = (EstDrag(104,0))-EstDrag(155,0); % difference in drag with removal of gear
 Dnew1 = Dtot+Ddiff;
 
-Ddiff = (EstDrag(104,0))-EstDrag(155,0); % difference in drag with removal of gear
+Ddiff = (EstDrag(92,0))-EstDrag(104,0); % difference in drag with removal of gear
 Dnew2 = Dnew1+Ddiff;
 
 % load TOWDRAG

@@ -1,6 +1,8 @@
 % Power Timeline Detailed
 % Detailed timeline of entanglement/disentanglement of EG 4057
- 
+
+warning off
+
 % gear on animal = 115 m estimate
 Dtot = EstDrag(155,0);
 
@@ -8,7 +10,7 @@ Dtot = EstDrag(155,0);
 Ddiff = (EstDrag(104,0))-EstDrag(155,0); % difference in drag with removal of gear
 Dnew1 = Dtot+Ddiff;
 
-Ddiff = (EstDrag(104,0))-EstDrag(155,0); % difference in drag with removal of gear
+Ddiff = (EstDrag(92,0))-EstDrag(104,0); % difference in drag with removal of gear
 Dnew2 = Dnew1+Ddiff;
 
 % load TOWDRAG
@@ -82,8 +84,11 @@ adjustfigurefont
 
 %% try with plotyy
 figure(5); clf; hold on
+set(gcf,'position',[120 240 915 420])
 [hAx,hLine1,hLine2] = plotyy(t/3600,-eg047a.p,[Tplot(:,1)/3600 Tplot(:,1)/3600],[Tplot(:,2),Tplot(:,3)]);
-set(hAx(1),'ylim',[-32 30],'ytick',[-30:5:0]); set(hAx(2),'ylim',[-181 170])
+set(hAx(1),'ylim',[-32 30],'ytick',[-30:5:0],...
+    'yticklabels',{'30','25','20','15','10','5','0'})
+set(hAx(2),'ylim',[-181 170],'ytick',[0:40:160])
 xlabel('Time since tag on (hours)'); 
 ylabel(hAx(1),'Depth (m)                       ') % left y-axis
 ylabel(hAx(2),'                             Force (N)') % right y-axis
