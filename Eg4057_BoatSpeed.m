@@ -36,15 +36,15 @@ for i = 1:length(UP)
     downidx(i) = downpidx_(1);
 end
 
-% calculate distance between points during up period, every second
+% calculate distance between points during up period, every minute
 for j = 1:length(upidx)
-for i = upidx(j):20:downidx(j)-1
-    clear arclen
-arclen(:,i) = distance(latitude(i),longitude(i),latitude(i+1),longitude(i+1));
-end
-arclen(arclen == 0) = NaN;
-arclen = deg2km(arclen)*100; % convert from degrees to m
-mnspeed(j) = nanmean(arclen); % average speed per second during up period
+    for i = upidx(j):downidx(j)-1
+        clear arclen
+        arclen(:,i) = distance(latitude(i),longitude(i),latitude(i+1),longitude(i+1));
+    end
+    arclen(arclen == 0) = NaN;
+    arclen = deg2km(arclen)*100; % convert from degrees to m
+    mnspeed(j) = nanmean(arclen);
 end
 
 
