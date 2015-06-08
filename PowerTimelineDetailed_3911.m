@@ -1,6 +1,8 @@
 % Power Timeline Detailed
 % Detailed timeline of entanglement/disentanglement of EG 3911
  
+clear all; close all
+
 % drag on removed gear = 159.2 N as measured from tensiometer (van der Hoop et al.
 % 2013 Marine Mammal Science)
 Ddiff = 73.9;
@@ -33,9 +35,7 @@ figure(2); clf; hold on
 plot(Tplot(:,1),Tplot(:,2))
 plot(Tplot(:,1),Tplot(:,3),':')
 
-%% load in DTAG and plot
-load_rw015a
-
+%% plot
 t = (1:length(rw015a.p))/fs;
 plot(t,-rw015a.p,'k') % plot depth
 
@@ -52,7 +52,7 @@ ylim([-40 1100])
 
 %% plot on separate axes (depth, forces)
 warning off
-figure(5); set(gcf,'position',[120 240 915 420])
+figure(5); clf; hold on; set(gcf,'position',[120 240 915 420])
 [hAx,hLine1,hLine2] = plotyy(t/3600,-rw015a.p,[Tplot(:,1)/3600 Tplot(:,1)/3600],[Tplot(:,2),Tplot(:,3)]);
 set(hAx(1),'ylim',[-25 30],'ytick',[-20:5:0],...
     'yticklabels',{'20','15','10','5','0'}); 
@@ -61,3 +61,6 @@ xlabel('Time since tag on (hours)');
 ylabel(hAx(1),'Depth (m)                       ') % left y-axis
 ylabel(hAx(2),'                             Force (N)') % right y-axis
 adjustfigurefont
+
+cd C:\Users\Julie\Documents\MATLAB\Eg4057\AnalysisFigs
+print('eg3911_timeline','-dtiff','-r300')

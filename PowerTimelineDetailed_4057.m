@@ -2,6 +2,7 @@
 % Detailed timeline of entanglement/disentanglement of EG 4057
 
 warning off
+clear all; close all;
 
 % gear on animal = 115 m estimate
 Dtot = EstDrag(155,0);
@@ -93,3 +94,6 @@ xlabel('Time since tag on (hours)');
 ylabel(hAx(1),'Depth (m)                       ') % left y-axis
 ylabel(hAx(2),'                             Force (N)') % right y-axis
 adjustfigurefont
+
+cd C:\Users\Julie\Documents\MATLAB\Eg4057\AnalysisFigs
+print('eg4057_timeline','-dtiff','-r300')
