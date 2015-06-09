@@ -27,9 +27,7 @@ eg047a.t = (1:length(eg047a.p))/fs;
 
 % add times of interest
 eg047a.p1 = [410 4711]; % consistent tag position, entangled
-eg047a.p2 = [5133 10740]; % consistent tag position, entangled
-% BUT MAYBE ESTABLISHED CONTROL LINE IN THIS TIME PERIOD
-% TALK TO DOUG/HEATHER/ZACH/DISENTANGLERS
+eg047a.p2 = [5133 8571]; % consistent tag position, until disentanglement begins
 eg047a.p3 = [11350 13250]; % consistent tag position, entangled + telemetry
 
 clear A Aw head M Mw p pitch roll tempr 

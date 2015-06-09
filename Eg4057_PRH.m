@@ -1,5 +1,14 @@
 % Eg4057 PRH Attempt and Problems
 
+% set tag path
+path = 'F:\eg14\eg14_047a\';
+settagpath('cal',[path 'cal\'],'prh',[path 'prh\'],'raw',[path 'raw\'],'audit',[path 'audit\'])
+settagpath('audio','F:\')
+tag = 'eg14_047a';
+
+% load prh
+loadprh(tag)
+
 % create time vector
 t = (1:length(p))/fs;
 
@@ -18,6 +27,7 @@ FWC_0733_cue = etime(FWC_0733,tagstart);
 FWC_0739_cue = etime(FWC_0739,tagstart);
 FWC_1251_cue = etime(FWC_1251,tagstart);
 orion_cue = etime(orion,tagstart);
+removed_cue = 9922; % orion on scene, removed additional 12 m, kept telemetry
 buoyon_cue = etime(buoyon,tagstart);
 tagoff_cue = etime(tagoff,tagstart);
 
@@ -30,6 +40,7 @@ plot(t,-p/max(p),'k') % plot normalized depth
 
 plot([tagon_cue tagon_cue],[-3 3],'k--')
 plot([orion_cue orion_cue],[-3 3],'r-')
+plot([removed_cue removed_cue],[-3 3],'r--')
 plot([buoyon_cue buoyon_cue],[-3 3],'r--')
 plot([tagoff_cue tagoff_cue],[-3 3],'k--')
 
@@ -40,12 +51,14 @@ box on
 %
 % used ginput to guess consistent periods
 p1 = [tagon_cue 4711];
-p2 = [5133 10740];
+p2 = [5133 orion_cue];
 p3 = [11350 tagoff_cue];
 
 plot(p1,[2.5 2.5],'k','LineWidth',3)
 plot(p2,[2.5 2.5],'k','LineWidth',3)
 plot(p3,[2.5 2.5],'k','LineWidth',3)
+
+return
 
 %% make OTAB based on three periods identified in Fig 10
 % 
