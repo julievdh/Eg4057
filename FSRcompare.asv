@@ -23,24 +23,14 @@ load_eg047a
 % plot((1:length(eg047a.fr)),eg047a.fr,'g.')
 
 %% use peakdet to find individual fluke strokes
-[maxtab,mintab] = peakdet(eg047a.ph,0.01);
-figure(11); hold on
+[maxtab,mintab] = peakdet(eg047a.ph,0.025);
+figure(11); clf; hold on
 plot(eg047a.ph)
 plot(maxtab(:,1),maxtab(:,2),'r.')
 ylabel('Pitch Deviation from mean');
 
-% %% RECOMPUTE FLUKE STROKE RATE OWN OWN
-%% compare fluke stroke rate
-FSRp1 = eg047a.fr(eg047a.p1(1):eg047a.p1(2));
-FSRp12 = eg047a.fr(eg047a.p1(1):eg047a.p2(2));
-FSRp2 = eg047a.fr(eg047a.p2(1):eg047a.p2(2));
-FSRp3 = eg047a.fr(eg047a.p3(1):eg047a.p3(2));
+%% RECOMPUTE FLUKE STROKE RATE OWN OWN
 
-%% vertcat to boxplot
-FSRall = vertcat(FSRp12, FSRp3);
-FSRall(:,2) = vertcat(repmat(1,length(FSRp12),1), repmat(3,length(FSRp3),1));
-figure(12)
-boxplot(FSRall(:,1),FSRall(:,2))
 
 %% Duty Cycle
 
