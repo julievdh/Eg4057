@@ -11,14 +11,14 @@ load('rw11_015aprh.mat')
 % Pitch Deviation and Normalized Depth
 figure(1); clf
 subplot('position',[0.1 0.55 0.4 0.4]); hold on
-plot((1:length(ph(10*fs+11591:10*fs+12245)))/fs,ph(10*fs+11591:10*fs+12245),'color',[178/255 0/255 14/255])
+plot((1:length(ph(10*fs+11591:10*fs+12245)))/fs,ph(10*fs+11591:10*fs+12245),'b')
 plot((1:length(ph(10*fs+11591:10*fs+12245)))/fs,-p(10*fs+11591:10*fs+12245)/max(p(10*fs+11591:10*fs+12245)),'color',[0.5 0.5 0.5])
 text(4,0.8,'A','FontSize',18,'FontWeight','Bold')
 ylabel('Pitch Deviation'); xlim([0 130]); ylim([-1 1])
 subplot('position',[0.1 0.1 0.4 0.4]); hold on
 plot((1:length(ph(7000*fs+60336:7000*fs+61496)))/fs,ph(7000*fs+60336:7000*fs+61496),'k')
 plot((1:length(ph(7000*fs+60336:7000*fs+61496)))/fs,-p(7000*fs+60336:7000*fs+61496)/max(p(7000*fs+60336:7000*fs+61496)),'color',[0.5 0.5 0.5])
-text(6,0.82,'C','FontSize',18,'FontWeight','Bold')
+text(6,0.8,'C','FontSize',18,'FontWeight','Bold')
 xlim([0 220]); ylim([-1 1])
 ylabel('Pitch Deviation')
 xlabel('Time (seconds)')
@@ -75,7 +75,7 @@ load('eg14_047aprh.mat')
 figure(1);
 subplot('position',[0.55 0.55 0.4 0.4]); hold on
 % ZOOM IN on one dive, consistent tag position, High drag
-plot((1:length(ph(11350*fs+3850:11350*fs+6500)))/fs,ph(11350*fs+3850:11350*fs+6500),'color',[178/255 0/255 14/255]); 
+plot((1:length(ph(11350*fs+3850:11350*fs+6500)))/fs,ph(11350*fs+3850:11350*fs+6500),'b'); 
 plot((1:length(ph(11350*fs+3850:11350*fs+6500)))/fs,-p(11350*fs+3850:11350*fs+6500)/max(p(11350*fs+3850:11350*fs+6500)),'color',[0.5 0.5 0.5])
 xlim([0 520]); ylim([-1 1])
 text(10,0.82,'B','FontSize',18,'FontWeight','Bold')
