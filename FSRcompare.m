@@ -32,14 +32,15 @@ ifi12 = vertcat(ifi1,ifi2);
 figure(2); clf 
 % set histogram bins
 bins = [0:0.2:20];
-subplot(211); hold on; xlim([0 20])
-hist(ifi12/fs,bins)
-hist(ifi3/fs,bins)
+subplot(212); hold on; xlim([0 20])
+hist(ifi12/fs,bins) % low
+hist(ifi3/fs,bins) % high
 h = findobj(gca,'Type','patch');
-set(h(2),'FaceColor','r','EdgeColor','w','facealpha',0.5)
-set(h(1),'FaceColor','y','EdgeColor','w','facealpha',0.5)
-xlabel('Inter-fluke-interval (seconds)'); 
-legend('Low Drag','High Drag')
+set(h(2),'FaceColor','k','EdgeColor','w','facealpha',0.5)
+set(h(1),'FaceColor','b','EdgeColor','w','facealpha',0.5)
+xlabel('Inter-Fluke Interval (seconds)') 
+text(0.5,132,'B','FontSize',18,'FontWeight','Bold')
+plot([0 20],[0 0],'k')
 
 figure(3); clf; hold on
 h1 = cdfplot(ifi12);
@@ -59,21 +60,24 @@ ifi = shift_maxtab(:,1)-maxtab(1:end-1,1); % in SAMPLES
 ifi1_3911 = ifi(maxtab(:,1) > rw015a.p1(1)*fs & maxtab(:,1) < rw015a.p1(2)*fs); % high drag
 ifi2_3911 = ifi(maxtab(:,1) > rw015a.p2(1)*fs & maxtab(:,1) < rw015a.p3(2)*fs); % low drag
 
-figure(2); subplot(212); hold on; xlim([0 20])
-hist(ifi1_3911/fs,bins)
-hist(ifi2_3911/fs,bins)
-hist(ifi3_3911/fs,bins)
+figure(2); subplot(211); hold on; xlim([0 20])
+hist(ifi2_3911/fs,bins) % low
+hist(ifi1_3911/fs,bins) % high
 h = findobj(gca,'Type','patch');
-set(h(2),'FaceColor','r','EdgeColor','w','facealpha',0.5)
-set(h(1),'FaceColor','y','EdgeColor','w','facealpha',0.5)
-xlabel('Inter-fluke-interval (seconds)'); 
+set(h(2),'FaceColor','k','EdgeColor','w','facealpha',0.5) 
+set(h(1),'FaceColor','b','EdgeColor','w','facealpha',0.5)
+legend('Low Drag','High Drag'); text(0.5,1.35E3,'A','FontSize',18,'FontWeight','Bold')
+plot([0 20],[0 0],'k')
+adjustfigurefont
+
+cd C:\Users\Julie\Documents\MATLAB\Eg4057\AnalysisFigs
+print('IFIdistribution','-dtiff')
 
 figure(3); hold on
 h1 = cdfplot(ifi1_3911);
 h2 = cdfplot(ifi2_3911);
-h3 = cdfplot(ifi3_3911);
-set(h1,'color','c')
-set(h2,'color','m')
+set(h1,'color','b')
+set(h2,'color','k')
 
 %% KS test, with bonferroni correction
 % Are conditions different in 3911 low drag and high drag?
