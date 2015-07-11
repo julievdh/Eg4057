@@ -10,17 +10,22 @@ load('rw11_015aprh.mat')
 % plot data: 
 % Pitch Deviation and Normalized Depth
 figure(1); clf
-subplot(211); hold on
-plot(ph(10*fs:6600*fs),'color',[178/255 0/255 14/255])
-plot(-p(10*fs:6600*fs)/max(p(10*fs:6600*fs)))
-subplot(212); hold on
-plot(ph(7000*fs:103550),'k')
-plot(-p(7000*fs:103550)/max(p(7000*fs:103550)))
-ylabel('Pitch')
-xlabel('Time (samples)')
+subplot('position',[0.1 0.55 0.4 0.4]); hold on
+plot((1:length(ph(10*fs+11591:10*fs+12245)))/fs,ph(10*fs+11591:10*fs+12245),'color',[178/255 0/255 14/255])
+plot((1:length(ph(10*fs+11591:10*fs+12245)))/fs,-p(10*fs+11591:10*fs+12245)/max(p(10*fs+11591:10*fs+12245)),'color',[0.5 0.5 0.5])
+text(4,0.8,'A','FontSize',18,'FontWeight','Bold')
+ylabel('Pitch Deviation'); xlim([0 130])
+subplot('position',[0.1 0.1 0.4 0.4]); hold on
+plot((1:length(ph(7000*fs+60336:7000*fs+61496)))/fs,ph(7000*fs+60336:7000*fs+61496),'k')
+plot((1:length(ph(7000*fs+60336:7000*fs+61496)))/fs,-p(7000*fs+60336:7000*fs+61496)/max(p(7000*fs+60336:7000*fs+61496)),'color',[0.5 0.5 0.5])
+text(6,0.36,'C','FontSize',18,'FontWeight','Bold')
+xlim([0 220])
+ylabel('Pitch Deviation')
+xlabel('Time (seconds)')
 
+%%
 figure(2); clf; hold on; box on
-set(gcf,'position',[1540 240 1300 420])
+set(gcf,'position',[154 240 1300 420])
 %subplot(211)
 plot(ph(5200:6100),'color',[178/255 0/255 14/255])
 %subplot(212)
@@ -35,7 +40,7 @@ plot(before,0.2,'r.',after,0.18,'k.')
 
 %%
 figure(3); clf; hold on; box on
-set(gcf,'position',[1540 0 1300 420],'PaperPositionMode','auto','color','white')
+set(gcf,'position',[154 0 1300 420],'PaperPositionMode','auto','color','white')
 %plot(ph(11277:11640),'k')
 plot(ph(8500:8900),'k','LineWidth',2)
 %plot(ph(12285:12550),'k')
@@ -67,24 +72,34 @@ load('eg14_047aprh.mat')
 [v,ph,mx,fr] = findflukes(Aw,Mw,fs,0.3,0.02,[2 8]);
 
 %% plot data
-figure(1); clf; 
-subplot(211); hold on
-% consistent tag position, High drag
-plot(ph(11350*fs:13250*fs),'color',[178/255 0/255 14/255]); 
-plot(-p(11350*fs:13250*fs)/max(p(11350*fs:13250*fs)))
-% consistent tag position, Low Drag
-subplot(212); hold on
-plot(ph(410*fs:4711*fs),'k')
-plot(-p(410*fs:4711*fs)/max(p(410*fs:4711*fs)))
-ylabel('Pitch')
-xlabel('Time (samples)')
+figure(1);
+subplot('position',[0.55 0.55 0.4 0.4]); hold on
+% ZOOM IN on one dive, consistent tag position, High drag
+plot((1:length(ph(11350*fs+3850:11350*fs+6500)))/fs,ph(11350*fs+3850:11350*fs+6500),'color',[178/255 0/255 14/255]); 
+plot((1:length(ph(11350*fs+3850:11350*fs+6500)))/fs,-p(11350*fs+3850:11350*fs+6500)/max(p(11350*fs+3850:11350*fs+6500)),'color',[0.5 0.5 0.5])
+xlim([0 520])
+text(10,0.36,'B','FontSize',18,'FontWeight','Bold')
 
-figure(2); clf; hold on; box on
+% ZOOM IN on one dive, consistent tag position, Low Drag
+subplot('position',[0.55 0.1 0.4 0.4]); hold on
+plot((1:length(ph(410*fs+10500:410*fs+14100)))/fs,ph(410*fs+10500:410*fs+14100),'k')
+plot((1:length(ph(410*fs+10500:410*fs+14100)))/fs,-p(410*fs+10500:410*fs+14100)/max(p(410*fs+10440:410*fs+14100)),'color',[0.5 0.5 0.5])
+xlabel('Time (seconds)')
+xlim([0 700])
+text(20,0.36,'D','FontSize',18,'FontWeight','Bold')
+
+adjustfigurefont
+
+cd C:\Users\Julie\Documents\MATLAB\Eg4057\AnalysisFigs
+print('DiveFluke','-dtiff')
+%%
+
+figure(5); clf; hold on; box on
 set(gcf,'position',[131 203 1300 420])
 % HIGH DRAG
-plot(ph(60817:62817),'color',[178/255 0/255 14/255])
+plot(ph(11350*fs+3838:11350*fs+6767),'color',[178/255 0/255 14/255]); 
 % LOW DRAG
-plot(ph(14100:16100),'k','linewidth',2)
+plot(ph(410*fs+10440:410*fs+13369),'k')
 xlabel('Time (samples)')
 ylabel('Pitch deviation')
 

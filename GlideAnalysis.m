@@ -110,6 +110,8 @@ for i = 1:length(T)
     plot(T(i,1)*fs:T(i,2)*fs,rw015a.ph(T(i,1)*fs:T(i,2)*fs),'r')
 end
 
+clear low high 
+
 low = find(T(:,1) > rw015a.p2(1) & T(:,1) < rw015a.p3(2));
 lowrate_3911 = size(low,1)/(rw015a.p3(2)-rw015a.p2(1));
 high = find(T(:,1) > rw015a.p1(1) & T(:,1) < rw015a.p1(2));

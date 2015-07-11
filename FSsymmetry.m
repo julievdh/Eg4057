@@ -1,12 +1,23 @@
 % Fluke stroke symmetry
 
-[ifi,maxtab,mintab] = dutycycleplot([rw015a.p1 rw015a.p2 rw015a.p3],rw015a.ph,fs); % find inter-fluke interval
-% close all;
+% load tag
+load_rw015a
+
+% find flukes and dives
+[rw015a.v,rw015a.ph,rw015a.mx,rw015a.fr] = findflukes(rw015a.Aw,rw015a.Mw,fs,0.3,0.01,[0.7 4]);
+rw015a.T = finddives(rw015a.p,fs,5,1,0);
+
+% load descents and ascents
+load('rw015a_descasc')
+
+%% calculate inter fluke interval and max/min points
+[ifi,maxtab,mintab] = dutycycleplot([rw015a.p1(1) rw015a.p2(2)],rw015a.ph,fs); 
+
 
 %%
 
 figure(12); clf
-ii = find(maxtab(:,1) > rw015a.p1(1)*fs & maxtab(:,1) < rw015a.p1(2)*fs);
+ii = find(maxtab(:,1) > rw015a.p1(1)*fs & maxtab(:,1) < rw015a.p2(2)*fs);
 
 ud_diff = nan(length(maxtab(ii)),50);
 for i = 1:10:length(maxtab(ii));
@@ -26,7 +37,7 @@ for i = 1:10:length(maxtab(ii));
     
     % plot normalized
     figure(12); set(gcf,'position',[24 132 1244 500])
-    subplot(221);
+    subplot(221); title('High Drag')
     patchline([maxtab(ii(i),1):maxtab(ii(i+1),1)]-mintab(ii(i),1),rw015a.ph(maxtab(ii(i,1)):maxtab(ii(i+1,1))),'edgecolor','k','edgealpha',0.1,'LineWidth',3)
     % plot half stroke down
     patchline([maxtab(ii(i),1):mintab(ii(i),1)]-mintab(ii(i),1),rw015a.ph(maxtab(ii(i),1):mintab(ii(i),1)),'edgecolor','b','edgealpha',0.5)
@@ -56,9 +67,9 @@ for i = 1:10:length(maxtab(ii));
     xlim([-0.5 0.5]); ylim([-0.5 0.5]); axis equal
     plot([-1 1],[-1 1],'k')
 end
-
-
-ii = find(maxtab(:,1) > rw015a.p2(1)*fs & maxtab(:,1) < rw015a.p3(2)*fs);
+ 
+clear ii
+ii = find(maxtab(:,1) > rw015a.p3(1)*fs & maxtab(:,1) < rw015a.p3(2)*fs);
 
 ud_diff = nan(length(maxtab(ii)),50);
 for i = 1:10:length(maxtab(ii));
