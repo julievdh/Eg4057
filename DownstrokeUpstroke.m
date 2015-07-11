@@ -104,3 +104,13 @@ h = findobj(gca,'Type','patch');
 set(h(2),'FaceColor','k','EdgeColor','w','facealpha',0.5) 
 set(h(1),'FaceColor','b','EdgeColor','w','facealpha',0.5)
 xlim([0 8]); ylim([0 350])
+
+%% stats
+individual = vertcat(repmat(3911,length(ds_low_3911),1),repmat(3911,length(ds_high_3911),1),...
+    repmat(4057,length(ds_low_4057),1),repmat(4057,length(ds_high_4057),1));
+condition = vertcat(zeros(length(ds_low_3911),1),ones(length(ds_high_3911),1),...
+    zeros(length(ds_low_4057),1),ones(length(ds_high_4057),1));
+
+figure
+[p,table,stats] = anovan(vertcat(ds_low_3911,ds_high_3911,ds_low_4057,ds_high_4057),{individual condition},'varnames',{'Individual','Condition'});
+[c,m,h,nms] = multcompare(stats,'dim',2);
