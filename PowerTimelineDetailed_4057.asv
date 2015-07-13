@@ -2,7 +2,7 @@
 % Detailed timeline of entanglement/disentanglement of EG 4057
 
 warning off
-% clear all; close all;
+clear all; close all;
 
 % gear on animal = 115 m estimate
 Dtot = EstDrag(155,0);
@@ -44,8 +44,6 @@ Tplot(8,:) = [Timeline(3)+100 Dnew2 0];
 Tplot(9,:) = [Timeline(3)+100 D_wtelem2 buoy]; 
 Tplot(10,:) = [Timeline(4) D_wtelem2 buoy]; 
 Tplot(11,:) = [Timeline(5) D_wtelem2 buoy];
-
-return
 
 figure(2); clf; hold on
 plot(Tplot(:,1)/3600,Tplot(:,2))

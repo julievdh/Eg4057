@@ -1,8 +1,6 @@
 % Power Timeline Detailed
 % Detailed timeline of entanglement/disentanglement of EG 3911
  
-clear all; close all
-
 % drag on removed gear = 159.2 N as measured from tensiometer (van der Hoop et al.
 % 2013 Marine Mammal Science)
 Ddiff = 73.9;
@@ -22,7 +20,7 @@ buoy2 = (121-6.8)*4.448;
 buoys = buoy1+buoy2;
 
 %% create timeline -- based on cues from DTAG
-load_rw015a
+% load_rw015a
 Timeline = rw015a.p1; % entangled period
 
 %% interpolate points in timeline for plotting
@@ -30,6 +28,8 @@ Tplot(1,:) = [Timeline(1) Dtot buoys]; % baseline
 Tplot(2,:) = [Timeline(2) Dtot buoys]; 
 Tplot(3,:) = [Timeline(2) Dleft 0]; % decrease at disentanglement
 Tplot(4,:) = [22268 Dleft 0]; % until end of tag
+
+return
 
 figure(2); clf; hold on
 plot(Tplot(:,1),Tplot(:,2))
