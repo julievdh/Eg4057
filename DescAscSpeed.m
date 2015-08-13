@@ -35,9 +35,16 @@ dist = rw015a.p(rw015a.T(:,2)*fs)-rw015a.p(rw015a.T(:,1)*fs+start_asc');
 time = (rw015a.T(:,2)*fs-(rw015a.T(:,1)*fs+start_asc'))./fs; 
 asc_speed_015a = abs(dist./time); 
 
+%% use Mark's function
+v = vertical(rw015a.p,fs);
+for i = 1:length(rw015a.T)
+    desc_vspeed_015a(i) = mean(v(rw015a.T(i,1)*fs:rw015a.T(i,1)*fs+end_desc(1)));
+    asc_vspeed_015a(i) = mean(v(rw015a.T(i,1)*fs+start_asc(i):rw015a.T(i,2)*fs));
+end
+
 %% plot
 figure(100); clf; hold on
-gscatter(desc_speed_015a,asc_speed_015a,rw015a.cond,'kb')
+gscatter(desc_vspeed_015a,-asc_vspeed_015a,rw015a.cond,'kb')
 xlabel('Descent Speed (m/s)'); ylabel('Ascent Speed (m/s)')
 
 %% for Eg 4057
@@ -78,10 +85,39 @@ dist = eg047a.p(eg047a.T(:,2)*fs)-eg047a.p(eg047a.T(:,1)*fs+start_asc');
 time = (eg047a.T(:,2)*fs-(eg047a.T(:,1)*fs+start_asc'))./fs; 
 asc_speed_047a = abs(dist./time); 
 
+%% use mark's Vertical Speed calculation
+v = vertical(eg047a.p,fs);
+for i = 1:length(eg047a.T)
+desc_vspeed_047a(i) = mean(v(eg047a.T(i,1)*fs:eg047a.T(i,1)*fs+end_desc(1)));
+    asc_vspeed_047a(i) = mean(v(eg047a.T(i,1)*fs+start_asc(i):eg047a.T(i,2)*fs));
+end
 %% plot
-gscatter(desc_speed_047a,asc_speed_047a,eg047a.cond,'gr')
+gscatter(desc_vspeed_047a,-asc_vspeed_047a,eg047a.cond,'gr')
 xlabel('Descent Speed (m/s)'); ylabel('Ascent Speed (m/s)')
 plot([0 1],[0 1],'k')
 legend('Eg 3911 Low Drag','Eg 3911 High Drag','Eg 4057 Low Drag',...
     'Eg 4057 High Drag','Location','NW')
 
+%% plot in a different way:
+figure(2); clf
+subplot(121);hold on
+errorbar(0,mean(desc_vspeed_015a(rw015a.cond == 0)),std(desc_vspeed_015a(rw015a.cond == 0)),'o')
+errorbar(1,mean(desc_vspeed_015a(rw015a.cond == 1)),std(desc_vspeed_015a(rw015a.cond == 1)),'o')
+
+errorbar(0,mean(desc_vspeed_047a(eg047a.cond == 0)),std(desc_vspeed_047a(eg047a.cond == 0)),'ro')
+errorbar(1,mean(desc_vspeed_047a(eg047a.cond == 1)),std(desc_vspeed_047a(eg047a.cond == 1)),'ro')
+
+ylabel('Descent Speed (m/s)')
+set(gca,'xtick',[0 1],'xticklabel',{'Low','High'})
+xlim([-0.1 1.1])
+
+subplot(122);hold on
+errorbar(0,mean(-asc_vspeed_015a(rw015a.cond == 0)),std(-asc_vspeed_015a(rw015a.cond == 0)),'o')
+errorbar(1,mean(-asc_vspeed_015a(rw015a.cond == 1)),std(-asc_vspeed_015a(rw015a.cond == 1)),'o')
+
+errorbar(0,mean(-asc_vspeed_047a(eg047a.cond == 0)),std(-asc_vspeed_047a(eg047a.cond == 0)),'ro')
+errorbar(1,mean(-asc_vspeed_047a(eg047a.cond == 1)),std(-asc_vspeed_047a(eg047a.cond == 1)),'ro')
+
+ylabel('Ascent Speed (m/s)')
+set(gca,'xtick',[0 1],'xticklabel',{'Low','High'})
+xlim([-0.1 1.1])

@@ -9,8 +9,8 @@ plot(start_asc(dive),-rw015a.p(rw015a.T(dive,1)*fs+start_asc(dive)),'k*')
 plot(rw015a.ph(rw015a.T(dive,1)*fs:rw015a.T(dive,2)*fs)) % plot pitch during dive
 
 % plot descent and ascent only
-plot(-rw015a.p(rw015a.T(dive,1)*fs:rw015a.T(dive,1)*fs+end_desc(dive)),'r')
 plot(-rw015a.p(rw015a.T(dive,1)*fs+start_asc(dive):rw015a.T(dive,2)*fs),'r')
+plot(-rw015a.p(rw015a.T(dive,1)*fs:rw015a.T(dive,1)*fs+end_desc(dive)),'r')
 
 % find maxtab within descent and ascent
 fs_desc = find(maxtab(:,1) > rw015a.T(dive,1)*fs & maxtab(:,1) <rw015a.T(dive,1)*fs+end_desc(dive));
@@ -72,7 +72,6 @@ for i = 1:2:length(maxtab(ii)); % every second one
     xlim([-0.5 0.5]); ylim([-0.5 0.5]); axis equal
     plot([-1 1],[-1 1],'k')
     
-    pause; clf
 end
  
 
@@ -125,7 +124,6 @@ for i = 1:length(maxtab(ii));
     xlim([-0.5 0.5]); ylim([-0.5 0.5]); axis equal
     plot([-1 1],[-1 1],'k')  
     
-    pause; clf
 end
 
 end

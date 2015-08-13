@@ -4,7 +4,7 @@
 warning off
 % clear all; close all;
 
-% gear on animal = 115 m estimate
+% gear on animal = 155 m estimate
 Dtot = EstDrag(155,0);
 
 % removed 104 m, then 12 m on Feb 16 2014

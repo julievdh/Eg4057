@@ -71,46 +71,76 @@ xlabel('Downstroke Duration (sec)'); ylabel('Upstroke Duration (sec)')
 legend('Low Drag','High Drag')
 
 %% 
-bins = 0:0.25:8;
+bins = 0:0.25:10;
 figure(2); clf;
 subplot(221); hold on
-hist(ds_low_3911/fs,bins)
-hist(ds_high_3911/fs,bins)
-h = findobj(gca,'Type','patch');
-set(h(2),'FaceColor','k','EdgeColor','w','facealpha',0.5) 
-set(h(1),'FaceColor','b','EdgeColor','w','facealpha',0.5)
+h1 = hist(ds_low_3911/fs,bins);
+h2 = hist(ds_high_3911/fs,bins);
+h1 = h1/sum(h1);
+h2 = h2/sum(h2);
+h = bar(bins,[h1;h2]',1.2,'grouped');
 xlim([0 8])
+set(h(1),'FaceColor','k')
+set(h(2),'FaceColor','b')
 
 subplot(223); hold on
-hist(ds_low_4057/fs,bins)
-hist(ds_high_4057/fs,bins)
-h = findobj(gca,'Type','patch');
-set(h(2),'FaceColor','k','EdgeColor','w','facealpha',0.5) 
-set(h(1),'FaceColor','b','EdgeColor','w','facealpha',0.5)
-xlim([0 8]); ylim([0 350])
+h3 = hist(ds_low_4057/fs,bins);
+h4 = hist(ds_high_4057/fs,bins);
+h3 = h3/sum(h3);
+h4 = h4/sum(h4);
+h = bar(bins,[h3;h4]',1.2,'grouped');
+set(h(1),'FaceColor','k')
+set(h(2),'FaceColor','b')
+xlim([0 8])
+xlabel('Downstroke Duration (sec)')
 
 subplot(222); hold on
-hist(us_low_3911/fs,bins)
-hist(us_high_3911/fs,bins)
-h = findobj(gca,'Type','patch');
-set(h(2),'FaceColor','k','EdgeColor','w','facealpha',0.5) 
-set(h(1),'FaceColor','b','EdgeColor','w','facealpha',0.5)
+h5 = hist(us_low_3911/fs,bins);
+h6 = hist(us_high_3911/fs,bins);
+h5 = h5/sum(h5);
+h6 = h6/sum(h6);
+h = bar(bins,[h5;h6]',1.2,'grouped');
+set(h(1),'FaceColor','k')
+set(h(2),'FaceColor','b')
 xlim([0 8])
 
 subplot(224); hold on
-hist(us_low_4057/fs,bins)
-hist(us_high_4057/fs,bins)
-h = findobj(gca,'Type','patch');
-set(h(2),'FaceColor','k','EdgeColor','w','facealpha',0.5) 
-set(h(1),'FaceColor','b','EdgeColor','w','facealpha',0.5)
-xlim([0 8]); ylim([0 350])
+h7 = hist(us_low_4057/fs,bins);
+h8 = hist(us_high_4057/fs,bins);
+h7 = h7/sum(h7);
+h8 = h8/sum(h8);
+h = bar(bins,[h7;h8]',1.2,'grouped');
+set(h(1),'FaceColor','k')
+set(h(2),'FaceColor','b')
+xlim([0 8])
+xlabel('Upstroke Duration (sec)')
 
 %% stats
-individual = vertcat(repmat(3911,length(ds_low_3911),1),repmat(3911,length(ds_high_3911),1),...
-    repmat(4057,length(ds_low_4057),1),repmat(4057,length(ds_high_4057),1));
-condition = vertcat(zeros(length(ds_low_3911),1),ones(length(ds_high_3911),1),...
-    zeros(length(ds_low_4057),1),ones(length(ds_high_4057),1));
+% individual = vertcat(repmat(3911,length(ds_low_3911),1),repmat(3911,length(ds_high_3911),1),...
+%     repmat(4057,length(ds_low_4057),1),repmat(4057,length(ds_high_4057),1));
+% condition = vertcat(zeros(length(ds_low_3911),1),ones(length(ds_high_3911),1),...
+%     zeros(length(ds_low_4057),1),ones(length(ds_high_4057),1));
+% 
+% figure
+% [p,table,stats] = anovan(vertcat(ds_low_3911,ds_high_3911,ds_low_4057,ds_high_4057),{individual condition},'varnames',{'Individual','Condition'});
+% [c,m,h,nms] = multcompare(stats,'dim',2);
 
-figure
-[p,table,stats] = anovan(vertcat(ds_low_3911,ds_high_3911,ds_low_4057,ds_high_4057),{individual condition},'varnames',{'Individual','Condition'});
-[c,m,h,nms] = multcompare(stats,'dim',2);
+%% proportion of stroke that is upstroke vs downstroke?
+propds_high_4057 = ds_high_4057./(ds_high_4057+us_high_4057);
+propds_low_4057 = ds_low_4057./(ds_low_4057+us_low_4057);
+propds_high_3911 = ds_high_3911./(ds_high_3911+us_high_3911);
+propds_low_3911 = ds_low_3911./(ds_low_3911+us_low_3911);
+
+
+figure(10)
+bins = 0:0.1:1;
+h10 = hist(propds_high_4057,bins);
+h11 = hist(propds_low_4057,bins);
+h12 = hist(propds_high_3911,bins);
+h13 = hist(propds_low_3911,bins);
+
+h10 = h10/sum(h10);
+h11 = h11/sum(h11);
+h12 = h12/sum(h12);
+h13 = h13/sum(h13);
+h = bar(bins,[h10;h11;h12;h13]',1.2,'grouped');
