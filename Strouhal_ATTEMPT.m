@@ -73,8 +73,8 @@ mn_amp_am = sin(mn_amp_a)*5;
 mn_amp_dm = sin(mn_amp_d)*5;
 
 % calculate St = Af/U
-St_dm = (mn_amp_dm.*hz_d)./desc_vspeed_015a;
-St_am = (mn_amp_am.*hz_a)./asc_vspeed_015a;
+St_dm = (mn_amp_dm.*hz_d)./desc_maxspeed;
+St_am = (mn_amp_am.*hz_a)./asc_maxspeed;
 
 % plot St
 figure(2); clf; hold on

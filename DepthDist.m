@@ -17,11 +17,15 @@ figure(1); clf; set(gcf,'position',[320 360 1020 420])
 subplot('position',[0.28 0.55 0.62 0.4]); hold on
 plot(ground_3911(:,9)/3600,-ground_3911(:,8),'-','color',[0.5 0.5 0.5])
 plot(rw015a.t(rw015a.p1(1)*fs:rw015a.p1(2)*fs)/3600,-rw015a.p(rw015a.p1(1)*fs:rw015a.p1(2)*fs),'b'); box on
-[hAx,hLine1,hLine2] = plotyy(rw015a.t(rw015a.p2(1)*fs:rw015a.p3(2)*fs)/3600,-rw015a.p(rw015a.p2(1)*fs:rw015a.p3(2)*fs),[Tplot(:,1)/3600 Tplot(:,1)/3600],[Tplot(:,2),Tplot(:,3)]);
+[hAx,hLine1,hLine2] = plotyy(rw015a.t(rw015a.p2(1)*fs:rw015a.p3(2)*fs)/3600,-rw015a.p(rw015a.p2(1)*fs:rw015a.p3(2)*fs),...
+    Tplot(:,1)/3600,Tplot(:,2:5));
 set(hAx(1),'ylim',[-32 30],'ytick',[-30:10:0],...
     'yticklabels',{'30','20','10','0'},'xlim',[0 6.182],'ycolor',[0 0 0]); 
 set(hAx(2),'ylim',[-1294 1200],'ytick',[0:400:1200], 'xlim',[0 6.182])
 set(hLine1,'color','k')
+set(hLine2(1:3),'color',[0 0.5 0])
+set(hLine2(2:3),'linestyle',':')
+set(hLine2(4),'color','r')
 ylabel(hAx(2),'                             Force (N)') % right y-axis
 
 
@@ -44,13 +48,18 @@ set(h(2),'FaceColor','k')
 PowerTimelineDetailed_4057
 
 % plot
-subplot('position',[0.28 0.1 0.37 0.4]); hold on
+figure(1)
+subplot('position',[0.28 0.1 0.62 0.4]); hold on
 plot(ground_4057(:,9)/(3600),-ground_4057(:,8),'-','color',[0.5 0.5 0.5])
 plot(eg047a.t(eg047a.p1(1)*fs:10610*fs)/3600,-eg047a.p(eg047a.p1(1)*fs:10610*fs),'k'); box on
-[hAx,hLine1,hLine2] = plotyy(eg047a.t(8571*fs:eg047a.p3(2)*fs)/3600,-eg047a.p(8571*fs:eg047a.p3(2)*fs),[Tplot(:,1)/3600 Tplot(:,1)/3600],[Tplot(:,2),Tplot(:,3)]);
+[hAx,hLine1,hLine2] = plotyy(eg047a.t(8571*fs:eg047a.p3(2)*fs)/3600,-eg047a.p(8571*fs:eg047a.p3(2)*fs),...
+    Tplot(:,1)/3600,Tplot(:,2:5));
 set(hAx(1),'ylim',[-32 30],'ytick',[-30:10:0],...
     'yticklabels',{'30','20','10','0'},'xlim',[0 3.68],'xtick',[0 1 2 3],'ycolor',[0 0 0])
 set(hAx(2),'ylim',[-181 170],'ytick',[0:40:160],'xlim',[0 3.68],'xtick',[0 1 2 3])
+set(hLine2(1:3),'color',[0 0.5 0])
+set(hLine2(4),'color','r')
+set(hLine2(2:3),'linestyle',':')
 xlabel('Time since tag on (hours)'); 
 ylabel(hAx(2),'                             Force (N)') % right y-axis
 
