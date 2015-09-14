@@ -4,6 +4,7 @@
 
 %% plot through and estimate alpha for each dive ascent and descent
 figure(6); clf
+subplot(121)
 % with sawtooth curves
 hold on; box on
 xlabel('Strouhal Number, St'); ylabel('C_T/St^2')
@@ -15,7 +16,6 @@ h = plot(a10_sawtooth(:,1),a10_sawtooth(:,2),a15_sawtooth(:,1),a15_sawtooth(:,2)
 set(h,'color',[0.75 0.75 0.75])
 h = plot(a10_harmonic(:,1),a10_harmonic(:,2),a15_harmonic(:,1),a15_harmonic(:,2)); % harmonic contours for low angles and low St
 set(h,'color','k')
-xlim([0 2]);
 
 text(0.85,9.4728,'\alpha = 35^0')
 text(0.85,8.1629,'\alpha = 30^0')
@@ -23,6 +23,8 @@ text(0.85,6.5016,'\alpha = 25^0')
 text(0.85,4.7444,'\alpha = 20^0')
 text(0.85,2.6677,'\alpha = 15^0')
 text(0.85,0.7827,'\alpha = 10^0')
+
+text(0.0386,9.78,'A','FontSize',14,'FontWeight','Bold')
 
 % load saved alpha values
 load('alpha')
