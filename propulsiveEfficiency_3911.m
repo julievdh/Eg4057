@@ -86,72 +86,7 @@ adjustfigurefont
 print('Eg3911_Drag.eps','-depsc','-r300')
 
 %% 2. Coefficient of Thrust based on Drag estimates
-
-% load amplitudes, speeds, St for every dive
-cd /Users/julievanderhoop/Documents/MATLAB/Eg4057
-load('eg3911_Stvars')
-
-% amplitude of fluke oscillation
-A_E_a = mn_amp_am; % amplitude for entangled 3911 on ascent
-A_E_d = mn_amp_dm; % amplitude for entangled 3911 on descent
-A_NE_a = mean(mn_amp_am(low)); % average amplitude for non-entangled 3911 ascent
-A_NE_d = mean(mn_amp_dm(low)); % average amplitude for non-entangled 3911 descent
-span = 78.234*exp(0.001*10*100); % from Moore et al. 2005, Figure 1e
-% figure(10); x = 2:16; plot(l,span,'o',x,78.234*exp(0.001*x*100))
-span = span/100; % convert to m
-
-% entangled thrust coefficient CTE on ascent and descent across all speeds
-for i = 1:53 % high drag dives
-    % descent
-    CT_E_d(i,:) = Dtot_highdrag./(0.5*rho*U.^2.*(A_E_d(i).*span));
-    CT_E_d_lower(i,:) = Dtot_high_lower./(0.5*rho*U.^2.*(A_E_d(i)*span));
-    CT_E_d_upper(i,:) = Dtot_high_upper./(0.5*rho*U.^2.*(A_E_d(i)*span));
-    
-    % ascent
-    CT_E_a(i,:) = Dtot_highdrag./(0.5*rho*U.^2.*(A_E_a(i).*span));
-    CT_E_a_lower(i,:) = Dtot_high_lower./(0.5*rho*U.^2.*(A_E_a(i)*span));
-    CT_E_a_upper(i,:) = Dtot_high_upper./(0.5*rho*U.^2.*(A_E_a(i)*span));
-end
-
-% disentangled thrust coefficient CTD
-for i = 54:154 % low drag dives
-    % descent
-    CT_DE_d(i,:) = Dtot_lowdrag./(0.5*rho*U.^2.*(A_E_d(i)*span));
-    CT_DE_d_lower(i,:) = Dtot_low_lower./(0.5*rho*U.^2.*(A_E_d(i)*span));
-    CT_DE_d_upper(i,:) = Dtot_low_upper./(0.5*rho*U.^2.*(A_E_d(i)*span));
-    
-    % ascent
-    CT_DE_a(i,:) = Dtot_lowdrag./(0.5*rho*U.^2.*(A_E_a(i)*span));
-    CT_DE_a_lower(i,:) = Dtot_low_lower./(0.5*rho*U.^2.*(A_E_a(i)*span));
-    CT_DE_a_upper(i,:) = Dtot_low_upper./(0.5*rho*U.^2.*(A_E_a(i)*span));
-end
-
-% non-entangled thrust coefficient CTN
-CT_NE_a = whaleDf./(0.5*rho*U.^2.*(A_NE_a*span));
-CT_NE_a_lower = whaleDf_lower./(0.5*rho*U.^2.*((A_NE_a+0.12)*span)); % added amplitude SD
-CT_NE_a_upper = whaleDf_upper./(0.5*rho*U.^2.*((A_NE_a-0.12)*span));
-CT_NE_d = whaleDf./(0.5*rho*U.^2.*(A_NE_d*span));
-CT_NE_d_lower = whaleDf_lower./(0.5*rho*U.^2.*((A_NE_d+0.17)*span)); % added amplitude SD
-CT_NE_d_upper = whaleDf_upper./(0.5*rho*U.^2.*((A_NE_d-0.17)*span));
-
-figure(2); clf
-subplot(211); hold on
-plot(U,CT_E_d,'b-',U,CT_E_d_lower,'b:',U,CT_E_d_upper,'b:')
-plot(U,CT_DE_d,'k-',U,CT_DE_d_lower,'k:',U,CT_DE_d_upper,'k:')
-h = plot(U,CT_NE_d,U,CT_NE_d_lower,':',U,CT_NE_d_upper,':');
-set(h,'color',[0.5 0.5 0.5])
-title('Descent'); ylim([0 2.5]); ylabel('Coefficient of Thrust, C_T')
-
-subplot(212); hold on
-plot(U,CT_E_a,'b-',U,CT_E_a_lower,'b:',U,CT_E_a_upper,'b:')
-plot(U,CT_DE_a,'k-',U,CT_DE_a_lower,'k:',U,CT_DE_a_upper,'k:')
-h = plot(U,CT_NE_a,U,CT_NE_a_lower,':',U,CT_NE_a_upper,':');
-set(h,'color',[0.5 0.5 0.5])
-title('Ascent'); ylim([0 2.5])
-
-xlabel('Speed (m/s)'); ylabel('Coefficient of Thrust, C_T')
-adjustfigurefont
-print('Eg3911_CT.eps','-depsc','-r300')
+ThrustCoefficient_3911
 
 %% Get CT for each speed of descent and ascent (so points rather than curves for each CT)
 
@@ -246,9 +181,9 @@ foldinc_a = mean(CT_E_a_atspeed)/mean(CT_DE_a_atspeed(low))
 condition = [ones(1,53) zeros(1,101) ones(1,53) zeros(1,101)];
 portion = [repmat(-1,1,154) repmat(1,1,154)];
 allCT = vertcat(CT_E_d_atspeed',CT_DE_d_atspeed(low)',CT_E_a_atspeed',CT_DE_a_atspeed(low)');
-boxplot(allCT,{condition portion})
+% boxplot(allCT,{condition portion})
 % two-way ANOVA
-[p,t,stats] = anovan(allCT,{condition portion},'varnames',{'Condition';'Dive Portion'});
+% [p,t,stats] = anovan(allCT,{condition portion},'varnames',{'Condition';'Dive Portion'});
 
 % average non-entangled CT across the same range of speeds
 disp('mean SD average non-entangled CT descent')
@@ -264,9 +199,9 @@ foldinc_ne = [mean(CT_DE_d_atspeed(low))/mean(CT_NE_d(3:13))  mean(CT_DE_a_atspe
 [mean(ni_DE_a_atspeed(low)) std(ni_DE_a_atspeed(low))]
 
 allni = vertcat(ni_E_d_atspeed',ni_DE_d_atspeed(low)',ni_E_a_atspeed',ni_DE_a_atspeed(low)');
-boxplot(allni,{condition portion})
+% boxplot(allni,{condition portion})
 % two-way ANOVA
-[p,t,stats] = anovan(allni,{condition portion},'varnames',{'Condition';'Dive Portion'});
+% [p,t,stats] = anovan(allni,{condition portion},'varnames',{'Condition';'Dive Portion'});
 
 [mean(ni_NE_d(3:14)) std(ni_NE_d(3:14))] % average non-entangled ni across same range of speeds
 [mean(ni_NE_a(1:8)) std(ni_NE_a(1:8))]
@@ -347,7 +282,7 @@ for i = 1:length(high)
         % store
         eta_high(i,1) = a10_harmonic_i(ind,2);
         % plot
-        scatter(st_dmax(high(i)),eta_high(i,1),'bv','filled')
+        scatter(st_dmax(high(i)),eta_high(i,1),'rv','filled')
     else if alpha_high(i,1) == 10
             ind = nearest(a10_sawtooth_i(:,1),st_dmax(high(i)));
             eta_high(i,1) = a10_sawtooth_i(ind,2);
@@ -359,7 +294,7 @@ for i = 1:length(high)
             else if alpha_high(i,1) == 159
                     ind = nearest(a15_harmonic_i(:,1),st_dmax(high(i)));
                     eta_high(i,1) = a15_harmonic_i(ind,2);
-                    scatter(st_dmax(high(i)),eta_high(i,1),'bv','filled')
+                    scatter(st_dmax(high(i)),eta_high(i,1),'rv','filled')
                 end
             end
         end
@@ -394,7 +329,7 @@ for i = 1:length(high)
     end
 end
 
-%% for low drag
+% for low drag
 % descent
 for i = 1:length(low)
     if alpha_low(i,1) == 109
@@ -403,7 +338,7 @@ for i = 1:length(low)
         % store
         eta_low(i,1) = a10_harmonic_i(ind,2);
         % plot
-        scatter(st_dmax(low(i)),eta_low(i,1),'kv','filled')
+        scatter(st_dmax(low(i)),eta_low(i,1),'rv','filled')
     else if alpha_low(i,1) == 10
             ind = nearest(a10_sawtooth_i(:,1),st_dmax(low(i)));
             eta_low(i,1) = a10_sawtooth_i(ind,2);
@@ -421,7 +356,7 @@ for i = 1:length(low)
     else if alpha_low(i,2) == 109
             ind = nearest(a10_harmonic_i(:,1),st_amax(low(i)));
             eta_low(i,2) = a10_harmonic_i(ind,2);
-            scatter(st_amax(low(i)),eta_low(i,2),'k^')
+            scatter(st_amax(low(i)),eta_low(i,2),'r^')
         end
     end
 end
@@ -446,6 +381,7 @@ scatter(zeros(length(low),1)+rand(length(low),1)/4,st_amax(low),[],'k^')
 scatter(ones(length(high),1)+rand(length(high),1)/4,st_amax(high),[],'b^')
 set(gca,'xtick',[0 1],'xticklabels',{'Low Drag','High Drag'})
 ylabel('Strouhal Number, St')
+text(-0.4240,1.55,'A','FontSize',14,'FontWeight','Bold')
 box on
 
 % plot efficiencies 
@@ -453,25 +389,25 @@ subplot(122); hold on
 % low drag descent
 setjit4 = rand(length(low),1)/4;
 scatter(zeros(length(low),1)-setjit4,eta_low(:,1),[],'kv','filled')
-ii = find(alpha_low(:,1) == 109 | alpha_low(:,1) == 159); % find harmonic
-scatter(zeros(length(ii),1)-setjit4(ii),eta_low(ii,1),[],'rv')
+%ii = find(alpha_low(:,1) == 109 | alpha_low(:,1) == 159); % find harmonic
+%scatter(zeros(length(ii),1)-setjit4(ii),eta_low(ii,1),[],'rv')
 % high drag descent
 setjit4 = rand(length(high),1)/4;
 scatter(ones(length(high),1)-setjit4,eta_high(:,1),[],'bv','filled')
-ii = find(alpha_high(:,1) == 109 | alpha_high(:,1) == 159); % find harmonic
-scatter(ones(length(ii),1)-setjit4(ii),eta_high(ii,1),[],'rv')
+%ii = find(alpha_high(:,1) == 109 | alpha_high(:,1) == 159); % find harmonic
+%scatter(ones(length(ii),1)-setjit4(ii),eta_high(ii,1),[],'rv')
 % low drag ascent
 setjit4 = rand(length(low),1)/4;
 scatter(zeros(length(low),1)+setjit4,eta_low(:,2),[],'k^')
 ii = find(alpha_low(:,2) == 109 | alpha_low(:,2) == 159);
-scatter(zeros(length(ii),1)+setjit4(ii),eta_low(ii,2),[],'r^')
+%scatter(zeros(length(ii),1)+setjit4(ii),eta_low(ii,2),[],'r^')
 % high drag ascent
 scatter(ones(length(high),1)+rand(length(high),1)/4,eta_high(:,2),[],'b^') % no harmonic ones here
 set(gca,'xtick',[0 1],'xticklabels',{'Low Drag','High Drag'})
 ylabel('Propulsive Efficiency,\eta')
 box on
 adjustfigurefont
-
+text(-0.4240,0.5844,'B','FontSize',14','FontWeight','Bold')
 
 print('3911_EfficiencyChange.eps','-depsc','-r300')
 
@@ -554,7 +490,7 @@ setjit1 = rand(length(low),1)/4; setjit2 = rand(length(low),1)/4;
 setjit3 = rand(length(high),1)/4; setjit4 = rand(length(high),1)/4;
 % error bars?
 for i = 1:length(low)
-plot([0+setjit1(i) 0+setjit1(i)],[P_al_lower(i)/0.25 P_al_upper(i)/0.25],'k')
+plot([0+setjit1(i) 0+setjit1(i)],[P_al_lower(i)/0.25 P_al_upper(i)/0.25],'k') % aerobic efficiency
 plot([0-setjit2(i) 0-setjit2(i)],[P_dl_lower(i)/0.25 P_dl_upper(i)/0.25],'k')
 end
 for i = 1:length(high)
@@ -569,7 +505,7 @@ scatter(ones(length(high),1)-setjit4,P_dh/0.25,[],'bv','Filled')
 
 xlim([-0.5 1.5])
 set(gca,'xtick',[0 1],'xticklabels',{'Low Drag','High Drag'})
-ylabel('Estimated Power (W), P = (D*U)/(\eta*\eta_a)')
+ylabel('Estimated Power (W), P = (D*U)/(\eta*\eta_a)') % includes chemical efficiency
 box on
 adjustfigurefont
 
