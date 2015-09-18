@@ -64,15 +64,16 @@ ii = find(j_select >= cutoff);
 % caused by surfacing
 ii(ii<5) = NaN;
 ii(ii>length(j_select)-5) = NaN;
-ii(isnan(ii))=[]; % remove NaNs
 % plot
 figure(5); clf; hold on
 plot(-rw015a.p(rw015a.T(i,1)*fs:rw015a.T(i,2)*fs),'b')
 plot(j_select,'b')
+if sum(~isnan(ii) > 0)
 plot(ii,j_select(ii),'g*')
+end
 plot([0 length(j_select)],[cutoff cutoff],'g')
 % store
 trans(i) = length(ii)-sum(isnan(ii));
-% pause
+pause
 end
 
