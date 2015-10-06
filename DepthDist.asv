@@ -55,13 +55,14 @@ plot(eg047a.t(eg047a.p1(1)*fs:10610*fs)/3600,-eg047a.p(eg047a.p1(1)*fs:10610*fs)
 [hAx,hLine1,hLine2] = plotyy(eg047a.t(8571*fs:eg047a.p3(2)*fs)/3600,-eg047a.p(8571*fs:eg047a.p3(2)*fs),...
     Tplot(:,1)/3600,Tplot(:,2:5));
 set(hAx(1),'ylim',[-32 30],'ytick',[-30:10:0],...
-    'yticklabels',{'30','20','10','0'},'xlim',[0 6.182],'xtick',[0 1 2 3],'ycolor',[0 0 0])
-set(hAx(2),'ylim',[-181 170],'ytick',[0:40:160],'xlim',[0 6.182],'xtick',[0 1 2 3])
+    'yticklabels',{'30','20','10','0'},'xlim',[0 3.68],'xtick',[0 1 2 3],'ycolor',[0 0 0])
+set(hAx(2),'ylim',[-181 170],'ytick',[0:40:160],'xlim',[0 3.68],'xtick',[0 1 2 3])
 set(hLine2(1:3),'color',[0 0.5 0])
 set(hLine2(4),'color','r')
 set(hLine2(2:3),'linestyle',':')
 xlabel('Time since tag on (hours)'); 
 ylabel(hAx(2),'                             Force (N)') % right y-axis
+set(gca,'xlim',[0 6.1820])
 
 % calculate depth distribution
 % while entangled
