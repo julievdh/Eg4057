@@ -15,11 +15,13 @@ figure(1); clf; set(gcf,'position',[92 182 738 583])
 subplot('position',[0.12 0.57 0.4 0.4])
 [ifi_low_3911,maxtab,mintab] = dutycycleplot(rw015a.p3,rw015a.ph,fs); 
 ylim([-1 1]); text(0.1,0.85,'A','FontSize',18,'FontWeight','Bold')
+xlim([0 8])
 
 % B: high drag/buoyancy fluke stroke duty cycle for Eg 3911
 subplot('position',[0.57 0.57 0.4 0.4])
 [ifi_high_3911,maxtab,mintab] = dutycycleplot([rw015a.p1(1) rw015a.p2(2)],rw015a.ph,fs); 
 ylim([-1 1]); text(0.1,0.85,'B','FontSize',18,'FontWeight','Bold')
+xlim([0 8])
 
 % C: low drag/buoyancy fluke stroke duty cycle for Eg 4057
 subplot('position',[0.12 0.12 0.4 0.4])
@@ -39,6 +41,8 @@ adjustfigurefont
 
 cd C:\Users\Julie\Documents\MATLAB\Eg4057\AnalysisFigs
 print('AllDutyCycle','-dtiff','-r300')
+
+return
 
 %% Two way anova
 individual = vertcat(repmat(4057,length(ifi_low_4057),1),...
