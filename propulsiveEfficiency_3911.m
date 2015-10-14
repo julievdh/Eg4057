@@ -68,7 +68,7 @@ whaleDf_E = whaleDf*ye;
 
 Dtot_highdrag = whaleDf_E + 92.91 + 7.5; % high drag
 Dtot_lowdrag = whaleDf + 19.01 + 7.5; % after disentanglement
-Dtot_high_lower = whaleDf_E*0.9 + 91.59 + 7.5*0.9;
+Dtot_high_lower = whaleDf_E*0.9 + 91.59 + 7.5*0.9; % uncertainty due to gear drag estimates and oscillation parameter 
 Dtot_high_upper = whaleDf_E*1.1 + 94.24 + 7.5*1.1;
 Dtot_low_lower = whaleDf*0.9 + 17.68 + 7.5*0.9;
 Dtot_low_upper = whaleDf*1.1 + 20.34 + 7.5*1.1;
@@ -77,13 +77,28 @@ Dtot_low_upper = whaleDf*1.1 + 20.34 + 7.5*1.1;
 
 % plot
 figure(1); clf; hold on
-plot(U,Dtot_highdrag,'b',U,Dtot_high_lower,'b:',U,Dtot_high_upper,'b:')
-plot(U,Dtot_lowdrag,'k',U,Dtot_low_lower,'k:',U,Dtot_low_upper,'k:')
-h = plot(U,whaleDf,U,whaleDf_lower,':',U,whaleDf_upper,':');
-set(h,'color',[0.75 0.75 0.75])
+h1 = plot(U,Dtot_highdrag,'b'); plot(U,Dtot_high_lower,'b:',U,Dtot_high_upper,'b:');
+h2 = plot(U,Dtot_lowdrag,'k'); plot(U,Dtot_low_lower,'k:',U,Dtot_low_upper,'k:');
+h3 = plot(U,whaleDf); 
+h4 = plot(U,whaleDf_lower,':',U,whaleDf_upper,':');
+set([h3; h4],'color',[0.75 0.75 0.75])
 xlabel('Speed (m/s)'); ylabel('Drag (N)')
+legend([h1 h2 h3],'Not Entangled','Entangled','Disentangled','Location','NW')
 adjustfigurefont
 print('Eg3911_Drag.eps','-depsc','-r300')
+
+% drag stats
+% two sample t to compare nonentangled and entangled drag, and entangled
+% drag vs disentangled drag
+[min(whaleDf) max(whaleDf)]
+[min(Dtot_highdrag) max(Dtot_highdrag)]
+[min(Dtot_lowdrag) max(Dtot_lowdrag)]
+
+[h,p,ci,stats] = ttest(whaleDf,Dtot_highdrag);
+[h,p,ci,stats] = ttest(Dtot_lowdrag,Dtot_highdrag);
+
+pinc = mean((Dtot_highdrag-whaleDf)./whaleDf);
+pdec = mean((Dtot_lowdrag-Dtot_highdrag)./Dtot_highdrag);
 
 %% 2. Coefficient of Thrust based on Drag estimates
 ThrustCoefficient_3911
@@ -361,7 +376,7 @@ for i = 1:length(low)
     end
 end
 
-print('Eg3911_eta_est.eps','-depsc','-r300')
+print('Eg3911_eta_est','-dtiff','-r300')
 
 %% Take efficiency and look at change in efficiency with entanglement
 efficiencyPlot

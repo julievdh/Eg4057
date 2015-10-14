@@ -20,7 +20,7 @@ text(0.8386,0.35,'\alpha = 20^0')
 text(0.8386,0.29,'\alpha = 15^0')
 
 text(0.0386,0.587,'B','FontSize',14,'FontWeight','Bold')
-xlabel('Strouhal Number, St'); ylabel('Propulsive Efficiency, \eta')
+xlabel('Strouhal Number, \itSt '); ylabel('Propulsive Efficiency, \it\eta_p')
 adjustfigurefont
 
 %% interpolate points

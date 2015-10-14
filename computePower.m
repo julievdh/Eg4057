@@ -67,9 +67,15 @@ scatter(zeros(length(low),1)-setjit2,P_dl,[],'kv','Filled')
 scatter(ones(length(high),1)+setjit3,P_ah,[],'b^','MarkerFaceColor','w')
 scatter(ones(length(high),1)-setjit4,P_dh,[],'bv','Filled')
 
+% values for Table 2 in paper
+% [nanmean(P_dl) nanstd(P_dl)]
+% [nanmean(P_al) nanstd(P_al)]
+% [nanmean(P_dh) nanstd(P_dh)]
+% [nanmean(P_ah) nanstd(P_ah)]
+
 xlim([-0.5 1.5])
 set(gca,'xtick',[0 1],'xticklabels',{'Low Drag','High Drag'})
-ylabel('Estimated Thrust Power (W), P = (D*U)/\eta')
+ylabel('Estimated Thrust Power (W), P = (D*U)/\eta_p')
 box on
 text(-.4,1160,'A','FontSize',14,'FontWeight','Bold')
 
@@ -103,8 +109,14 @@ scatter(ones(length(high),1)-setjit4,P_dh/0.25,[],'bv','Filled')
 
 xlim([-0.5 1.5])
 set(gca,'xtick',[0 1],'xticklabels',{'Low Drag','High Drag'})
-ylabel('Estimated Power (W), P = (D*U)/(\eta*\eta_a)') % includes chemical efficiency
+ylabel('Estimated Power (W), P = (D*U)/(\eta_p*\eta_m)') % includes chemical efficiency
 box on
 adjustfigurefont
 text(-.4,4350,'B','FontSize',14,'FontWeight','Bold')
 print('Eg3911_PTPO.eps','-depsc','-r300')
+
+% values for Table 2 in paper
+% [nanmean(P_dl/0.25) nanstd(P_dl/0.25)]
+% [nanmean(P_al/0.25) nanstd(P_al/0.25)]
+% [nanmean(P_dh/0.25) nanstd(P_dh/0.25)]
+% [nanmean(P_ah/0.25) nanstd(P_ah/0.25)]

@@ -7,7 +7,7 @@ figure(6); clf
 subplot(121)
 % with sawtooth curves
 hold on; box on
-xlabel('Strouhal Number, St'); ylabel('C_T/St^2')
+xlabel('Strouhal Number, \itSt '); ylabel('C_T/St^2')
 % plot Hover contours
 load('Hover2004_Fig5')
 h = plot(a10_sawtooth(:,1),a10_sawtooth(:,2),a15_sawtooth(:,1),a15_sawtooth(:,2),...

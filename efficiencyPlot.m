@@ -17,7 +17,7 @@ scatter(ones(length(high),1)-rand(length(high),1)/4,st_dmax(high),[],'bv','fille
 scatter(zeros(length(low),1)+rand(length(low),1)/4,st_amax(low),[],'k^')
 scatter(ones(length(high),1)+rand(length(high),1)/4,st_amax(high),[],'b^')
 set(gca,'xtick',[0 1],'xticklabels',{'Low Drag','High Drag'})
-ylabel('Strouhal Number, St')
+ylabel('Strouhal Number, \itSt')
 text(-0.4240,1.55,'A','FontSize',14,'FontWeight','Bold')
 box on
 
@@ -41,9 +41,9 @@ ii = find(alpha_low(:,2) == 109 | alpha_low(:,2) == 159);
 % high drag ascent
 scatter(ones(length(high),1)+rand(length(high),1)/4,eta_high(:,2),[],'b^') % no harmonic ones here
 set(gca,'xtick',[0 1],'xticklabels',{'Low Drag','High Drag'})
-ylabel('Propulsive Efficiency,\eta')
+ylabel('Propulsive Efficiency,\it\eta_p')
 box on
 adjustfigurefont
 text(-0.4240,0.5844,'B','FontSize',14','FontWeight','Bold')
 
-print('3911_EfficiencyChange.eps','-depsc','-r300')
+print('3911_EfficiencyChange','-dtiff','-r300')
