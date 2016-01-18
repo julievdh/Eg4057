@@ -9,8 +9,8 @@
 % This is the best we can do, I think.
 
 % load data
-load_rw015a
-loadprh(tag)
+rw015a = load('rw11_015aprh.mat');
+fs = 5;
 
 % calculate pitch deviation
 [~,rw015a.ph,~,~] = findflukes(rw015a.Aw,rw015a.Mw,fs,0.3,0.01,[0.7 8]);
@@ -26,6 +26,8 @@ amp = maxtab(1:end-1,2) - mintab(:,2);              % calculate amplitude
 % plot([maxtab(i,1) maxtab(i,1)],[maxtab(i,2) maxtab(i,2)-amp(i)],'k')
 % end
 
+
+%% for each dive
 for i = 1:length(rw015a.T);
     % find fluke strokes within dive
     ii = find(maxtab(:,1) > rw015a.T(i,1)*fs & maxtab(:,1) < rw015a.T(i,1)*fs+end_desc(i));
@@ -40,6 +42,8 @@ for i = 1:length(rw015a.T);
     count = size(ii,1);
     dur = end_desc(i)/fs;
     hz_d(i) = count/dur;
+    shift_maxtab = maxtab(ii(2):ii(end),1);
+    ifi_d(i,1:count-1) = shift_maxtab(:,1)-maxtab(ii(1):ii(end)-1,1); % in SAMPLES
 end
 
 % calculate mean vertical speed
@@ -66,7 +70,20 @@ for i = 1:length(rw015a.T);
     count = size(ii,1);
     dur = end_desc(i)/fs;
     hz_a(i) = count/dur;
+    shift_maxtab = maxtab(ii(2):ii(end),1);
+    ifi_a(i,1:count-1) = shift_maxtab(:,1)-maxtab(ii(1):ii(end)-1,1); % in SAMPLES
 end
+
+% replace zeros with NaNs
+ifi_d(ifi_d == 0) = NaN;
+ifi_a(ifi_a == 0) = NaN;
+
+figure(2); clf; hold on
+histogram(ifi_d)
+histogram(ifi_a)
+
+
+return
 %%
 % calculate mean amplitude in meters
 mn_amp_am = sin(mn_amp_a)*5;
