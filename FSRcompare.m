@@ -200,6 +200,22 @@ ylim([0 0.5])
 % end
 % ylim([-22 2])
 
+% store values
+ifi_d_low_3911 = ifi_d_low;
+ifi_d_high_3911 = ifi_d_high;
+ifi_b_low_3911 = ifi_b_low;
+ifi_b_high_3911 = ifi_b_high;
+ifi_a_low_3911 = ifi_a_low;
+ifi_a_high_3911 = ifi_a_high;
+hz_d_low_3911 = hz_d(54:end);
+hz_d_high_3911 = hz_d(1:53);
+hz_b_low_3911 = hz_b(54:end);
+hz_b_high_3911 = hz_b(1:53);
+hz_a_low_3911 = hz_a(54:end);
+hz_a_high_3911 = hz_a(1:53);
+
+return
+
 %% For Eg 4057
 clear maxtab mintab ifi_d ifi_b ifi_a ii hz_d hz_b hz_a
 
