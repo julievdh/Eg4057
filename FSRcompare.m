@@ -109,6 +109,10 @@ ifi_b_low = ifi_b(54:end);
 ifi_a_high = ifi_a(1:53,:);
 ifi_a_low = ifi_a(54:end);
 
+%% What about IFI/fluke stroke rate at the surface?
+
+[ifi_s_3911,hz_s_3911] = surfIFI(rw015a,maxtab);
+
 %%
 figure(3); clf;
 subplot(231); hold on
@@ -209,7 +213,7 @@ hz_b_3911 = hz_b;
 hz_a_3911 = hz_a;
 
 %% For Eg 4057
-clear maxtab mintab ifi_d ifi_b ifi_a ii hz_d hz_b hz_a
+clear maxtab mintab ifi_d ifi_b ifi_a ifi_s ii hz_d hz_b hz_a hz_s
 
 [eg047a.v,eg047a.ph,eg047a.mx,eg047a.fr] = findflukes(eg047a.Aw,eg047a.Mw,fs,0.2,0.001,[0.7 8]);
 
@@ -363,6 +367,8 @@ ylim([0 0.5])
 
 
 %% Run stats
+[ifi_s,hz_s] = surfIFI(eg047a,maxtab);
+
 FSRstats
 
 return
