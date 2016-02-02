@@ -25,6 +25,7 @@ end
 
 ifi_s(ifi_s == 0) = NaN;
 ifi_s(i+1,:) = NaN;
+hz_s(hz_s == 0) = NaN;
 hz_s(i+1) = NaN;
 % histogram(ifi_s)
 ifi_s_high = ifi_s(1:3,:);
