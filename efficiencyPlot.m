@@ -6,16 +6,16 @@ warning off
 % replace zeros with NaNs
 eta_high(eta_high == 0) = NaN; eta_low(eta_low == 0) = NaN;
 % remove St outliers 
-st_dmax(st_dmax > 1.6) = NaN; st_amax(st_amax > 1.6) = NaN;
+St_d(St_d > 1.6) = NaN; St_a(St_a > 1.6) = NaN;
 
 % plot
 figure(5); clf;
 subplot(121); hold on
-scatter(zeros(length(low),1)-rand(length(low),1)/4,st_dmax(low),[],'kv','filled')
-scatter(ones(length(high),1)-rand(length(high),1)/4,st_dmax(high),[],'bv','filled')
+scatter(zeros(length(low),1)-rand(length(low),1)/4,St_d(low),[],'kv','filled')
+scatter(ones(length(high),1)-rand(length(high),1)/4,St_d(high),[],'bv','filled')
 
-scatter(zeros(length(low),1)+rand(length(low),1)/4,st_amax(low),[],'k^')
-scatter(ones(length(high),1)+rand(length(high),1)/4,st_amax(high),[],'b^')
+scatter(zeros(length(low),1)+rand(length(low),1)/4,St_a(low),[],'k^')
+scatter(ones(length(high),1)+rand(length(high),1)/4,St_a(high),[],'b^')
 set(gca,'xtick',[0 1],'xticklabels',{'Low Drag','High Drag'})
 ylabel('Strouhal Number, \itSt')
 text(-0.4240,1.55,'A','FontSize',14,'FontWeight','Bold')

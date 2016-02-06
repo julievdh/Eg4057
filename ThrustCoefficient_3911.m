@@ -6,11 +6,14 @@
 cd /Users/julievanderhoop/Documents/MATLAB/Eg4057
 load('eg3911_Stvars')
 
+low = 54:154;   % dives in low drag
+high = 1:53;    % dives in high drag
+
 % amplitude of fluke oscillation
-A_E_a = mn_amp_am; % amplitude for entangled 3911 on ascent
-A_E_d = mn_amp_dm; % amplitude for entangled 3911 on descent
-A_NE_a = mean(mn_amp_am(low)); % average amplitude for non-entangled 3911 ascent
-A_NE_d = mean(mn_amp_dm(low)); % average amplitude for non-entangled 3911 descent
+A_E_a = mn_amp_a; % amplitude for entangled 3911 on ascent
+A_E_d = mn_amp_d; % amplitude for entangled 3911 on descent
+A_NE_a = mean(mn_amp_a(low)); % average amplitude for non-entangled 3911 ascent
+A_NE_d = mean(mn_amp_d(low)); % average amplitude for non-entangled 3911 descent
 span = 78.234*exp(0.001*10*100); % from Moore et al. 2005, Figure 1e
 % figure(10); x = 2:16; plot(l,span,'o',x,78.234*exp(0.001*x*100))
 span = span/100; % convert to m

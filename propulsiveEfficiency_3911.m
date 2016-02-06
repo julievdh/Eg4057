@@ -83,7 +83,7 @@ h3 = plot(U,whaleDf);
 h4 = plot(U,whaleDf_lower,':',U,whaleDf_upper,':');
 set([h3; h4],'color',[0.75 0.75 0.75])
 xlabel('Speed (m/s)'); ylabel('Drag (N)')
-legend([h1 h2 h3],'Not Entangled','Entangled','Disentangled','Location','NW')
+legend([h1 h2 h3],'Entangled','Disentangled','Not Entangled','Location','NW')
 adjustfigurefont
 print('Eg3911_Drag.eps','-depsc','-r300')
 
@@ -184,21 +184,21 @@ PlotCTni
 
 %% Calculate differences between
 
-[mean(CT_E_d_atspeed) std(CT_E_d_atspeed)]
-[mean(CT_E_a_atspeed) std(CT_E_a_atspeed)]
-[h,p,ci,stats] = ttest(CT_E_d_atspeed,CT_E_a_atspeed)
-    
-[mean(CT_DE_d_atspeed(low)) std(CT_DE_d_atspeed(low))]
-[mean(CT_DE_a_atspeed(low)) std(CT_DE_a_atspeed(low))]
-foldinc_d = mean(CT_E_d_atspeed)/mean(CT_DE_d_atspeed(low))
-foldinc_a = mean(CT_E_a_atspeed)/mean(CT_DE_a_atspeed(low))
+% [mean(CT_E_d_atspeed) std(CT_E_d_atspeed)]
+% [nanmean(CT_E_a_atspeed) nanstd(CT_E_a_atspeed)]
+% [h,p,ci,stats] = ttest(CT_E_d_atspeed,CT_E_a_atspeed)
+%     
+% [mean(CT_DE_d_atspeed(low)) std(CT_DE_d_atspeed(low))]
+% [mean(CT_DE_a_atspeed(low)) std(CT_DE_a_atspeed(low))]
+% foldinc_d = mean(CT_E_d_atspeed)/mean(CT_DE_d_atspeed(low))
+% foldinc_a = mean(CT_E_a_atspeed)/mean(CT_DE_a_atspeed(low))
 
 condition = [ones(1,53) zeros(1,101) ones(1,53) zeros(1,101)];
 portion = [repmat(-1,1,154) repmat(1,1,154)];
 allCT = vertcat(CT_E_d_atspeed',CT_DE_d_atspeed(low)',CT_E_a_atspeed',CT_DE_a_atspeed(low)');
-% boxplot(allCT,{condition portion})
+boxplot(allCT,{condition portion})
 % two-way ANOVA
-% [p,t,stats] = anovan(allCT,{condition portion},'varnames',{'Condition';'Dive Portion'});
+[p,t,stats] = anovan(allCT,{condition portion},'varnames',{'Condition';'Dive Portion'});
 
 % average non-entangled CT across the same range of speeds
 disp('mean SD average non-entangled CT descent')
@@ -224,19 +224,19 @@ allni = vertcat(ni_E_d_atspeed',ni_DE_d_atspeed(low)',ni_E_a_atspeed',ni_DE_a_at
 %% 3. Calculate angle of attack based on St and CT
 
 % Calculate CT/St^2 for every dive descent and ascent
-CTSt2_E_a = CT_E_a_atspeed./(st_amax(high).^2);
-CTSt2_E_d = CT_E_d_atspeed./(st_dmax(high).^2);
-CTSt2_DE_a = CT_DE_a_atspeed(low)./(st_amax(low).^2);
-CTSt2_DE_d = CT_DE_d_atspeed(low)./(st_dmax(low).^2);
+CTSt2_E_a = CT_E_a_atspeed./(St_a(high).^2);
+CTSt2_E_d = CT_E_d_atspeed./(St_d(high).^2);
+CTSt2_DE_a = CT_DE_a_atspeed(low)./(St_a(low).^2);
+CTSt2_DE_d = CT_DE_d_atspeed(low)./(St_d(low).^2);
 
 % plot
 figure(6); clf
 set(gcf,'position',[427 5 532 668])
 subplot(211); hold on; box on
-scatter(st_amax(high),CTSt2_E_a,'b^')
-scatter(st_dmax(high),CTSt2_E_d,'bv','filled')
-scatter(st_amax(low),CTSt2_DE_a,'k^')
-scatter(st_dmax(low),CTSt2_DE_d,'kv','filled')
+scatter(St_a(high),CTSt2_E_a,'b^')
+scatter(St_d(high),CTSt2_E_d,'bv','filled')
+scatter(St_a(low),CTSt2_DE_a,'k^')
+scatter(St_d(low),CTSt2_DE_d,'kv','filled')
 % plot Hover contours
 load('Hover2004_Fig5')
 h = plot(a10_harmonic(:,1),a10_harmonic(:,2),a15_harmonic(:,1),a15_harmonic(:,2),...
@@ -255,10 +255,10 @@ xlim([0 1.25]); ylim([0 10])
 
 % with sawtooth curves
 subplot(212); hold on; box on
-scatter(st_amax(high),CTSt2_E_a,'b^')
-scatter(st_dmax(high),CTSt2_E_d,'bv','filled')
-scatter(st_amax(low),CTSt2_DE_a,'k^')
-scatter(st_dmax(low),CTSt2_DE_d,'kv','filled')
+scatter(St_a(high),CTSt2_E_a,'b^')
+scatter(St_d(high),CTSt2_E_d,'bv','filled')
+scatter(St_a(low),CTSt2_DE_a,'k^')
+scatter(St_d(low),CTSt2_DE_d,'kv','filled')
 % plot Hover contours
 load('Hover2004_Fig5')
 h = plot(a10_sawtooth(:,1),a10_sawtooth(:,2),a15_sawtooth(:,1),a15_sawtooth(:,2),...
@@ -293,50 +293,50 @@ plotHoverFig6
 for i = 1:length(high)
     if alpha_high(i,1) == 109
         % what is nearest index?
-        ind = nearest(a10_harmonic_i(:,1),st_dmax(high(i)));
+        ind = nearest(a10_harmonic_i(:,1),St_d(high(i)));
         % store
         eta_high(i,1) = a10_harmonic_i(ind,2);
         % plot
-        scatter(st_dmax(high(i)),eta_high(i,1),'rv','filled')
+        scatter(St_d(high(i)),eta_high(i,1),'rv','filled')
     else if alpha_high(i,1) == 10
-            ind = nearest(a10_sawtooth_i(:,1),st_dmax(high(i)));
+            ind = nearest(a10_sawtooth_i(:,1),St_d(high(i)));
             eta_high(i,1) = a10_sawtooth_i(ind,2);
-            scatter(st_dmax(high(i)),eta_high(i,1),'bv','filled')
+            scatter(St_d(high(i)),eta_high(i,1),'bv','filled')
         else if alpha_high(i,1) == 20
-                ind = nearest(a20_sawtooth_i(:,1),st_dmax(high(i)));
+                ind = nearest(a20_sawtooth_i(:,1),St_d(high(i)));
                 eta_high(i,1) = a20_sawtooth_i(ind,2);
-                scatter(st_dmax(high(i)),eta_high(i,1),'bv','filled')
+                scatter(St_d(high(i)),eta_high(i,1),'bv','filled')
             else if alpha_high(i,1) == 159
-                    ind = nearest(a15_harmonic_i(:,1),st_dmax(high(i)));
+                    ind = nearest(a15_harmonic_i(:,1),St_d(high(i)));
                     eta_high(i,1) = a15_harmonic_i(ind,2);
-                    scatter(st_dmax(high(i)),eta_high(i,1),'rv','filled')
+                    scatter(St_d(high(i)),eta_high(i,1),'rv','filled')
                 end
             end
         end
     end
 end
-% ascent
+%% ascent
 for i = 1:length(high)
     if alpha_high(i,2) == 10
-        ind = nearest(a10_sawtooth_i(:,1),st_amax(high(i)));
+        ind = nearest(a10_sawtooth_i(:,1),St_a(high(i)));
         eta_high(i,2) = a10_sawtooth_i(ind,2);
-        scatter(st_amax(high(i)),eta_high(i,2),'b^')
+        scatter(St_a(high(i)),eta_high(i,2),'b^')
     else if alpha_high(i,2) == 15
-            ind = nearest(a15_sawtooth_i(:,1),st_amax(high(i)));
+            ind = nearest(a15_sawtooth_i(:,1),St_a(high(i)));
             eta_high(i,2) = a15_sawtooth_i(ind,2);
-            scatter(st_amax(high(i)),eta_high(i,2),'b^')
+            scatter(St_a(high(i)),eta_high(i,2),'b^')
         else if alpha_high(i,2) == 20
-                ind = nearest(a20_sawtooth_i(:,1),st_amax(high(i)));
+                ind = nearest(a20_sawtooth_i(:,1),St_a(high(i)));
                 eta_high(i,2) = a20_sawtooth_i(ind,2);
-                scatter(st_amax(high(i)),eta_high(i,2),'b^')
+                scatter(St_a(high(i)),eta_high(i,2),'b^')
             else if alpha_high(i,2) == 25
-                    ind = nearest(a25_sawtooth_i(:,1),st_amax(high(i)));
+                    ind = nearest(a25_sawtooth_i(:,1),St_a(high(i)));
                     eta_high(i,2) = a25_sawtooth_i(ind,2);
-                    scatter(st_amax(high(i)),eta_high(i,2),'b^')
+                    scatter(St_a(high(i)),eta_high(i,2),'b^')
                 else if alpha_high(i,2) == 35
-                        ind = nearest(a35_sawtooth_i(:,1),st_amax(high(i)));
+                        ind = nearest(a35_sawtooth_i(:,1),St_a(high(i)));
                         eta_high(i,2) = a35_sawtooth_i(ind,2);
-                        scatter(st_amax(high(i)),eta_high(i,2),'b^')
+                        scatter(St_a(high(i)),eta_high(i,2),'b^')
                     end
                 end
             end
@@ -344,20 +344,20 @@ for i = 1:length(high)
     end
 end
 
-% for low drag
+%% for low drag
 % descent
 for i = 1:length(low)
     if alpha_low(i,1) == 109
         % what is nearest index?
-        ind = nearest(a10_harmonic_i(:,1),st_dmax(low(i)));
+        ind = nearest(a10_harmonic_i(:,1),St_d(low(i)));
         % store
         eta_low(i,1) = a10_harmonic_i(ind,2);
         % plot
-        scatter(st_dmax(low(i)),eta_low(i,1),'rv','filled')
+        scatter(St_d(low(i)),eta_low(i,1),'rv','filled')
     else if alpha_low(i,1) == 10
-            ind = nearest(a10_sawtooth_i(:,1),st_dmax(low(i)));
+            ind = nearest(a10_sawtooth_i(:,1),St_d(low(i)));
             eta_low(i,1) = a10_sawtooth_i(ind,2);
-            scatter(st_dmax(low(i)),eta_low(i,1),'kv','filled')
+            scatter(St_d(low(i)),eta_low(i,1),'kv','filled')
         end
     end
 end
@@ -365,13 +365,13 @@ end
 % ascent
 for i = 1:length(low)
     if alpha_low(i,2) == 10
-        ind = nearest(a10_sawtooth_i(:,1),st_amax(low(i)));
+        ind = nearest(a10_sawtooth_i(:,1),St_a(low(i)));
         eta_low(i,2) = a10_sawtooth_i(ind,2);
-        scatter(st_amax(low(i)),eta_low(i,2),'k^')
+        scatter(St_a(low(i)),eta_low(i,2),'k^')
     else if alpha_low(i,2) == 109
-            ind = nearest(a10_harmonic_i(:,1),st_amax(low(i)));
+            ind = nearest(a10_harmonic_i(:,1),St_a(low(i)));
             eta_low(i,2) = a10_harmonic_i(ind,2);
-            scatter(st_amax(low(i)),eta_low(i,2),'r^')
+            scatter(St_a(low(i)),eta_low(i,2),'r^')
         end
     end
 end
@@ -385,3 +385,4 @@ efficiencyStats
 %% Compute Power
 % power = D*U/efficiency
 computePower
+

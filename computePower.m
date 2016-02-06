@@ -2,6 +2,10 @@
 % compute and compare and plot Power estimates (thrust power and overall
 % power)
 
+% replace eta < 0.05 = NaN
+eta_high(eta_high < 0.03) = NaN;
+eta_low(eta_low < 0.03) = NaN;
+
 % ascent high
 P_ah = (Dtot_highdrag(ind_a(high)).*U(ind_a(high)))'./eta_high(:,2);
 P_ah_lower = (Dtot_high_lower(ind_a(high)).*U(ind_a(high)))'./eta_high(:,2);
@@ -73,7 +77,7 @@ scatter(ones(length(high),1)-setjit4,P_dh,[],'bv','Filled')
 % [nanmean(P_dh) nanstd(P_dh)]
 % [nanmean(P_ah) nanstd(P_ah)]
 
-xlim([-0.5 1.5])
+xlim([-0.5 1.5]); ylim([0 4500])
 set(gca,'xtick',[0 1],'xticklabels',{'Low Drag','High Drag'})
 ylabel('Estimated Thrust Power (W), P = (D*U)/\eta_p')
 box on
@@ -82,9 +86,9 @@ text(-.4,1160,'A','FontSize',14,'FontWeight','Bold')
 
 %% stats
 all_pt = vertcat(P_dh,P_dl,P_ah,P_al);
-% boxplot(all_pt,{condition portion})
+boxplot(all_pt,{condition portion})
 [p,t,stats] = anovan(all_pt,{condition portion},'varnames',{'Condition';'Dive Portion'});
-[p,t,stats] = anovan(all_pt/0.25,{condition portion},'varnames',{'Condition';'Dive Portion'});
+% [p,t,stats] = anovan(all_pt/0.25,{condition portion},'varnames',{'Condition';'Dive Portion'});
 finc_d = nanmean(P_dh)/nanmean(P_dl); % and same number if P_dh/0.25 and P_dl/0.25
 finc_a = nanmean(P_ah)/nanmean(P_dl);
 
