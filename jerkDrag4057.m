@@ -1,0 +1,125 @@
+% Jerk
+load_eg047a
+loadprh(tag)
+%%
+% calculate jerk and MSA
+j = njerk(eg047a.A,fs);
+m = msa(eg047a.A);
+t = (1:length(eg047a.A))/fs;
+
+% get pitch deviation
+[~,eg047a.ph,~,~] = findflukes(eg047a.Aw,eg047a.Mw,fs,0.3,0.01,[0.7 8]);
+
+%% plot 
+figure(1); clf
+subplot(121);hold on
+plot(t(eg047a.p1(1)*fs:eg047a.p1(2)*fs),j(eg047a.p1(1)*fs:eg047a.p1(2)*fs))
+plot(t(eg047a.p1(1)*fs:eg047a.p1(2)*fs),-eg047a.p(eg047a.p1(1)*fs:eg047a.p1(2)*fs),'k')
+plot(t(eg047a.p1(1)*fs:eg047a.p1(2)*fs),eg047a.ph(eg047a.p1(1)*fs:eg047a.p1(2)*fs),'r')
+plot(t(eg047a.p1(1)*fs:eg047a.p1(2)*fs),m(eg047a.p1(1)*fs:eg047a.p1(2)*fs),'g')
+ylim([-30 50]); xlim([0 6670])
+plot([0 6670],[mean(j)+2*std(j) mean(j)+2*std(j)],'k')
+
+subplot(122);hold on
+plot(t(eg047a.p2(1)*fs:eg047a.p3(2)*fs),j(eg047a.p2(1)*fs:eg047a.p3(2)*fs))
+plot(t(eg047a.p2(1)*fs:eg047a.p3(2)*fs),-eg047a.p(eg047a.p2(1)*fs:eg047a.p3(2)*fs),'k')
+plot(t(eg047a.p2(1)*fs:eg047a.p3(2)*fs),eg047a.ph(eg047a.p2(1)*fs:eg047a.p3(2)*fs),'r')
+plot(t(eg047a.p2(1)*fs:eg047a.p3(2)*fs),m(eg047a.p2(1)*fs:eg047a.p3(2)*fs),'g')
+ylim([-30 50]); xlim([6600 22300])
+plot([6600 22300],[mean(j)+2*std(j) mean(j)+2*std(j)],'k')
+
+
+%% find dives
+eg047a.T = finddives(eg047a.p,fs,5,1);              % find dives
+figure(3); clf; hold on; ylim([-30 50])
+% plot random high drag dive
+i = randi([1,12]);
+plot(-eg047a.p(eg047a.T(i,1)*fs:eg047a.T(i,2)*fs),'b')
+plot(j(eg047a.T(i,1)*fs:eg047a.T(i,2)*fs),'b')
+% plot random low drag dive
+i = randi([13,20]);
+plot(-eg047a.p(eg047a.T(i,1)*fs:eg047a.T(i,2)*fs),'k')
+plot(j(eg047a.T(i,1)*fs:eg047a.T(i,2)*fs),'k')
+
+%% what is meanSD jerk within dives?
+for i = 1:length(eg047a.T)
+    mn_j(i) = mean(j(eg047a.T(i,1)*fs:eg047a.T(i,2)*fs));
+    std_j(i) = std(j(eg047a.T(i,1)*fs:eg047a.T(i,2)*fs));
+    mn_msa(i) = mean(m(eg047a.T(i,1)*fs:eg047a.T(i,2)*fs));
+    std_msa(i) = std(m(eg047a.T(i,1)*fs:eg047a.T(i,2)*fs));
+end
+figure(4); clf 
+subplot(121); hold on
+bins = 0:0.5:4;
+h1 = hist(mn_j(1:12),bins);
+h2 = hist(mn_j(13:end),bins);
+h = bar(bins,[h1;h2]',1.2,'grouped');
+legend('Low','High'); xlim([0 3])
+% so then this+2SD should be the cutoff for transients within dives
+cutoff = mean(mn_j)+2*(mean(std_j));
+
+subplot(122); hold on
+bins = 0:0.05:1;
+h1 = hist(mn_msa(1:12),bins);
+h2 = hist(mn_msa(13:end),bins);
+h = bar(bins,[h1;h2]',1.2,'grouped');
+xlim([0.1 0.4])
+
+%% FIND NUMBER OF TRANSIENTS IN DIVE
+% NOT WITHIN FIRST OR LAST FEW SECONDS DUE TO SURFACING
+
+for i = 1:20;
+j_select = j(eg047a.T(i,1)*fs:eg047a.T(i,2)*fs);
+m_select = m(eg047a.T(i,1)*fs:eg047a.T(i,2)*fs);
+ii = find(j_select >= cutoff);
+% eliminate those within first and last second of dive, high jerk is
+% caused by surfacing
+ii(ii<5) = NaN;
+ii(ii>length(j_select)-5) = NaN;
+ii(isnan(ii))=[]; % remove NaNs
+% plot
+figure(5); clf; hold on; ylim([-3 10])
+plot(-eg047a.p(eg047a.T(i,1)*fs:eg047a.T(i,2)*fs)/10,'b')
+plot(j_select,'b')
+plot(m_select,'r')
+plot(ii,j_select(ii),'g*')
+% plot(ii+5,m_select(ii+5),'g*')
+plot([0 length(j_select)],[cutoff cutoff],'g')
+% store
+trans(i) = length(ii)-sum(isnan(ii));
+title(i)
+pause
+% figure(6); hold on; % title(i)
+% h1 = plot(m_select(ii+5),j_select(ii),'o');
+% if i < 54
+%     set(h1,'color','b')
+% else set(h1,'color','k')
+% end
+% xlim([0 4]); ylim([0 10])
+end
+
+return
+
+%% figure
+figure(10); clf 
+ind = [10 134 48 101];
+for n = 1:length(ind)
+   i = ind(n);
+  j_select = j(eg047a.T(i,1)*fs:eg047a.T(i,2)*fs);
+m_select = m(eg047a.T(i,1)*fs:eg047a.T(i,2)*fs);
+ii = find(j_select >= cutoff);
+% eliminate those within first and last second of dive, high jerk is
+% caused by surfacing
+ii(ii<5) = NaN;
+ii(ii>length(j_select)-5) = NaN;
+ii(isnan(ii))=[]; % remove NaNs
+% plot
+subplot(2,2,n); hold on
+plot(-eg047a.p(eg047a.T(i,1)*fs:eg047a.T(i,2)*fs)/10,'b')
+plot(j_select,'b')
+plot(m_select,'r')
+plot(ii,j_select(ii),'g*')
+% plot(ii+5,m_select(ii+5),'g*')
+plot([0 length(j_select)],[cutoff cutoff],'g')
+end  
+

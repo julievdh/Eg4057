@@ -1,6 +1,6 @@
 % Plot Fluke Stroke over duty cycle
 
-function [ifi,maxtab,mintab] = dutycycleplot(periods,ph,fs)
+function [dur,maxtab,mintab] = dutycycleplot(periods,ph,fs)
 % find fluke strokes with peak detector
 [maxtab,mintab] = peakdet(ph,0.01);
 
@@ -21,7 +21,7 @@ th = quantile(diff(maxtab(:,1)),0.9); % in samples
 for i = 1:length(ii)-1
     ind1 = maxtab(i,1);
     ind2 = maxtab(i+1,1);
-    ifi(1,i) = ind2-ind1;
+    dur(1,i) = (ind2-ind1)/fs; % fluke stroke cycle duration in SECONDS
     if maxtab(i+1)-maxtab(i) < th
  % plot duration of fluke stroke in SECONDS not in CUES
     patchline((1:length(ph(ind1:ind2)))/fs,ph(ind1:ind2),'edgecolor','k','edgealpha',0.1)
