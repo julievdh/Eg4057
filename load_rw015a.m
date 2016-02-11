@@ -1,10 +1,10 @@
 % load tag rw11_015a
 
 % set tag path
-path = 'F:\rw11\rw11_015a\';
-settagpath('cal',[path 'cal\'],'prh',[path 'prh\'],'raw',[path 'raw\'],'audit',[path 'audit\'])
-settagpath('audio','F:\')
-tag = 'rw11_015a';
+% path = 'F:\rw11\rw11_015a\';
+% settagpath('cal',[path 'cal\'],'prh',[path 'prh\'],'raw',[path 'raw\'],'audit',[path 'audit\'])
+% settagpath('audio','F:\')
+% tag = 'rw11_015a';
 
 % load prh
 loadprh(tag)
