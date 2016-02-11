@@ -19,7 +19,7 @@ eg047a.t = (1:length(eg047a.p))/eg047a.fs;
 fs = 5;
 
 % calculate pitch deviation from mean. ignore fluke stroke info here.
-[~,rw015a.ph,~,~] = findflukes(rw015a.Aw,rw015a.Mw,fs,0.3,0.01,[0.7 8]);
+[rw015a.v,rw015a.ph,~,rw015a.fr] = findflukes(rw015a.Aw,rw015a.Mw,fs,0.3,0.01,[0.7 8]);
 [eg047a.v,eg047a.ph,eg047a.mx,eg047a.fr] = findflukes(eg047a.Aw,eg047a.Mw,fs,0.2,0.001,[0.7 8]);
 
 rw015a.T = finddives(rw015a.p,fs,5,1);              % find dives
@@ -27,17 +27,20 @@ load('rw015a_descasc')                              % load ascents and descents
 
 
 %% use peakdet to find individual fluke strokes
-[maxtab,mintab] = peakdet(rw015a.ph,0.04);
+%[maxtab,mintab] = peakdet(rw015a.ph,0.04);
 
 %% Calculate Inter-Fluke Interval
 %% for each dive
+warning off
 for i = 1:length(rw015a.T);
+    % pause
     figure(1); clf; hold on
-    plot(-rw015a.p(rw015a.T(i,1)*fs:rw015a.T(i,2)*fs),'color',[0.75 0.75 0.75]) % plot dive
-    plot(rw015a.ph(rw015a.T(i,1)*fs:rw015a.T(i,2)*fs),'k') % plot pitch deviation
-    plot([end_desc(i) end_desc(i)],[-20 0],'k') % plot descent
+    plot(rw015a.T(i,1)*fs:rw015a.T(i,2)*fs,-rw015a.p(rw015a.T(i,1)*fs:rw015a.T(i,2)*fs),'color',[0.75 0.75 0.75]) % plot dive
+    plot(rw015a.T(i,1)*fs:rw015a.T(i,2)*fs,rw015a.ph(rw015a.T(i,1)*fs:rw015a.T(i,2)*fs),'k') % plot pitch deviation
+    % plot([end_desc(i) end_desc(i)],[-20 0],'k') % plot descent
+    % plot(rw015a.T(i,1)*fs:fs:rw015a.T(i,2)*fs,rw015a.fr(rw015a.T(i,1):(rw015a.T(i,2))),'r') % plot instantaneous fluke stroke rate
     % find fluke strokes within descent
-    ii = find(maxtab(:,1) > rw015a.T(i,1)*fs & maxtab(:,1) < rw015a.T(i,1)*fs+end_desc(i));
+    ii = find(rw015a.v > rw015a.T(i,1) & rw015a.v(:,1) < rw015a.T(i,1)+end_desc(i)/fs);
     
     % calculate mean amplitude (in radians)
     % mn_amp_d(i) = mean(amp(ii));
@@ -48,90 +51,95 @@ for i = 1:length(rw015a.T);
     count = size(ii,1);
     dur = end_desc(i)/fs;
     hz_d(i) = count/dur;
-    shift_maxtab = maxtab(ii(2):ii(end),1);
-    ifi_d(i,1:count-1) = shift_maxtab(:,1)-maxtab(ii(1):ii(end)-1,1); % in SAMPLES
-
-    % on an ascent
-    plot([start_asc(i) start_asc(i)],[-20 0],'k')
-    
+%     shift_maxtab = maxtab(ii(2):ii(end),1);
+%     ifi_d(i,1:count-1) = shift_maxtab(:,1)-maxtab(ii(1):ii(end)-1,1); % in SAMPLES
+% 
+%     % on an ascent
+%     plot([start_asc(i) start_asc(i)],[-20 0],'k')
+%     
     % find fluke strokes
-    ii = find(maxtab(:,1) > rw015a.T(i,1)*fs+start_asc(i) & maxtab(:,1) < rw015a.T(i,2)*fs);
-    
-    % calculate mean amplitude (in radians)
-    % mn_amp_a(i) = mean(amp(ii(1:end-1))); % because last one is always big kick
-    
-    % calculate mean amplitude in m
-    % mn_amp_am(i) = mean(abs(sin(rad2deg(amp(ii))*(2/3)*10)));
-    
-    % calculate mean frequency
+    ii = find(rw015a.v > rw015a.T(i,1)+start_asc(i)/fs & rw015a.v < rw015a.T(i,2));
+%     
+%     % calculate mean amplitude (in radians)
+%     % mn_amp_a(i) = mean(amp(ii(1:end-1))); % because last one is always big kick
+%     
+%     % calculate mean amplitude in m
+%     % mn_amp_am(i) = mean(abs(sin(rad2deg(amp(ii))*(2/3)*10)));
+%     
+%     % calculate mean frequency
     count = size(ii,1);
     dur = end_desc(i)/fs;
     hz_a(i) = count/dur;
-    shift_maxtab = maxtab(ii(2):ii(end),1);
-    ifi_a(i,1:count-1) = shift_maxtab(:,1)-maxtab(ii(1):ii(end)-1,1); % in SAMPLES
-
-
+%     shift_maxtab = maxtab(ii(2):ii(end),1);
+%     ifi_a(i,1:count-1) = shift_maxtab(:,1)-maxtab(ii(1):ii(end)-1,1); % in SAMPLES
+% 
+% 
     % for bottom period
     % find fluke strokes
-    ii = find(maxtab(:,1) > rw015a.T(i,1)*fs+end_desc(i) & maxtab(:,1) < rw015a.T(i,1)*fs+start_asc(i));
-    
-    % calculate mean amplitude (in radians)
-    % mn_amp_b(i) = mean(amp(ii(1:end-1))); % because last one is always big kick
-    
-    % calculate mean amplitude in m
-    % mn_amp_bm(i) = mean(abs(sin(rad2deg(amp(ii))*(2/3)*10)));
-    
-    % calculate mean frequency
+    ii = find(rw015a.v > rw015a.T(i,1)+end_desc(i)/fs & rw015a.v < rw015a.T(i,1)+start_asc(i)/fs);
+    plot(rw015a.v(ii)*fs,zeros(length(ii)),'*')
+
+%     % calculate mean amplitude (in radians)
+%     % mn_amp_b(i) = mean(amp(ii(1:end-1))); % because last one is always big kick
+%     
+%     % calculate mean amplitude in m
+%     % mn_amp_bm(i) = mean(abs(sin(rad2deg(amp(ii))*(2/3)*10)));
+%     
+%     % calculate mean frequency
     count = size(ii,1);
-    dur = end_desc(i)/fs;
+    dur = (start_asc(i) - end_desc(i))/fs;
     hz_b(i) = count/dur;
-    if count > 1
-    shift_maxtab = maxtab(ii(2):ii(end),1);
-    ifi_b(i,1:count-1) = shift_maxtab(:,1)-maxtab(ii(1):ii(end)-1,1); % in SAMPLES
-    end
+%     if count > 1
+%     shift_maxtab = maxtab(ii(2):ii(end),1);
+%     ifi_b(i,1:count-1) = shift_maxtab(:,1)-maxtab(ii(1):ii(end)-1,1); % in SAMPLES
+%     end
 end
 
-% replace zeros with NaNs
-ifi_d(ifi_d == 0) = NaN;
-ifi_a(ifi_a == 0) = NaN;
-ifi_b(ifi_b == 0) = NaN;
-
+%% replace zeros with NaNs
 figure(2); clf; hold on
-histogram(ifi_d)
-histogram(ifi_a)
-histogram(ifi_b)
+histogram(hz_d)
+histogram(hz_a)
+histogram(hz_b)
 
 % find within phases
-ifi_d_high = ifi_d(1:53,:);
-ifi_d_low = ifi_d(54:end);
-ifi_b_high = ifi_b(1:53,:);
-ifi_b_low = ifi_b(54:end);
-ifi_a_high = ifi_a(1:53,:);
-ifi_a_low = ifi_a(54:end);
+hz_d_high = hz_d(1:53);
+hz_d_low = hz_d(54:end);
+hz_b_high = hz_b(1:53);
+hz_b_low = hz_b(54:end);
+hz_a_high = hz_a(1:53);
+hz_a_low = hz_a(54:end);
 
 %% What about IFI/fluke stroke rate at the surface?
 
-[ifi_s_3911,hz_s_3911] = surfIFI(rw015a,maxtab);
+[~,hz_s_3911] = surfIFI(rw015a,rw015a.v); 
+figure(2)
+histogram(hz_s_3911)
 
 %%
 figure(3); clf;
-subplot(231); hold on
+subplot(241); hold on
 title('Eg 3911')
-histogram(ifi_d_low/fs,0:0.25:20,'normalization','probability')
-histogram(ifi_d_high/fs,0:0.25:20,'normalization','probability')
-ylim([0 0.5])
+histogram(hz_d_low,0:0.05:1,'normalization','probability')
+histogram(hz_d_high,0:0.05:1,'normalization','probability')
+% ylim([0 0.5])
 
-subplot(232); hold on
-histogram(ifi_b_low/fs,0:0.25:20,'normalization','probability')
-histogram(ifi_b_high/fs,0:0.25:20,'normalization','probability')
-ylim([0 0.5])
+subplot(242); hold on
+histogram(hz_b_low,0:0.05:1,'normalization','probability')
+histogram(hz_b_high,0:0.05:1,'normalization','probability')
+% ylim([0 0.5])
 
-subplot(233); hold on
-histogram(ifi_a_low/fs,0:0.25:20,'normalization','probability')
-histogram(ifi_a_high/fs,0:0.25:20,'normalization','probability')
-xlabel('Inter-Fluke-Interval (seconds)')
-legend('low','high')
-ylim([0 0.5])
+subplot(243); hold on
+histogram(hz_a_low,0:0.05:1,'normalization','probability')
+histogram(hz_a_high,0:0.05:1,'normalization','probability')
+xlabel('Fluke Stroke Rate (Hz)')
+% ylim([0 0.5])
+
+subplot(244); hold on
+histogram(hz_s_3911(54:end),0:0.05:1,'normalization','probability')
+histogram(hz_s_3911(1:53),0:0.05:1,'normalization','probability')
+xlabel('Fluke Stroke Rate (Hz)')
+% ylim([0 0.5])
+
 
 % figure(4); 
 % subplot(231); hold on
@@ -150,31 +158,50 @@ ylim([0 0.5])
 figure(5); clf; 
 subplot('position',[0.1 0.52 0.4 0.45]); hold on
 % plot low drag and high drag 3911 dive
-for i = [38,80]
-    dur = (1:length(rw015a.T(i,1)*fs:rw015a.T(i,2)*fs))/length(rw015a.T(i,1)*fs:rw015a.T(i,2)*fs);
-    plot(dur,-rw015a.p(rw015a.T(i,1)*fs:rw015a.T(i,2)*fs),'color',[0.75 0.75 0.75]) % plot dive
-    plot(dur,rw015a.ph(rw015a.T(i,1)*fs:rw015a.T(i,2)*fs),'k') % plot pitch deviation
-    plot([dur(end_desc(i)) dur(end_desc(i))],[-20 0],'k') % plot descent
-    plot([dur(start_asc(i)) dur(start_asc(i))],[-20 0],'k')
+c = [0 0 1; 0 0 0];
+for dives = 1:2
+    n = [38,80];
+    i = n(dives);
+    dur = (1:length(rw015a.T(i,1)*fs:rw015a.T(i+1,1)*fs))/length(rw015a.T(i,1)*fs:rw015a.T(i+1,1)*fs);
+    h1 = plot(dur,-rw015a.p(rw015a.T(i,1)*fs:rw015a.T(i+1,1)*fs)); % plot dive
+    h2 = plot(dur,rw015a.ph(rw015a.T(i,1)*fs:rw015a.T(i+1,1)*fs)); % plot pitch deviation
+    % plot([dur(end_desc(i)) dur(end_desc(i))],[-20 0],'k') % plot descent
+    % plot([dur(start_asc(i)) dur(start_asc(i))],[-20 0],'k')
+    h1.Color = c(dives,:);
+    h2.Color = [c(dives,:) 0.4];
 end
 
+xlabel('Normalized Duration'); ylabel('Depth (m)')
+
 % plot histograms
-subplot('position',[0.55 0.8 0.4 0.15]); hold on
-histogram(ifi_d_low/fs,0:0.25:20,'normalization','probability')
-histogram(ifi_d_high/fs,0:0.25:20,'normalization','probability')
-ylim([0 0.5])
+subplot('position',[0.55 0.86 0.4 0.1125]); hold on
+h = histogram(hz_d_low,0:0.05:1,'normalization','probability','displaystyle','stairs');
+h.EdgeColor = 'k';
+h = histogram(hz_d_high,0:0.05:1,'normalization','probability','displaystyle','stairs');
+h.EdgeColor = 'b';
+ylim([0 0.7])
 
-subplot('position',[0.55 0.65 0.4 0.15]); hold on
-histogram(ifi_b_low/fs,0:0.25:20,'normalization','probability')
-histogram(ifi_b_high/fs,0:0.25:20,'normalization','probability')
-ylim([0 0.5])
+subplot('position',[0.55 0.7475 0.4 0.1125]); hold on
+h = histogram(hz_b_low,0:0.05:1,'normalization','probability','displaystyle','stairs');
+h.EdgeColor = 'k';
+h = histogram(hz_b_high,0:0.05:1,'normalization','probability','displaystyle','stairs');
+h.EdgeColor = 'b';
+ylim([0 0.7])
 
-subplot('position',[0.55 0.5 0.4 0.15]); hold on
-histogram(ifi_a_low/fs,0:0.25:20,'normalization','probability')
-histogram(ifi_a_high/fs,0:0.25:20,'normalization','probability')
-xlabel('Inter-Fluke-Interval (seconds)')
-ylim([0 0.5])
+subplot('position',[0.55 0.6350 0.4 0.1125]); hold on
+h = histogram(hz_a_low,0:0.05:1,'normalization','probability','displaystyle','stairs');
+h.EdgeColor = 'k';
+h = histogram(hz_a_high,0:0.05:1,'normalization','probability','displaystyle','stairs');
+h.EdgeColor = 'b';
+ylim([0 0.7])
 
+subplot('position',[0.55 0.5225 0.4 0.1125]); hold on
+h = histogram(hz_s_3911(54:end),0:0.05:1,'normalization','probability','displaystyle','stairs');
+h.EdgeColor = 'k';
+h = histogram(hz_s_3911(1:53),0:0.05:1,'normalization','probability','displaystyle','stairs');
+h.EdgeColor = 'b';
+xlabel('Fluke Stroke Frequency (Hz)')
+ylim([0 0.7])
 
 %% Standardized dive desc and asc
 % subplot(121); hold on
@@ -205,15 +232,14 @@ ylim([0 0.5])
 % ylim([-22 2])
 
 % store values
-ifi_d_3911 = ifi_d;
-ifi_b_3911 = ifi_b;
-ifi_a_3911 = ifi_a;
 hz_d_3911 = hz_d;
 hz_b_3911 = hz_b;
 hz_a_3911 = hz_a;
 
+return
+
 %% For Eg 4057
-clear maxtab mintab ifi_d ifi_b ifi_a ifi_s ii hz_d hz_b hz_a hz_s
+clear ii hz_d hz_b hz_a hz_s
 
 [eg047a.v,eg047a.ph,eg047a.mx,eg047a.fr] = findflukes(eg047a.Aw,eg047a.Mw,fs,0.2,0.001,[0.7 8]);
 
@@ -371,7 +397,7 @@ ylim([0 0.5])
 
 FSRstats
 
-return
+
 %% Repeat for Eg 3911
 [maxtab,mintab] = peakdet(rw015a.ph,0.04);
 figure(11); clf; hold on

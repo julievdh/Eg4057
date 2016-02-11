@@ -30,34 +30,57 @@ phase_hz = vertcat(-ones(length(hz_d_3911),1),zeros(length(hz_b_3911),1),ones(le
 
 
 %% FSR PLOT
+warning off
 figure(5); clf; hold on
-load('rw015a_descasc')  
-subplot(211); hold on
+set(gcf,'position',[2670 11 455 595],'paperpositionmode','auto')
+subplot('position',[0.1 0.8 0.8 0.2]); hold on
 i = 80;
-    dur = (1:length(rw015a.T(i,1)*fs:rw015a.T(i+1,1)*fs))/length(rw015a.T(i,1)*fs:rw015a.T(i+1,1)*fs);
-    plot(dur,-rw015a.p(rw015a.T(i,1)*fs:rw015a.T(i+1,1)*fs),'color',[0.75 0.75 0.75]) % plot dive
-    plot(dur,rw015a.ph(rw015a.T(i,1)*fs:rw015a.T(i+1,1)*fs),'k') % plot pitch deviation
-    %plot([dur(end_desc(i)) dur(end_desc(i))],[-20 0],'k') % plot descent
-    %plot([dur(start_asc(i)) dur(start_asc(i))],[-20 0],'k')
+t = (1:length(rw015a.T(i,1)*fs:rw015a.T(i+1,1)*fs))/fs;
+plot(t,-rw015a.p(rw015a.T(i,1)*fs:rw015a.T(i+1,1)*fs),'color',[0.75 0.75 0.75]) % plot dive
+plot(t,rw015a.ph(rw015a.T(i,1)*fs:rw015a.T(i+1,1)*fs),'k') % plot pitch deviation
+ylabel('Depth (m)'); xlabel('Time (sec)'); 
+set(gca,'ytick',-15:5:0)
 
-subplot(212); hold on
+subplot('position',[0.1 0.1 0.8 0.68]); hold on
+ylabel('Fluke Stroke Rate (Hz)'); set(gca,'ytick',0:0.5:3); ylim([0 3.2])
+xlim([0 100]); set(gca,'xtick',[6 36 66 91],'xticklabels',{'Descent','Bottom','Ascent','Surface'})
 
-scatter(zeros(length(hz_all(phase_hz == -1 & cond == 0)),1)-rand(length(hz_all(phase_hz == -1 & cond == 0)),1)/4,...
-    hz_all(phase_hz == -1 & cond == 0),'kv','filled') % normal descent
-scatter(zeros(length(hz_all(phase_hz == -1 & cond == 1)),1)+0.5-rand(length(hz_all(phase_hz == -1 & cond == 1)),1)/4,...
-    hz_all(phase_hz == -1 & cond == 1),'bv','filled') % entangled descent
-scatter(zeros(length(hz_all(phase_hz == 0 & cond == 0)),1)+1-rand(length(hz_all(phase_hz == 0 & cond == 0)),1)/4,...
-    hz_all(phase_hz == 0 & cond == 0),'ko','filled') % normal bottom
-scatter(zeros(length(hz_all(phase_hz == 0 & cond == 1)),1)+1.5-rand(length(hz_all(phase_hz == 0 & cond == 1)),1)/4,...
-    hz_all(phase_hz == 0 & cond == 1),'bo','filled') % entangled bottom
-scatter(zeros(length(hz_all(phase_hz == 1 & cond == 0)),1)+2-rand(length(hz_all(phase_hz == 1 & cond == 0)),1)/4,...
-    hz_all(phase_hz == 1 & cond == 0),'kv','filled') % normal ascent
-scatter(zeros(length(hz_all(phase_hz == 1 & cond == 1)),1)+2.5-rand(length(hz_all(phase_hz == 1 & cond == 1)),1)/4,...
-    hz_all(phase_hz == 1 & cond == 1),'bv','filled') % entangled ascent
-scatter(zeros(length(hz_all(phase_hz == 2 & cond == 0)),1)+3-rand(length(hz_all(phase_hz == 2 & cond == 0)),1)/4,...
-    hz_all(phase_hz == 2 & cond == 0),'ks') % normal surf
-scatter(zeros(length(hz_all(phase_hz == 2 & cond == 1)),1)+3.5-rand(length(hz_all(phase_hz == 2 & cond == 1)),1)/4,...
-    hz_all(phase_hz == 2 & cond == 1),'bs') % entangled surf
+scatter(zeros(length(hz_all(phase_hz == -1 & cond == 0 & indv == 3911)),1)+5-rand(length(hz_all(phase_hz == -1 & cond == 0 & indv == 3911)),1)*4,...
+    hz_all(phase_hz == -1 & cond == 0 & indv == 3911),'kv','filled') % normal descent 3911
+scatter(zeros(length(hz_all(phase_hz == -1 & cond == 0 & indv == 4057)),1)+5-rand(length(hz_all(phase_hz == -1 & cond == 0 & indv == 4057)),1)*4,...
+    hz_all(phase_hz == -1 & cond == 0 & indv == 4057),'kv') % normal descent 4057
+scatter(zeros(length(hz_all(phase_hz == -1 & cond == 1 & indv == 3911)),1)+10-rand(length(hz_all(phase_hz == -1 & cond == 1 & indv == 3911)),1)*4,...
+    hz_all(phase_hz == -1 & cond == 1 & indv == 3911),'bv','filled') % entangled descent 3911
+scatter(zeros(length(hz_all(phase_hz == -1 & cond == 1 & indv == 4057)),1)+10-rand(length(hz_all(phase_hz == -1 & cond == 1 & indv == 4057)),1)*4,...
+    hz_all(phase_hz == -1 & cond == 1 & indv == 4057),'bv') % entangled descent 4057
 
-ylabel('Fluke Stroke Rate (Hz)')
+scatter(zeros(length(hz_all(phase_hz == 0 & cond == 0 & indv == 3911)),1)+35-rand(length(hz_all(phase_hz == 0 & cond == 0 & indv == 3911)),1)*4,...
+    hz_all(phase_hz == 0 & cond == 0 & indv == 3911),'ko','filled') % normal bottom 3911
+scatter(zeros(length(hz_all(phase_hz == 0 & cond == 0 & indv == 4057)),1)+35-rand(length(hz_all(phase_hz == 0 & cond == 0 & indv == 4057)),1)*4,...
+    hz_all(phase_hz == 0 & cond == 0 & indv == 4057),'ko') % normal bottom 4057
+scatter(zeros(length(hz_all(phase_hz == 0 & cond == 1 & indv == 3911)),1)+40-rand(length(hz_all(phase_hz == 0 & cond == 1 & indv == 3911)),1)*4,...
+    hz_all(phase_hz == 0 & cond == 1 & indv == 3911),'bo','filled') % entangled bottom 3911
+scatter(zeros(length(hz_all(phase_hz == 0 & cond == 1 & indv == 4057)),1)+40-rand(length(hz_all(phase_hz == 0 & cond == 1 & indv == 4057)),1)*4,...
+    hz_all(phase_hz == 0 & cond == 1 & indv == 4057),'bo') % entangled bottom 4057
 
+scatter(zeros(length(hz_all(phase_hz == 1 & cond == 0 & indv == 3911)),1)+65-rand(length(hz_all(phase_hz == 1 & cond == 0 & indv == 3911)),1)*4,...
+    hz_all(phase_hz == 1 & cond == 0 & indv == 3911),'k^','filled') % normal ascent 3911
+scatter(zeros(length(hz_all(phase_hz == 1 & cond == 0 & indv == 4057)),1)+65-rand(length(hz_all(phase_hz == 1 & cond == 0 & indv == 4057)),1)*4,...
+    hz_all(phase_hz == 1 & cond == 0 & indv == 4057),'k^') % normal ascent 4057
+scatter(zeros(length(hz_all(phase_hz == 1 & cond == 1 & indv == 3911)),1)+70-rand(length(hz_all(phase_hz == 1 & cond == 1 & indv == 3911)),1)*4,...
+    hz_all(phase_hz == 1 & cond == 1 & indv == 3911),'b^','filled') % entangled ascent
+scatter(zeros(length(hz_all(phase_hz == 1 & cond == 1 & indv == 4057)),1)+70-rand(length(hz_all(phase_hz == 1 & cond == 1 & indv == 4057)),1)*4,...
+    hz_all(phase_hz == 1 & cond == 1 & indv == 4057),'b^') % entangled ascent 4057
+
+scatter(zeros(length(hz_all(phase_hz == 2 & cond == 0 & indv == 3911)),1)+90-rand(length(hz_all(phase_hz == 2 & cond == 0 & indv == 3911)),1)*4,...
+    hz_all(phase_hz == 2 & cond == 0 & indv == 3911),'ks','filled') % normal surf 3911
+scatter(zeros(length(hz_all(phase_hz == 2 & cond == 0 & indv == 4057)),1)+90-rand(length(hz_all(phase_hz == 2 & cond == 0 & indv == 4057)),1)*4,...
+    hz_all(phase_hz == 2 & cond == 0 & indv == 4057),'ks') % normal surf 4057
+scatter(zeros(length(hz_all(phase_hz == 2 & cond == 1 & indv == 3911)),1)+95-rand(length(hz_all(phase_hz == 2 & cond == 1 & indv == 3911)),1)*4,...
+    hz_all(phase_hz == 2 & cond == 1 & indv == 3911),'bs','filled') % entangled surf 3911
+scatter(zeros(length(hz_all(phase_hz == 2 & cond == 1 & indv == 4057)),1)+95-rand(length(hz_all(phase_hz == 2 & cond == 1 & indv == 4057)),1)*4,...
+    hz_all(phase_hz == 2 & cond == 1 & indv == 4057),'bs') % entangled surf 4057
+
+adjustfigurefont
+cd /Users/julievanderhoop/Documents/MATLAB/Eg4057/AnalysisFigs
+print -dsvg DivePhaseHz
