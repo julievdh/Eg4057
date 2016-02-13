@@ -1,42 +1,34 @@
-% make vector of all hz
+% make vector of ifi
 hz_all_3911 = vertcat(hz_d_3911',hz_b_3911',hz_a_3911',hz_s_3911');
-% for 4057: low = [1:6,8:12];                                   % dive 7 tag moves
-%           high = [13:15,18:20];                               % dives 16, 17 tag moves
-low_4057 = [1:6,8:12]; high_4057 = [13:15,18:20]; 
-% select only those ones
-hz_d_4057 = hz_d_4057([low_4057 high_4057]);
-hz_b_4057 = hz_b_4057([low_4057 high_4057]);
-hz_a_4057 = hz_a_4057([low_4057 high_4057]);
-hz_s_4057 = hz_s_4057([low_4057 high_4057]);
-
-hz_all_4057 = vertcat(hz_d_4057',hz_b_4057',hz_a_4057',hz_s_4057');
+ifi_all_4057 = vertcat(nanmean(ifi_d')',nanmean(ifi_b')',nanmean(ifi_a')',nanmean(ifi_s')');
+hz_all_4057 = vertcat(hz_d',hz_b',hz_a',hz_s');
+ifi_all = vertcat(ifi_all_3911,ifi_all_4057);
 hz_all = vertcat(hz_all_3911,hz_all_4057);
 
 %% make accompanying vector of individual. should be same length (one entry
 % for each dive)
-indv = vertcat(repmat(3911,length(hz_all_3911),1),repmat(4057,length(hz_all_4057),1));
+indv = vertcat(repmat(3911,length(ifi_all_3911),1),repmat(4057,length(ifi_all_4057),1));
 
-% make accompanying vector of condition. should be high/low x 4  
-highlow = vertcat(ones(53,1),zeros(101,1)); % condition order for 3911size(
-lowhigh = vertcat(zeros(11,1),ones(6,1)); % condition order for 4057
+% make accompanying vector of condition. should be high/low x 3
+highlow = vertcat(ones(53,1),zeros(101,1)); % condition order for 3911
+lowhigh = vertcat(zeros(17,1),ones(3,1)); % condition order for 4057
 cond = vertcat(repmat(highlow,4,1),repmat(lowhigh,4,1));
 
 % make accompanying vector of dive phase
-phase_hz = vertcat(-ones(length(hz_d_3911),1),zeros(length(hz_b_3911),1),ones(length(hz_a_3911),1),repmat(2,length(hz_s_3911),1),...
-    -ones(length(hz_d_4057),1),zeros(length(hz_b_4057),1),ones(length(hz_a_4057),1),repmat(2,length(hz_s_4057),1));
+phase_ifi = vertcat(-ones(length(ifi_d_3911),1),zeros(length(ifi_b_3911),1),ones(length(ifi_a_3911),1),repmat(2,size(ifi_s_3911,1),1),...
+    -ones(size(ifi_d,1),1),zeros(size(ifi_b,1),1),ones(size(ifi_a,1),1),repmat(2,size(ifi_s,1),1));
+phase_hz = vertcat(-ones(length(hz_d_3911),1),zeros(length(hz_b_3911),1),ones(length(hz_a_3911),1),repmat(2,size(ifi_s_3911,1),1),...
+    -ones(size(ifi_d,1),1),zeros(size(ifi_b,1),1),ones(size(ifi_a,1),1),repmat(2,size(ifi_s,1),1));
 
-% three way anova individual, phase, condition
+% two way anova phase, condition
+[p,t,stats] = anovan(ifi_all,{indv,phase_ifi,cond},'interaction');
+[c,m,h,names] = multcompare(stats,'dim',3);
+
 [p,t,stats] = anovan(hz_all,{indv,phase_hz,cond},'varnames',{'Individual','Phase','Condition'});
 [c,m,h,names] = multcompare(stats,'dim',3);
 
-return
 
 %% FSR PLOT
-rw015a = load('rw11_015aprh.mat');
-rw015a.T = finddives(rw015a.p,fs,5,1);              % find dives
-[~,rw015a.ph,~,rw015a.fr] = findflukes(rw015a.Aw,rw015a.Mw,fs,0.3,0.01,[0.7 8]);
-
-
 warning off
 figure(5); clf; hold on
 set(gcf,'position',[2670 11 455 595],'paperpositionmode','auto')
@@ -49,7 +41,7 @@ ylabel('Depth (m)'); xlabel('Time (sec)');
 set(gca,'ytick',-15:5:0)
 
 subplot('position',[0.1 0.1 0.8 0.68]); hold on
-ylabel('Fluke Stroke Rate (Hz)'); set(gca,'ytick',0:0.5:3); ylim([0 1])
+ylabel('Fluke Stroke Rate (Hz)'); set(gca,'ytick',0:0.5:3); ylim([0 3.2])
 xlim([0 100]); set(gca,'xtick',[6 36 66 91],'xticklabels',{'Descent','Bottom','Ascent','Surface'})
 
 scatter(zeros(length(hz_all(phase_hz == -1 & cond == 0 & indv == 3911)),1)+5-rand(length(hz_all(phase_hz == -1 & cond == 0 & indv == 3911)),1)*4,...
