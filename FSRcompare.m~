@@ -210,8 +210,8 @@ hz_a_3911 = hz_a;
 %% For Eg 4057
 clear ii hz_d hz_b hz_a hz_s
 
-[~,eg047a.ph,~,eg047a.fr] = findflukes(eg047a.Aw,eg047a.Mw,fs,0.16,0.001,[0.6 10]);
-[maxtab,mintab] = peakdet(eg047a.ph,0.025); % use peak detection algorithm on pitch deviation. This gives better detection of fluke strokes (see Eg4057 Fig 5.fig)
+[eg047a.v,eg047a.ph,eg047a.mx,eg047a.fr] = findflukes(eg047a.Aw,eg047a.Mw,fs,0.16,0.001,[0.6 10]);
+[maxtab,mintab] = peakdet(eg047a.ph,0.025);
 
 eg047a.T = finddives(eg047a.p,fs,5,1);              % find dives
 load('eg047a_descasc')                              % load ascents and descents
@@ -227,8 +227,8 @@ for i = 5
     % plot([end_desc(i) end_desc(i)],[-20 0],'k') % plot descent
     % plot(eg047a.T(i,1)*fs:fs:eg047a.T(i,2)*fs,eg047a.fr(eg047a.T(i,1):(eg047a.T(i,2))),'r') % plot instantaneous fluke stroke rate
     % find fluke strokes within descent
-    ii = find(maxtab(:,1) > eg047a.T(i,1)*fs & maxtab(:,1) < eg047a.T(i,1)*fs+end_desc(i));
-    plot(maxtab(ii,1),maxtab(ii,2),'*')
+    ii =     ii = find(maxtab(:,1) > eg047a.T(i,1)*fs & maxtab(:,1) < eg047a.T(i,1)*fs+end_desc(i));
+    plot(eg047a.v(ii)*fs,eg047a.mx(ii),'*')
     
     
     % calculate mean amplitude (in radians)
@@ -243,8 +243,8 @@ for i = 5
 
     % on an ascent
     % find fluke strokes
-    ii = find(maxtab(:,1) > eg047a.T(i,1)*fs+start_asc(i) & maxtab(:,1) < eg047a.T(i,2)*fs);
-    plot(maxtab(ii,1),maxtab(ii,2),'*')
+    ii = find(eg047a.v > eg047a.T(i,1)+start_asc(i)/fs & eg047a.v < eg047a.T(i,2));
+    plot(eg047a.v(ii)*fs,eg047a.mx(ii),'*')
     
     % calculate mean amplitude (in radians)
     % mn_amp_a(i) = mean(amp(ii(1:end-1))); % because last one is always big kick
@@ -258,8 +258,8 @@ for i = 5
 
     % for bottom period
     % find fluke strokes
-    ii = find(maxtab(:,1) > eg047a.T(i,1)*fs+end_desc(i) & maxtab(:,1) < eg047a.T(i,1)*fs+start_asc(i));
-    plot(maxtab(ii,1),maxtab(ii,2),'*')
+    ii = find(eg047a.v > eg047a.T(i,1)+end_desc(i)/fs & eg047a.v < eg047a.T(i,1)+start_asc(i)/fs);    
+    plot(eg047a.v(ii)*fs,eg047a.mx(ii),'*')
    
     % calculate mean amplitude (in radians)
     % mn_amp_b(i) = mean(amp(ii(1:end-1))); % because last one is always big kick
@@ -271,6 +271,11 @@ for i = 5
     dur = (start_asc(i) - end_desc(i))/fs;
     hz_b(i) = count/dur;
 end
+
+% replace zeros with NaNs
+ifi_d(ifi_d == 0) = NaN;
+ifi_a(ifi_a == 0) = NaN;
+ifi_b(ifi_b == 0) = NaN;
 
 figure(2); clf; hold on
 histogram(ifi_d)
