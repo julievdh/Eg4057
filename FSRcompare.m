@@ -26,10 +26,7 @@ rw015a.T = finddives(rw015a.p,fs,5,1);              % find dives
 load('rw015a_descasc')                              % load ascents and descents
 
 
-%% use peakdet to find individual fluke strokes
-%[maxtab,mintab] = peakdet(rw015a.ph,0.04);
-
-%% Calculate Inter-Fluke Interval
+%% Calculate Fluke Stroke Rate
 %% for each dive
 warning off
 for i = 1:length(rw015a.T);
@@ -44,36 +41,30 @@ for i = 1:length(rw015a.T);
     
     % calculate mean amplitude (in radians)
     % mn_amp_d(i) = mean(amp(ii));
-        % calculate mean amplitude in m
+    % calculate mean amplitude in m
     % mn_amp_dm(i) = mean(abs(sin(rad2deg(amp(ii))*(2/3)*10)));
     
     % calculate mean frequency
     count = size(ii,1);
     dur = end_desc(i)/fs;
     hz_d(i) = count/dur;
-%     shift_maxtab = maxtab(ii(2):ii(end),1);
-%     ifi_d(i,1:count-1) = shift_maxtab(:,1)-maxtab(ii(1):ii(end)-1,1); % in SAMPLES
-% 
+    
 %     % on an ascent
 %     plot([start_asc(i) start_asc(i)],[-20 0],'k')
-%     
+     
     % find fluke strokes
     ii = find(rw015a.v > rw015a.T(i,1)+start_asc(i)/fs & rw015a.v < rw015a.T(i,2));
-%     
+    
 %     % calculate mean amplitude (in radians)
 %     % mn_amp_a(i) = mean(amp(ii(1:end-1))); % because last one is always big kick
-%     
 %     % calculate mean amplitude in m
 %     % mn_amp_am(i) = mean(abs(sin(rad2deg(amp(ii))*(2/3)*10)));
-%     
+    
 %     % calculate mean frequency
     count = size(ii,1);
     dur = end_desc(i)/fs;
     hz_a(i) = count/dur;
-%     shift_maxtab = maxtab(ii(2):ii(end),1);
-%     ifi_a(i,1:count-1) = shift_maxtab(:,1)-maxtab(ii(1):ii(end)-1,1); % in SAMPLES
-% 
-% 
+ 
     % for bottom period
     % find fluke strokes
     ii = find(rw015a.v > rw015a.T(i,1)+end_desc(i)/fs & rw015a.v < rw015a.T(i,1)+start_asc(i)/fs);
@@ -81,7 +72,6 @@ for i = 1:length(rw015a.T);
 
 %     % calculate mean amplitude (in radians)
 %     % mn_amp_b(i) = mean(amp(ii(1:end-1))); % because last one is always big kick
-%     
 %     % calculate mean amplitude in m
 %     % mn_amp_bm(i) = mean(abs(sin(rad2deg(amp(ii))*(2/3)*10)));
 %     
@@ -89,10 +79,6 @@ for i = 1:length(rw015a.T);
     count = size(ii,1);
     dur = (start_asc(i) - end_desc(i))/fs;
     hz_b(i) = count/dur;
-%     if count > 1
-%     shift_maxtab = maxtab(ii(2):ii(end),1);
-%     ifi_b(i,1:count-1) = shift_maxtab(:,1)-maxtab(ii(1):ii(end)-1,1); % in SAMPLES
-%     end
 end
 
 %% replace zeros with NaNs
@@ -139,20 +125,6 @@ histogram(hz_s_3911(54:end),0:0.05:1,'normalization','probability')
 histogram(hz_s_3911(1:53),0:0.05:1,'normalization','probability')
 xlabel('Fluke Stroke Rate (Hz)')
 % ylim([0 0.5])
-
-
-% figure(4); 
-% subplot(231); hold on
-% histogram(hz_d(54:end))
-% histogram(hz_d(1:53))
-% 
-% subplot(232); hold on
-% histogram(hz_b(54:end))
-% histogram(hz_b(1:53))
-% 
-% subplot(233); hold on
-% histogram(hz_a(54:end))
-% histogram(hz_a(1:53))
 
 %% make figure with dive profiles and histograms
 figure(5); clf; 
