@@ -442,3 +442,4 @@ set(h2,'color','k')
 mnsd3911 = [mean(vertcat(ifi1_3911,ifi2_3911))/fs std(vertcat(ifi1_3911,ifi2_3911))/fs]
 mnsd4057_low = [mean(ifi12/fs) std(ifi12/fs)]
 mnsd4057_high = [mean(ifi3/fs) std(ifi3/fs)]
+
