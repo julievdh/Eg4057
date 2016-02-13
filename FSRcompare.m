@@ -304,39 +304,62 @@ legend('low','high')
 ylim([0 0.7])
 
 %% make figure with dive profiles of low and high for two animals, and with histograms
-figure(5)
+figure(5); 
 subplot('position',[0.1 0.06 0.4 0.45]); hold on
-for i = [10,18]
+for dives = 1:2
+    n = [10,18];
+    i = n(dives);
     dur = (1:length(eg047a.T(i,1)*fs:eg047a.T(i,2)*fs))/length(eg047a.T(i,1)*fs:eg047a.T(i,2)*fs);
-    plot(dur,-eg047a.p(eg047a.T(i,1)*fs:eg047a.T(i,2)*fs),'color',[0.75 0.75 0.75]) % plot dive
-    plot(dur,eg047a.ph(eg047a.T(i,1)*fs:eg047a.T(i,2)*fs),'k') % plot pitch deviation
-    plot([dur(end_desc(i)) dur(end_desc(i))],[-20 0],'k') % plot descent
-    plot([dur(start_asc(i)) dur(start_asc(i))],[-20 0],'k')
+    h1 = plot(dur,-eg047a.p(eg047a.T(i,1)*fs:eg047a.T(i,2)*fs)); % plot dive
+    h2 = plot(dur,eg047a.ph(eg047a.T(i,1)*fs:eg047a.T(i,2)*fs)); % plot pitch deviation
+%     plot([dur(end_desc(i)) dur(end_desc(i))],[-20 0],'k') % plot descent
+%     plot([dur(start_asc(i)) dur(start_asc(i))],[-20 0],'k')
+h1.Color = c(dives,:);
+h2.Color = [c(dives,:) 0.4];
 end
+xlabel('Normalized Duration'); ylabel('Depth (m)')
 
 % plot histograms
-subplot('position',[0.55 0.36 0.4 0.15]); hold on
-histogram(hz_d(low),0:0.05:1,'normalization','probability')
-histogram(hz_d(high),0:0.05:1,'normalization','probability')
-ylim([0 0.5])
+subplot('position',[0.55 0.3975 0.4 0.1125]); hold on
+h = histogram(hz_d(low),0:0.05:1,'normalization','probability','displaystyle','stairs');
+h.EdgeColor = 'k';
+h = histogram(hz_d(high),0:0.05:1,'normalization','probability','displaystyle','stairs');
+h.EdgeColor = 'b';
+ylim([0 0.7])
 
-subplot('position',[0.55 0.21 0.4 0.15]); hold on
-histogram(hz_b(low),0:0.05:1,'normalization','probability')
-histogram(hz_b(high),0:0.05:1,'normalization','probability')
-ylim([0 0.5])
+subplot('position',[0.55 0.2850 0.4 0.1125]); hold on
+h = histogram(hz_b(low),0:0.05:1,'normalization','probability','displaystyle','stairs');
+h.EdgeColor = 'k';
+h = histogram(hz_b(high),0:0.05:1,'normalization','probability','displaystyle','stairs');
+h.EdgeColor = 'b';
+ylim([0 0.7])
 
-subplot('position',[0.55 0.06 0.4 0.15]); hold on
-histogram(hz_a(low),0:0.05:1,'normalization','probability')
-histogram(hz_a(high),0:0.05:1,'normalization','probability')
-ylim([0 0.5])
+subplot('position',[0.55 0.1725 0.4 0.1125]); hold on
+h = histogram(hz_a(low),0:0.05:1,'normalization','probability','displaystyle','stairs');
+h.EdgeColor = 'k';
+h = histogram(hz_a(high),0:0.05:1,'normalization','probability','displaystyle','stairs');
+h.EdgeColor = 'b';
+ylim([0 0.7])
 
 
-subplot('position',[0.55 0.06 0.4 0.15]); hold on
-histogram(hz_s(low),0:0.05:1,'normalization','probability')
-histogram(hz_s(high),0:0.05:1,'normalization','probability')
-xlabel('Inter-Fluke-Interval (seconds)')
-ylim([0 0.5])
+subplot('position',[0.55 0.06 0.4 0.1125]); hold on
+h = histogram(hz_s(low),0:0.05:1,'normalization','probability','displaystyle','stairs');
+h.EdgeColor = 'k';
+h = histogram(hz_s(high),0:0.05:1,'normalization','probability','displaystyle','stairs');
+h.EdgeColor = 'b';
+xlabel('Fluke Stroke Rate (Hz)')
+ylim([0 0.7])
 
+adjustfigurefont
+
+%% for consistency
+hz_d_4057 = hz_d;
+hz_b_4057 = hz_b;
+hz_a_4057 = hz_a;
+hz_s_4057 = hz_s;
+
+keep hz_d_4057 hz_b_4057 hz_a_4057 hz_s_4057 hz_d_3911 hz_b_3911 hz_a_3911 hz_s_3911 
+return
 
 %% Run stats
 FSRstats
