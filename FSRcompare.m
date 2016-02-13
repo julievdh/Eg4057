@@ -99,7 +99,7 @@ hz_a_high = hz_a(1:53);
 hz_a_low = hz_a(54:end);
 
 %% What about fluke stroke rate at the surface?
-[~,hz_s_3911] = surfIFI(rw015a,rw015a.v);
+[~,hz_s_3911] = surfIFI(rw015a,maxtab);
 figure(2)
 histogram(hz_s_3911)
 
@@ -275,44 +275,38 @@ for i = 1:length(eg047a.T)
     hz_b(i) = count/dur;
 end
 
+% at the surface
+[~,hz_s] = surfIFI(eg047a,maxtab);
+
 %%
 figure(3);
-subplot(234); hold on
+subplot(245); hold on
 title('Eg 4057')
-histogram(ifi_d_low/fs,0:0.25:20,'normalization','probability')
-histogram(ifi_d_high/fs,0:0.25:20,'normalization','probability')
-ylim([0 0.5])
+histogram(hz_d(low),0:0.05:1,'normalization','probability')
+histogram(hz_d(high),0:0.05:1,'normalization','probability')
+ylim([0 0.7])
 
-subplot(235); hold on
-histogram(ifi_b_low/fs,0:0.25:20,'normalization','probability')
-histogram(ifi_b_high/fs,0:0.25:20,'normalization','probability')
-ylim([0 0.5])
+subplot(246); hold on
+histogram(hz_b(low),0:0.05:1,'normalization','probability')
+histogram(hz_b(high),0:0.05:1,'normalization','probability')
+ylim([0 0.7])
 
-subplot(236); hold on
-histogram(ifi_a_low/fs,0:0.25:20,'normalization','probability')
-histogram(ifi_a_high/fs,0:0.25:20,'normalization','probability')
-xlabel('Inter-Fluke-Interval (seconds)')
+subplot(247); hold on
+histogram(hz_a(low),0:0.05:1,'normalization','probability')
+histogram(hz_a(high),0:0.05:1,'normalization','probability')
+ylim([0 0.7])
+
+subplot(248); hold on
+histogram(hz_s(low),0:0.05:1,'normalization','probability')
+histogram(hz_s(high),0:0.05:1,'normalization','probability')
+xlabel('Fluke Stroke Rate (Hz)')
 legend('low','high')
-ylim([0 0.5])
-
-% figure(4);
-% subplot(234); hold on
-% histogram(hz_d(1:17))
-% histogram(hz_d(18:end))
-%
-% subplot(235); hold on
-% histogram(hz_b(1:17))
-% histogram(hz_b(18:end))
-%
-% subplot(236); hold on
-% histogram(hz_a(1:17))
-% histogram(hz_a(18:end))
-
+ylim([0 0.7])
 
 %% make figure with dive profiles of low and high for two animals, and with histograms
 figure(5)
 subplot('position',[0.1 0.06 0.4 0.45]); hold on
-for i = [10,19]
+for i = [10,18]
     dur = (1:length(eg047a.T(i,1)*fs:eg047a.T(i,2)*fs))/length(eg047a.T(i,1)*fs:eg047a.T(i,2)*fs);
     plot(dur,-eg047a.p(eg047a.T(i,1)*fs:eg047a.T(i,2)*fs),'color',[0.75 0.75 0.75]) % plot dive
     plot(dur,eg047a.ph(eg047a.T(i,1)*fs:eg047a.T(i,2)*fs),'k') % plot pitch deviation
@@ -322,70 +316,29 @@ end
 
 % plot histograms
 subplot('position',[0.55 0.36 0.4 0.15]); hold on
-histogram(ifi_d_low/fs,0:0.25:20,'normalization','probability')
-histogram(ifi_d_high/fs,0:0.25:20,'normalization','probability')
+histogram(hz_d(low),0:0.05:1,'normalization','probability')
+histogram(hz_d(high),0:0.05:1,'normalization','probability')
 ylim([0 0.5])
 
 subplot('position',[0.55 0.21 0.4 0.15]); hold on
-histogram(ifi_b_low/fs,0:0.25:20,'normalization','probability')
-histogram(ifi_b_high/fs,0:0.25:20,'normalization','probability')
+histogram(hz_b(low),0:0.05:1,'normalization','probability')
+histogram(hz_b(high),0:0.05:1,'normalization','probability')
 ylim([0 0.5])
 
 subplot('position',[0.55 0.06 0.4 0.15]); hold on
-histogram(ifi_a_low/fs,0:0.25:20,'normalization','probability')
-histogram(ifi_a_high/fs,0:0.25:20,'normalization','probability')
+histogram(hz_a(low),0:0.05:1,'normalization','probability')
+histogram(hz_a(high),0:0.05:1,'normalization','probability')
+ylim([0 0.5])
+
+
+subplot('position',[0.55 0.06 0.4 0.15]); hold on
+histogram(hz_s(low),0:0.05:1,'normalization','probability')
+histogram(hz_s(high),0:0.05:1,'normalization','probability')
 xlabel('Inter-Fluke-Interval (seconds)')
 ylim([0 0.5])
 
 
 %% Run stats
-[ifi_s,hz_s] = surfIFI(eg047a,maxtab);
-
 FSRstats
 
-
-%% Repeat for Eg 3911
-[maxtab,mintab] = peakdet(rw015a.ph,0.04);
-figure(11); clf; hold on
-plot(rw015a.ph)
-plot(maxtab(:,1),maxtab(:,2),'r.')
-ylabel('Pitch Deviation from mean');
-
-shift_maxtab = maxtab(2:end,1);
-ifi = shift_maxtab(:,1)-maxtab(1:end-1,1); % in SAMPLES
-% find within phases
-ifi1_3911 = ifi(maxtab(:,1) > rw015a.p1(1)*fs & maxtab(:,1) < rw015a.p1(2)*fs); % high drag
-ifi2_3911 = ifi(maxtab(:,1) > rw015a.p2(1)*fs & maxtab(:,1) < rw015a.p3(2)*fs); % low drag
-
-figure(2); subplot(211); hold on; xlim([0 20])
-hist(ifi2_3911/fs,bins) % low
-hist(ifi1_3911/fs,bins) % high
-h = findobj(gca,'Type','patch');
-set(h(2),'FaceColor','k','EdgeColor','w','facealpha',0.5)
-set(h(1),'FaceColor','b','EdgeColor','w','facealpha',0.5)
-legend('Low Drag','High Drag'); text(0.5,1.35E3,'A','FontSize',18,'FontWeight','Bold')
-plot([0 20],[0 0],'k')
-adjustfigurefont
-
-cd C:\Users\Julie\Documents\MATLAB\Eg4057\AnalysisFigs
-print('IFIdistribution','-dtiff')
-
-figure(3); hold on
-h1 = cdfplot(ifi1_3911);
-h2 = cdfplot(ifi2_3911);
-set(h1,'color','b')
-set(h2,'color','k')
-
-%% KS test, with bonferroni correction
-% Are conditions different in 3911 low drag and high drag?
-[h,p,ks2stat] = kstest2(ifi1_3911,ifi2_3911,'alpha',0.05/2)
-
-% Are conditions different in 4057 low drag and high drag?
-[h,p,ks2stat] = kstest2(ifi12,ifi3,'alpha',0.05/2)
-
-%% descriptive statistics
-
-mnsd3911 = [mean(vertcat(ifi1_3911,ifi2_3911))/fs std(vertcat(ifi1_3911,ifi2_3911))/fs]
-mnsd4057_low = [mean(ifi12/fs) std(ifi12/fs)]
-mnsd4057_high = [mean(ifi3/fs) std(ifi3/fs)]
 

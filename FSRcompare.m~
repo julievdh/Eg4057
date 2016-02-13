@@ -65,7 +65,7 @@ for i = 1:length(rw015a.T);
     
     %     % calculate mean frequency
     count = size(ii,1);
-    dur = (rw015a.T(i,2)*fs - rw015a.T(i,1)*fs+start_asc(i))/fs;
+    dur = (rw015a.T(i,2)*fs - (rw015a.T(i,1)*fs+start_asc(i)))/fs;
     hz_a(i) = count/dur;
     
     % for bottom period
@@ -99,7 +99,7 @@ hz_a_high = hz_a(1:53);
 hz_a_low = hz_a(54:end);
 
 %% What about fluke stroke rate at the surface?
-[~,hz_s_3911] = surfIFI(rw015a,rw015a.v);
+[~,hz_s_3911] = surfIFI(rw015a,maxtab);
 figure(2)
 histogram(hz_s_3911)
 
@@ -256,7 +256,7 @@ for i = 1:length(eg047a.T)
     
     % calculate mean frequency
     count = size(ii,1);
-    dur = eg047a.T(i,2)-start_asc(i)/fs;
+    dur = (eg047a.T(i,2)*fs - (eg047a.T(i,1)*fs+start_asc(i)))/fs;
     hz_a(i) = count/dur;
     
     % for bottom period
@@ -277,23 +277,28 @@ end
 
 %%
 figure(3);
-subplot(234); hold on
+subplot(245); hold on
 title('Eg 4057')
-histogram(ifi_d_low/fs,0:0.25:20,'normalization','probability')
-histogram(ifi_d_high/fs,0:0.25:20,'normalization','probability')
-ylim([0 0.5])
+histogram(hz_d(low),0:0.05:1,'normalization','probability')
+histogram(hz_d(high),0:0.05:1,'normalization','probability')
+ylim([0 0.7])
 
-subplot(235); hold on
-histogram(ifi_b_low/fs,0:0.25:20,'normalization','probability')
-histogram(ifi_b_high/fs,0:0.25:20,'normalization','probability')
-ylim([0 0.5])
+subplot(246); hold on
+histogram(hz_b(low),0:0.05:1,'normalization','probability')
+histogram(hz_b(high),0:0.05:1,'normalization','probability')
+ylim([0 0.7])
 
-subplot(236); hold on
-histogram(ifi_a_low/fs,0:0.25:20,'normalization','probability')
-histogram(ifi_a_high/fs,0:0.25:20,'normalization','probability')
-xlabel('Inter-Fluke-Interval (seconds)')
+subplot(247); hold on
+histogram(hz_b(low),0:0.05:1,'normalization','probability')
+histogram(hz_b(high),0:0.05:1,'normalization','probability')
+ylim([0 0.7])
+
+subplot(248); hold on
+histogram(hz_s(low),0:0.05:1,'normalization','probability')
+histogram(hz_s(high),0:0.05:1,'normalization','probability')
+xlabel('Fluke Stroke Rate (Hz)')
 legend('low','high')
-ylim([0 0.5])
+ylim([0 0.7])
 
 % figure(4);
 % subplot(234); hold on

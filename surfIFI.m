@@ -4,6 +4,7 @@ for i = 1:length(tag.T)-1;
     figure(1); clf; hold on
     plot(-tag.p(tag.T(i,2)*tag.fs:tag.T(i+1,1)*tag.fs),'color',[0.75 0.75 0.75]) % plot surface interval
     plot(tag.ph(tag.T(i,2)*tag.fs:tag.T(i+1,1)*tag.fs),'k') % plot pitch deviation
+    
     % find fluke strokes
     ii = find(maxtab(:,1) > tag.T(i,2)*tag.fs & maxtab(:,1) < tag.T(i+1,1)*tag.fs);
     if isempty(ii) == 1 | size(ii) < 2
