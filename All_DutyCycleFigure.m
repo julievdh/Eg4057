@@ -2,8 +2,24 @@
 % low/high drag 
 
 %% load data
-load_eg047a
-load_rw015a
+% load tags
+rw015a = load('rw11_015aprh.mat');
+eg047a = load('eg14_047aprh.mat');
+
+% set time periods
+rw015a.p1 = [1 6667]; % entangled
+rw015a.p2 = [6668 15248]; % disentanglement
+rw015a.p3 = [15248 22268]; % recovery
+eg047a.p1 = [410 4711]; % consistent tag position, entangled
+eg047a.p2 = [5133 8571]; % consistent tag position, until disentanglement begins
+eg047a.p3 = [11350 13250]; % consistent tag position, entangled + telemetry
+
+% create time vectors
+rw015a.t = (1:length(rw015a.p))/rw015a.fs;
+eg047a.t = (1:length(eg047a.p))/eg047a.fs;
+
+fs = 5;
+%%
 
 % calculate pitch deviation from mean. ignore fluke stroke info here.
 [rw015a.v,rw015a.ph,rw015a.mx,rw015a.fr] = findflukes(rw015a.Aw,rw015a.Mw,fs,0.3,0.01,[0.7 8]);
