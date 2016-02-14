@@ -31,7 +31,6 @@ load('rw015a_descasc')                              % load ascents and descents
 %% for each dive
 warning off
 for i = 1:length(rw015a.T);
-    % pause
     figure(1); clf; hold on
     plot(rw015a.T(i,1)*fs:rw015a.T(i,2)*fs,-rw015a.p(rw015a.T(i,1)*fs:rw015a.T(i,2)*fs),'color',[0.75 0.75 0.75]) % plot dive
     plot(rw015a.T(i,1)*fs:rw015a.T(i,2)*fs,rw015a.ph(rw015a.T(i,1)*fs:rw015a.T(i,2)*fs),'k') % plot pitch deviation
