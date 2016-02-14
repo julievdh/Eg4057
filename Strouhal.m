@@ -8,8 +8,6 @@
 % U is only available for vertical speed
 % This is the best we can do, I think.
 
-close all; clear all; clc
-
 % load data
 rw015a = load('rw11_015aprh.mat');
 fs = 5;                                             % sampling frequency
