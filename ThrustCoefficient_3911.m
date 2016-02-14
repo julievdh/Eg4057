@@ -31,16 +31,17 @@ for i = high % high drag dives
 end
 
 % disentangled thrust coefficient CTD
-for i = 1:length(low) % low drag dives
+for i = 54:154 % low drag dives
+    ind = i - 53; % to get back to index
     % descent
-    CT_DE_d(i,:) = Dtot_lowdrag./(0.5*rho*U.^2.*(A_NE_d(i)*span));
-    CT_DE_d_lower(i,:) = Dtot_low_lower./(0.5*rho*U.^2.*(A_NE_d(i)*span));
-    CT_DE_d_upper(i,:) = Dtot_low_upper./(0.5*rho*U.^2.*(A_NE_d(i)*span));
+    CT_DE_d(i,:) = Dtot_lowdrag./(0.5*rho*U.^2.*(A_NE_d(ind)*span));
+    CT_DE_d_lower(i,:) = Dtot_low_lower./(0.5*rho*U.^2.*(A_NE_d(ind)*span));
+    CT_DE_d_upper(i,:) = Dtot_low_upper./(0.5*rho*U.^2.*(A_NE_d(ind)*span));
     
     % ascent
-    CT_DE_a(i,:) = Dtot_lowdrag./(0.5*rho*U.^2.*(A_NE_a(i)*span));
-    CT_DE_a_lower(i,:) = Dtot_low_lower./(0.5*rho*U.^2.*(A_NE_a(i)*span));
-    CT_DE_a_upper(i,:) = Dtot_low_upper./(0.5*rho*U.^2.*(A_NE_a(i)*span));
+    CT_DE_a(i,:) = Dtot_lowdrag./(0.5*rho*U.^2.*(A_NE_a(ind)*span));
+    CT_DE_a_lower(i,:) = Dtot_low_lower./(0.5*rho*U.^2.*(A_NE_a(ind)*span));
+    CT_DE_a_upper(i,:) = Dtot_low_upper./(0.5*rho*U.^2.*(A_NE_a(ind)*span));
 end
 
 % non-entangled thrust coefficient CTN

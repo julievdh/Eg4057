@@ -95,8 +95,11 @@ for i = 1:length(rw015a.T);
     
 end
 
-return
+% calculate St = Af/U
+St_d = (mn_amp_d.*hz_d)./desc_maxspeed;
+St_a = (mn_amp_a.*hz_a)./asc_maxspeed;
 
+return
 %% plot frequency vs amplitude
 figure(3); clf; hold on
 plot(hz_d(1:53),mn_amp_d(1:53),'bv','markerfacecolor','b')
@@ -116,10 +119,6 @@ xlabel('Mean vertical speed (m/s)'); ylabel('Frequency (Hz)')
 adjustfigurefont
 
 %%
-
-% calculate St = Af/U
-St_d = (mn_amp_d.*hz_d)./desc_maxspeed;
-St_a = (mn_amp_a.*hz_a)./asc_maxspeed;
 
 % plot St
 figure(2); clf; hold on
