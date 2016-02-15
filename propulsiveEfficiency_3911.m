@@ -316,7 +316,7 @@ for i = 1:length(high)
         end
     end
 end
-%% ascent
+% ascent
 for i = 1:length(high)
     if alpha_high(i,2) == 10
         ind = nearest(a10_sawtooth_i(:,1),St_a(high(i)));
@@ -345,7 +345,7 @@ for i = 1:length(high)
     end
 end
 
-%% for low drag
+% for low drag
 % descent
 for i = 1:length(low)
     if alpha_low(i,1) == 109
@@ -382,7 +382,7 @@ print('Eg3911_eta_est','-dtiff','-r300')
 
 %% Take efficiency and look at change in efficiency with entanglement
 efficiencyPlot
-% efficiencyStats
+efficiencyStats
 
 %% Compute Power
 % power = D*U/efficiency
