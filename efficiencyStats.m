@@ -5,7 +5,7 @@ allst = vertcat(St_d',St_a');
 figure
 boxplot(allst,{condition portion})
 % two-way ANOVA
-[p,t,stats] = anovan(allni,{condition portion},'model','interaction','varnames',{'Condition';'Dive Portion'});
+% [p,t,stats] = anovan(allni,{condition portion},'model','interaction','varnames',{'Condition';'Dive Portion'});
 % [mean(St_d(low)) std(St_d(low))]
 % [nanmean(St_d(high)) nanstd(St_d(high))]
 % [mean(St_a(low)) std(St_a(low))]

@@ -198,8 +198,8 @@ condition = [ones(1,53) zeros(1,101) ones(1,53) zeros(1,101)];
 portion = [repmat(-1,1,154) repmat(1,1,154)];
 allCT = vertcat(CT_E_d_atspeed',CT_DE_d_atspeed(low)',CT_E_a_atspeed',CT_DE_a_atspeed(low)');
 % boxplot(allCT,{condition portion});
-% % two-way ANOVA
-% [p,t,stats] = anovan(allCT,{condition portion},'varnames',{'Condition';'Dive Portion'});
+% two-way ANOVA
+[p,t,stats] = anovan(allCT,{condition portion},'model','interaction','varnames',{'Condition';'Dive Portion'});
 
 % average non-entangled CT across the same range of speeds
 % disp('mean SD average non-entangled CT descent')
@@ -219,7 +219,7 @@ allni = vertcat(ni_E_d_atspeed',ni_DE_d_atspeed(low)',ni_E_a_atspeed',ni_DE_a_at
 % two-way ANOVA
 % [p,t,stats] = anovan(allni,{condition portion},'varnames',{'Condition';'Dive Portion'});
 
-[mean(ni_NE_d(3:14)) std(ni_NE_d(3:14))]; % average non-entangled ni across same range of speeds
+[mean(ni_NE_d(3:13)) std(ni_NE_d(3:13))]; % average non-entangled ni across same range of speeds
 [mean(ni_NE_a(1:8)) std(ni_NE_a(1:8))];
 
 %% 3. Calculate angle of attack based on St and CT
