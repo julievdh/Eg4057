@@ -31,26 +31,26 @@ load('alpha')
 
 % %% plot through for high drag
 % for i = 1:length(high)
-% scatter(St_a(high(i)),CTSt2_E_a(i),'b^')
-% scatter(St_d(high(i)),CTSt2_E_d(i),'bv','filled')
-% prompt = 'enter alpha estimate descent ';
-% alpha(i,1) = input(prompt);
-% prompt = 'enter alpha estimate ascent ';
-% alpha(i,2) = input(prompt);
-% scatter(St_a(high(i)),CTSt2_E_a(i),'w^')
-% scatter(St_d(high(i)),CTSt2_E_d(i),'wv','filled')
+%     scatter(St_a(high(i)),CTSt2_E_a(i),'b^')
+%     scatter(St_d(high(i)),CTSt2_E_d(i),'bv','filled')
+%     prompt = 'enter alpha estimate descent ';
+%     alpha(i,1) = input(prompt);
+%     prompt = 'enter alpha estimate ascent ';
+%     alpha(i,2) = input(prompt);
+%     scatter(St_a(high(i)),CTSt2_E_a(i),'w^')
+%     scatter(St_d(high(i)),CTSt2_E_d(i),'wv','filled')
 % end
 % 
 % %% for low drag
 % for i = 1:length(low)
-% scatter(St_a(low(i)),CTSt2_DE_a(i),'k^')
-% scatter(St_d(low(i)),CTSt2_DE_d(i),'kv','filled')
-% prompt = 'enter alpha estimate descent ';
-% alpha_low(i,1) = input(prompt);
-% prompt = 'enter alpha estimate ascent ';
-% alpha_low(i,2) = input(prompt);
-% scatter(St_a(low(i)),CTSt2_DE_a(i),'w^')
-% scatter(St_d(low(i)),CTSt2_DE_d(i),'wv','filled')
+%     scatter(St_a(low(i)),CTSt2_DE_a(i),'k^')
+%     scatter(St_d(low(i)),CTSt2_DE_d(i),'kv','filled')
+%     prompt = 'enter alpha estimate descent ';
+%     alpha_low(i,1) = input(prompt);
+%     prompt = 'enter alpha estimate ascent ';
+%     alpha_low(i,2) = input(prompt);
+%     scatter(St_a(low(i)),CTSt2_DE_a(i),'w^')
+%     scatter(St_d(low(i)),CTSt2_DE_d(i),'wv','filled')
 % end
 
 %% plot and with colours to distinguish harmonic vs. sawtooth
@@ -73,8 +73,8 @@ scatter(St_d(high(ii_desc)),CTSt2_E_d(ii_desc),'rv','filled')
 % ii = find(St_a(high(ii_asc)) > 0.4);
 % plot(St_a(high(ii_asc(ii))),CTSt2_E_a(ii_asc(ii)),'g*')
 % % replace
-% alpha_high(ii_asc(ii),1) = 10;
-
+% alpha_high(ii_asc(ii),2) = 10;
+%
 % plot all LOW harmonic
 ii_desc = find(alpha_low(:,1) == 109 | alpha_low(:,1) == 159);
 ii_asc = find(alpha_low(:,2) == 109 | alpha_low(:,2) == 159);
@@ -85,7 +85,7 @@ scatter(St_d(low(ii_desc)),CTSt2_DE_d(ii_desc),'rv','filled')
 % plot(St_a(low(ii_asc(ii))),CTSt2_DE_a(ii_asc(ii)),'g*')
 % % replace
 % alpha_low(ii_asc(ii),2) = 10;
-% 
+%
 % ii = find(St_d(low(ii_desc)) > 0.4);
 % plot(St_d(low(ii_desc(ii))),CTSt2_DE_d(ii_desc(ii)),'g*')
 % % replace
@@ -99,6 +99,11 @@ scatter(St_d(low(ii_desc)),CTSt2_DE_d(ii_desc),'rv','filled')
 % plot(St_d(high(ii)),CTSt2_E_d(ii),'g*')
 % St_d(high(ii)) = NaN; CTSt2_E_d(ii) = NaN;
 
+% % find other random ones that need replacing:
+% ii = find(CTSt2_E_d > 3.3 & CTSt2_E_d < 3.4);
+% plot(St_d(high(ii)),CTSt2_E_d(ii),'m*')
+% % Replace: make sure (ii,2) for ascent
+% alpha_high(ii,1) = 159; % or 109 depending on where point falls.
 
 % save('alpha','alpha_high','alpha_low')
 

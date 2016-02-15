@@ -1,5 +1,6 @@
 % Estimate Propulsive Efficiency
 % 12 Aug 2015
+% Updated 14 Feb 2015 after finding bugs in calculation of f and A
 
 clear all; close all
 
@@ -90,9 +91,9 @@ print('Eg3911_Drag.eps','-depsc','-r300')
 % drag stats
 % two sample t to compare nonentangled and entangled drag, and entangled
 % drag vs disentangled drag
-[min(whaleDf) max(whaleDf)]
-[min(Dtot_highdrag) max(Dtot_highdrag)]
-[min(Dtot_lowdrag) max(Dtot_lowdrag)]
+[min(whaleDf) max(whaleDf)];
+[min(Dtot_highdrag) max(Dtot_highdrag)];
+[min(Dtot_lowdrag) max(Dtot_lowdrag)];
 
 [h,p,ci,stats] = ttest(whaleDf,Dtot_highdrag);
 [h,p,ci,stats] = ttest(Dtot_lowdrag,Dtot_highdrag);
@@ -196,30 +197,30 @@ PlotCTni
 condition = [ones(1,53) zeros(1,101) ones(1,53) zeros(1,101)];
 portion = [repmat(-1,1,154) repmat(1,1,154)];
 allCT = vertcat(CT_E_d_atspeed',CT_DE_d_atspeed(low)',CT_E_a_atspeed',CT_DE_a_atspeed(low)');
-boxplot(allCT,{condition portion})
-% two-way ANOVA
-[p,t,stats] = anovan(allCT,{condition portion},'varnames',{'Condition';'Dive Portion'});
+% boxplot(allCT,{condition portion});
+% % two-way ANOVA
+% [p,t,stats] = anovan(allCT,{condition portion},'varnames',{'Condition';'Dive Portion'});
 
 % average non-entangled CT across the same range of speeds
-disp('mean SD average non-entangled CT descent')
-[mean(CT_NE_a(3:13)) std(CT_NE_d(3:13))] % descent
-disp('mean SD average non-entangled CT descent')
-[mean(CT_NE_a(1:8)) std(CT_NE_a(1:8))] % ascent
+% disp('mean SD average non-entangled CT descent')
+% [mean(CT_NE_a(3:13)) std(CT_NE_d(3:13))]; % descent
+% disp('mean SD average non-entangled CT descent')
+% [mean(CT_NE_a(1:8)) std(CT_NE_a(1:8))]; % ascent
 foldinc_ne = [mean(CT_DE_d_atspeed(low))/mean(CT_NE_d(3:13))  mean(CT_DE_a_atspeed(low))/mean(CT_NE_a(1:8))]
 
 %%
-[mean(ni_E_d_atspeed) std(ni_E_d_atspeed)]
-[mean(ni_E_a_atspeed) std(ni_E_a_atspeed)]
-[mean(ni_DE_d_atspeed(low)) std(ni_DE_d_atspeed(low))]
-[mean(ni_DE_a_atspeed(low)) std(ni_DE_a_atspeed(low))]
+[mean(ni_E_d_atspeed) std(ni_E_d_atspeed)];
+[mean(ni_E_a_atspeed) std(ni_E_a_atspeed)];
+[mean(ni_DE_d_atspeed(low)) std(ni_DE_d_atspeed(low))];
+[mean(ni_DE_a_atspeed(low)) std(ni_DE_a_atspeed(low))];
 
 allni = vertcat(ni_E_d_atspeed',ni_DE_d_atspeed(low)',ni_E_a_atspeed',ni_DE_a_atspeed(low)');
 % boxplot(allni,{condition portion})
 % two-way ANOVA
 % [p,t,stats] = anovan(allni,{condition portion},'varnames',{'Condition';'Dive Portion'});
 
-[mean(ni_NE_d(3:14)) std(ni_NE_d(3:14))] % average non-entangled ni across same range of speeds
-[mean(ni_NE_a(1:8)) std(ni_NE_a(1:8))]
+[mean(ni_NE_d(3:14)) std(ni_NE_d(3:14))]; % average non-entangled ni across same range of speeds
+[mean(ni_NE_a(1:8)) std(ni_NE_a(1:8))];
 
 %% 3. Calculate angle of attack based on St and CT
 
@@ -378,9 +379,10 @@ end
 
 print('Eg3911_eta_est','-dtiff','-r300')
 
+
 %% Take efficiency and look at change in efficiency with entanglement
 efficiencyPlot
-efficiencyStats
+% efficiencyStats
 
 %% Compute Power
 % power = D*U/efficiency
