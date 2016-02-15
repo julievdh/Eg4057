@@ -252,7 +252,7 @@ text(0.03,4.3610,'\alpha = 15^0')
 text(0.03,2.6038,'\alpha = 10^0')
 
 xlabel('Strouhal Number, St'); ylabel('C_T/St^2')
-xlim([0 1.25]); ylim([0 10])
+xlim([0 1.6]); ylim([0 10])
 
 % with sawtooth curves
 subplot(212); hold on; box on
@@ -274,7 +274,7 @@ text(0.85,2.6677,'\alpha = 15^0')
 text(0.85,0.7827,'\alpha = 10^0')
 
 xlabel('Strouhal Number, St'); ylabel('C_T/St^2')
-xlim([0 1.25]); ylim([0 10])
+xlim([0 1.6]); ylim([0 10])
 adjustfigurefont
 text(0.0379,24.8465,'Harmonic','Fontsize',14,'FontWeight','Bold')
 text(0.0379,10.8465,'Sawtooth','Fontsize',14,'FontWeight','Bold')

@@ -108,5 +108,5 @@ scatter(St_d(low(ii_desc)),CTSt2_DE_d(ii_desc),'rv','filled')
 % save('alpha','alpha_high','alpha_low')
 
 %% zoom and save plot
-xlim([0 1.2]); ylim([0 10])
+xlim([0 1.6]); ylim([0 10])
 print('Eg3911_a_estimation2.eps','-depsc','-r300')

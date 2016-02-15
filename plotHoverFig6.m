@@ -10,7 +10,7 @@ h = plot(a10_sawtooth(:,1),a10_sawtooth(:,2),a15_sawtooth(:,1),a15_sawtooth(:,2)
     a20_sawtooth(:,1),a20_sawtooth(:,2),a25_sawtooth(:,1),a25_sawtooth(:,2),...
     a35_sawtooth(:,1),a35_sawtooth(:,2));
 set(h,'color',[0.75 0.75 0.75])
-xlim([0 1.2])
+xlim([0 1.6])
 text(0.42,0.5435,'\alpha = 15^0')
 text(0.38,0.58,'\alpha = 10^0')
 text(0.8386,0.1447,'\alpha = 10^0')
