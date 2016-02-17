@@ -26,7 +26,7 @@ P_dl = (Dtot_lowdrag(ind_a(low)).*U(ind_a(low)))'./eta_low(:,1);
 P_dl_lower = (Dtot_low_lower(ind_a(low)).*U(ind_a(low)))'./eta_low(:,1);
 P_dl_upper = (Dtot_low_upper(ind_a(low)).*U(ind_a(low)))'./eta_low(:,1);
 
-
+%%
 % figure(6); clf
 % subplot(221); hold on
 % histogram(P_ah)
@@ -86,8 +86,8 @@ text(-.4,1160,'A','FontSize',14,'FontWeight','Bold')
 
 %% stats
 all_pt = vertcat(P_dh,P_dl,P_ah,P_al);
-boxplot(all_pt,{condition portion})
-[p,t,stats] = anovan(all_pt,{condition portion},'varnames',{'Condition';'Dive Portion'});
+% boxplot(all_pt,{condition portion})
+% [p,t,stats] = anovan(all_pt,{condition portion},'varnames',{'Condition';'Dive Portion'});
 % [p,t,stats] = anovan(all_pt/0.25,{condition portion},'varnames',{'Condition';'Dive Portion'});
 finc_d = nanmean(P_dh)/nanmean(P_dl); % and same number if P_dh/0.25 and P_dl/0.25
 finc_a = nanmean(P_ah)/nanmean(P_dl);
@@ -124,3 +124,11 @@ print('Eg3911_PTPO.eps','-depsc','-r300')
 % [nanmean(P_al/0.25) nanstd(P_al/0.25)]
 % [nanmean(P_dh/0.25) nanstd(P_dh/0.25)]
 % [nanmean(P_ah/0.25) nanstd(P_ah/0.25)]
+
+%% Plot power vs. speed
+figure; hold on
+plot(asc_maxspeed(low),P_al,'k^')
+plot(asc_maxspeed(high),P_ah,'b^')
+scatter(desc_maxspeed(high),P_dh,'bv','filled')
+scatter(desc_maxspeed(low),P_dl,'kv','filled')
+xlabel('Speed (m/s)'); ylabel('Power (W)')

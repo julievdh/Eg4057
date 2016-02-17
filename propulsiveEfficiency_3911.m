@@ -2,7 +2,7 @@
 % 12 Aug 2015
 % Updated 14 Feb 2015 after finding bugs in calculation of f and A
 
-clear all; close all
+clear all; 
 
 %% 1. Drag estimates
 
