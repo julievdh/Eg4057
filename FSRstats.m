@@ -32,14 +32,14 @@ phase_hz = vertcat(-ones(length(hz_d_3911),1),zeros(length(hz_b_3911),1),ones(le
 return
 
 %% FSR PLOT
-rw015a = load('rw11_015aprh.mat');
+rw015a = load('rw11_015aprh.mat'); fs = 5;
 rw015a.T = finddives(rw015a.p,fs,5,1);              % find dives
 [~,rw015a.ph,~,rw015a.fr] = findflukes(rw015a.Aw,rw015a.Mw,fs,0.3,0.01,[0.7 8]);
 
 
 warning off
 figure(5); clf; hold on
-set(gcf,'position',[2670 11 455 595],'paperpositionmode','auto')
+set(gcf,'position',[785 11 455 595],'paperpositionmode','auto')
 subplot('position',[0.1 0.8 0.8 0.2]); hold on
 i = 80;
 t = (1:length(rw015a.T(i,1)*fs:rw015a.T(i+1,1)*fs))/fs;
@@ -50,7 +50,8 @@ set(gca,'ytick',-15:5:0)
 
 subplot('position',[0.1 0.1 0.8 0.68]); hold on
 ylabel('Fluke Stroke Rate (Hz)'); set(gca,'ytick',0:0.5:3); ylim([0 1])
-xlim([0 100]); set(gca,'xtick',[6 36 66 91],'xticklabels',{'Descent','Bottom','Ascent','Surface'})
+xlim([0 100]); set(gca,'xtick',[6 36 66 91],'xticklabels',...
+    {'Descent','Bottom','Ascent','Surface'},'ytick',[0 0.2 0.3 0.5 1])
 
 scatter(zeros(length(hz_all(phase_hz == -1 & cond == 0 & indv == 3911)),1)+5-rand(length(hz_all(phase_hz == -1 & cond == 0 & indv == 3911)),1)*4,...
     hz_all(phase_hz == -1 & cond == 0 & indv == 3911),'kv','filled') % normal descent 3911

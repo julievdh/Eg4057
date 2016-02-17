@@ -29,6 +29,8 @@ load('rw015a_descasc')                              % load ascents and descents
 % See e.g. Figure Eg4057Dive5.fig
 [maxtab,mintab] = peakdet(rw015a.ph,0.025);
 %% for each dive
+low = 54:154;
+high = 1:53;
 warning off
 for i = 1:length(rw015a.T);
     figure(1); clf; hold on
@@ -89,14 +91,6 @@ histogram(hz_d)
 histogram(hz_a)
 histogram(hz_b)
 
-% find within phases
-hz_d_high = hz_d(1:53);
-hz_d_low = hz_d(54:end);
-hz_b_high = hz_b(1:53);
-hz_b_low = hz_b(54:end);
-hz_a_high = hz_a(1:53);
-hz_a_low = hz_a(54:end);
-
 %% What about fluke stroke rate at the surface?
 [~,hz_s_3911] = surfIFI(rw015a,maxtab);
 figure(2)
@@ -106,24 +100,24 @@ histogram(hz_s_3911)
 figure(3); clf;
 subplot(241); hold on
 title('Eg 3911')
-histogram(hz_d_low,0:0.05:1,'normalization','probability')
-histogram(hz_d_high,0:0.05:1,'normalization','probability')
+histogram(hz_d(low),0:0.05:1,'normalization','probability')
+histogram(hz_d(high),0:0.05:1,'normalization','probability')
 % ylim([0 0.5])
 
 subplot(242); hold on
-histogram(hz_b_low,0:0.05:1,'normalization','probability')
-histogram(hz_b_high,0:0.05:1,'normalization','probability')
+histogram(hz_b(low),0:0.05:1,'normalization','probability')
+histogram(hz_b(high),0:0.05:1,'normalization','probability')
 % ylim([0 0.5])
 
 subplot(243); hold on
-histogram(hz_a_low,0:0.05:1,'normalization','probability')
-histogram(hz_a_high,0:0.05:1,'normalization','probability')
+histogram(hz_a(low),0:0.05:1,'normalization','probability')
+histogram(hz_a(high),0:0.05:1,'normalization','probability')
 xlabel('Fluke Stroke Rate (Hz)')
 % ylim([0 0.5])
 
 subplot(244); hold on
-histogram(hz_s_3911(54:end),0:0.05:1,'normalization','probability')
-histogram(hz_s_3911(1:53),0:0.05:1,'normalization','probability')
+histogram(hz_s_3911(low),0:0.05:1,'normalization','probability')
+histogram(hz_s_3911(high),0:0.05:1,'normalization','probability')
 xlabel('Fluke Stroke Rate (Hz)')
 % ylim([0 0.5])
 
@@ -148,33 +142,33 @@ xlabel('Normalized Duration'); ylabel('Depth (m)')
 
 % plot histograms
 subplot('position',[0.55 0.87 0.4 0.1]); hold on
-h = histogram(hz_d_low,0:0.05:1,'normalization','probability','displaystyle','stairs');
+h = histogram(hz_d(54:end),0:0.05:1,'normalization','probability','displaystyle','stairs');
 h.EdgeColor = 'k';
-h = histogram(hz_d_high,0:0.05:1,'normalization','probability','displaystyle','stairs');
+h = histogram(hz_d(1:53),0:0.05:1,'normalization','probability','displaystyle','stairs');
 h.EdgeColor = 'b';
 ylim([0 0.7])
 set(gca,'xtick',[])
 
 subplot('position',[0.55 0.77 0.4 0.1]); hold on
-h = histogram(hz_b_low,0:0.05:1,'normalization','probability','displaystyle','stairs');
+h = histogram(hz_b(54:end),0:0.05:1,'normalization','probability','displaystyle','stairs');
 h.EdgeColor = 'k';
-h = histogram(hz_b_high,0:0.05:1,'normalization','probability','displaystyle','stairs');
+h = histogram(hz_b(1:53),0:0.05:1,'normalization','probability','displaystyle','stairs');
 h.EdgeColor = 'b';
 ylim([0 0.7])
 set(gca,'xtick',[])
 
 subplot('position',[0.55 0.67 0.4 0.1]); hold on
-h = histogram(hz_a_low,0:0.05:1,'normalization','probability','displaystyle','stairs');
+h = histogram(hz_a(low),0:0.05:1,'normalization','probability','displaystyle','stairs');
 h.EdgeColor = 'k';
-h = histogram(hz_a_high,0:0.05:1,'normalization','probability','displaystyle','stairs');
+h = histogram(hz_a(high),0:0.05:1,'normalization','probability','displaystyle','stairs');
 h.EdgeColor = 'b';
 ylim([0 0.7])
 set(gca,'xtick',[])
 
 subplot('position',[0.55 0.57 0.4 0.1]); hold on
-h = histogram(hz_s_3911(54:end),0:0.05:1,'normalization','probability','displaystyle','stairs');
+h = histogram(hz_s_3911(low),0:0.05:1,'normalization','probability','displaystyle','stairs');
 h.EdgeColor = 'k';
-h = histogram(hz_s_3911(1:53),0:0.05:1,'normalization','probability','displaystyle','stairs');
+h = histogram(hz_s_3911(high),0:0.05:1,'normalization','probability','displaystyle','stairs');
 h.EdgeColor = 'b';
 xlabel('Fluke Stroke Rate (Hz)')
 ylim([0 0.7])
@@ -355,8 +349,6 @@ xlabel('Fluke Stroke Rate (Hz)')
 ylim([0 0.7])
 
 adjustfigurefont
-
-return
 
 %% for consistency
 hz_d_4057 = hz_d;
