@@ -125,50 +125,92 @@ load('eg047a_descasc')
 low = [1:6,8:12];
 high = [13:15,18:20];
 figure(2); clf; 
-subplot(241); hold on; title('4057 low descent'); ylim([-1 1.25]); xlim([0 10])
+subplot(241); hold on; 
+xlim([0 10]); ylim([-1 1.25]); set(gca,'Position',[0.1300    0.5838    0.1338    0.3412])
 [dur_lowdesc_4057,maxtab,mintab] = dutycycleplot_phase([eg047a.T(low,1) eg047a.T(low,1)+end_desc(low)'],eg047a.ph,fs);
-text(0.5,-.8,strcat(num2str(nanmean(dur_lowdesc_4057(:)),'%.2f'),' \pm ',num2str(nanstd(dur_lowdesc_4057(:)),'%.2f')),'FontSize',10)
-histogram(dur_lowdesc_4057,'binwidth',0.5,'displaystyle','stairs','edgecolor','k','normalization','probability')
+text(0.5,-.85,strcat(num2str(nanmean(dur_lowdesc_4057(:)),'%.2f'),' \pm ',num2str(nanstd(dur_lowdesc_4057(:)),'%.2f')),'FontSize',10)
 
-subplot(245); hold on; title('4057 high descent'); ylim([-1 1.25]); xlim([0 10])
+subplot(245); hold on; 
+xlim([0 10]); ylim([-1 1.25]); set(gca,'Position',[0.1300    0.1100    0.1338    0.3412])
 [dur_highdesc_4057,maxtab,mintab] = dutycycleplot_phase([eg047a.T(high,1) eg047a.T(high,1)+end_desc(high)'],eg047a.ph,fs);
-text(0.5,-.8,strcat(num2str(nanmean(dur_highdesc_4057(:)),'%.2f'),' \pm ',num2str(nanstd(dur_highdesc_4057(:)),'%.2f')),'FontSize',10)
-histogram(dur_highdesc_4057,'binwidth',0.5,'displaystyle','stairs','edgecolor','k','normalization','probability')
+text(0.5,-.85,strcat(num2str(nanmean(dur_highdesc_4057(:)),'%.2f'),' \pm ',num2str(nanstd(dur_highdesc_4057(:)),'%.2f')),'FontSize',10)
 
-subplot(243); hold on; title('4057 low ascent'); ylim([-1 1.25]); xlim([0 10])
+subplot(243); hold on; 
+xlim([0 10]); ylim([-1 1.25]); set(gca,'Position',[0.5422    0.5838    0.1338    0.3412])
 [dur_lowasc_4057,maxtab,mintab] = dutycycleplot_phase([eg047a.T(low,1) eg047a.T(low,1)+start_asc(low)'],eg047a.ph,fs);
-text(0.5,-.8,strcat(num2str(nanmean(dur_lowasc_4057(:)),'%.2f'),' \pm ',num2str(nanstd(dur_lowasc_4057(:)),'%.2f')),'FontSize',10)
-histogram(dur_lowasc_4057,'binwidth',0.5,'displaystyle','stairs','edgecolor','k','normalization','probability')
+text(0.5,-.85,strcat(num2str(nanmean(dur_lowasc_4057(:)),'%.2f'),' \pm ',num2str(nanstd(dur_lowasc_4057(:)),'%.2f')),'FontSize',10)
 
-subplot(247); hold on; title('4057 high ascent'); ylim([-1 1.25]); xlim([0 10])
+subplot(247); hold on; 
+xlim([0 10]); ylim([-1 1.25]); set(gca,'Position',[0.5422    0.1100    0.1338    0.3412])
 [dur_highasc_4057,maxtab,mintab] = dutycycleplot_phase([eg047a.T(high,1) eg047a.T(high,1)+start_asc(high)'],eg047a.ph,fs);
-text(0.5,-.8,strcat(num2str(nanmean(dur_highasc_4057(:)),'%.2f'),' \pm ',num2str(nanstd(dur_highasc_4057(:)),'%.2f')),'FontSize',10)
-histogram(dur_highasc_4057,'binwidth',0.5,'displaystyle','stairs','edgecolor','k','normalization','probability')
+text(0.5,-.85,strcat(num2str(nanmean(dur_highasc_4057(:)),'%.2f'),' \pm ',num2str(nanstd(dur_highasc_4057(:)),'%.2f')),'FontSize',10)
 
-subplot(242); hold on; title('4057 low bottom'); ylim([-1 1.25]); xlim([0 10])
+subplot(242); hold on; 
+xlim([0 10]); ylim([-1 1.25]); set(gca,'Position',[0.3361    0.5838    0.1338    0.3412])
 [dur_lowbot_4057,maxtab,mintab] = dutycycleplot_phase([eg047a.T(low,1)+end_desc(low)' eg047a.T(low,1)+start_asc(low)'],eg047a.ph,fs);
-text(0.5,-.8,strcat(num2str(nanmean(dur_lowbot_4057(:)),'%.2f'),' \pm ',num2str(nanstd(dur_lowbot_4057(:)),'%.2f')),'FontSize',10)
-histogram(dur_lowbot_4057,'binwidth',0.5,'displaystyle','stairs','edgecolor','k','normalization','probability')
+text(0.5,-.85,strcat(num2str(nanmean(dur_lowbot_4057(:)),'%.2f'),' \pm ',num2str(nanstd(dur_lowbot_4057(:)),'%.2f')),'FontSize',10)
 
-subplot(246); hold on; title('4057 high bottom'); ylim([-1 1.25]); xlim([0 10])
+subplot(246); hold on; 
+xlim([0 10]); ylim([-1 1.25]); set(gca,'Position',[0.3361    0.1100    0.1338    0.3412])
 [dur_highbot_4057,maxtab,mintab] = dutycycleplot_phase([eg047a.T(high,1)+end_desc(high)' eg047a.T(high,1)+start_asc(high)'],eg047a.ph,fs);
-text(0.5,-.8,strcat(num2str(nanmean(dur_highbot_4057(:)),'%.2f'),' \pm ',num2str(nanstd(dur_highbot_4057(:)),'%.2f')),'FontSize',10)
-histogram(dur_highbot_4057,'binwidth',0.5,'displaystyle','stairs','edgecolor','k','normalization','probability')
+text(0.5,-.85,strcat(num2str(nanmean(dur_highbot_4057(:)),'%.2f'),' \pm ',num2str(nanstd(dur_highbot_4057(:)),'%.2f')),'FontSize',10)
 
 % this will have to be finagled because of timing
-subplot(244); hold on; title('4057 low surface'); ylim([-1 1.25]); xlim([0 10])
+subplot(244); hold on; 
+xlim([0 10]); ylim([-1 1.25]); set(gca,'Position',[0.7484    0.5838    0.1338    0.3412])
 [dur_lowsurf_4057,maxtab,mintab] = dutycycleplot_phase([eg047a.T(low(1:end-1),1) eg047a.T(low(2:end),1)],eg047a.ph,fs);
-text(0.5,-.8,strcat(num2str(nanmean(dur_lowsurf_4057(:)),'%.2f'),' \pm ',num2str(nanstd(dur_lowsurf_4057(:)),'%.2f')),'FontSize',10)
+text(0.5,-.85,strcat(num2str(nanmean(dur_lowsurf_4057(:)),'%.2f'),' \pm ',num2str(nanstd(dur_lowsurf_4057(:)),'%.2f')),'FontSize',10)
+
+subplot(248); hold on; 
+xlim([0 10]); ylim([-1 1.25]); set(gca,'Position',[0.7484    0.1100    0.1338    0.3412])
+[dur_highsurf_4057,maxtab,mintab] = dutycycleplot_phase([eg047a.T(high(1:end-1),1) eg047a.T(high(2:end),1)],eg047a.ph,fs);
+text(0.5,-.85,strcat(num2str(nanmean(dur_highsurf_4057(:)),'%.2f'),' \pm ',num2str(nanstd(dur_highsurf_4057(:)),'%.2f')),'FontSize',10)
+
+print('PhaseDutyCycle_4057','-dsvg','-r300')
+
+%%
+figure(4); clf
+subplot(241); hold on; % title('4057 low descent'); 
+xlim([0 10]); ylim([-1.5 0.75])
+set(gca,'YaxisLocation','right','ytick',[0 0.5],'xtick',[]); box on
+histogram(dur_lowdesc_4057,'binwidth',0.5,'displaystyle','stairs','edgecolor','k','normalization','probability')
+
+subplot(245); hold on; % title('4057 high descent'); 
+xlim([0 10]); ylim([-1.5 0.75])
+set(gca,'YaxisLocation','right','ytick',[0 0.5],'xtick',[]); box on
+histogram(dur_highdesc_4057,'binwidth',0.5,'displaystyle','stairs','edgecolor','k','normalization','probability')
+
+subplot(243); hold on; % title('4057 low ascent'); 
+xlim([0 10]); ylim([-1.5 0.75])
+set(gca,'YaxisLocation','right','ytick',[0 0.5],'xtick',[]); box on
+histogram(dur_lowasc_4057,'binwidth',0.5,'displaystyle','stairs','edgecolor','k','normalization','probability')
+
+subplot(247); hold on; % title('4057 high ascent'); 
+xlim([0 10]); ylim([-1.5 0.75])
+set(gca,'YaxisLocation','right','ytick',[0 0.5],'xtick',[]); box on
+histogram(dur_highasc_4057,'binwidth',0.5,'displaystyle','stairs','edgecolor','k','normalization','probability')
+
+subplot(242); hold on; % title('4057 low bottom'); 
+xlim([0 10]); ylim([-1.5 0.75])
+set(gca,'YaxisLocation','right','ytick',[0 0.5],'xtick',[]); box on
+histogram(dur_lowbot_4057,'binwidth',0.5,'displaystyle','stairs','edgecolor','k','normalization','probability')
+
+subplot(244); hold on; % title('4057 low surface'); 
+xlim([0 10]); ylim([-1.5 0.75]); 
+set(gca,'YaxisLocation','right','ytick',[0 0.5],'xtick',[]); box on
 histogram(dur_lowsurf_4057,'binwidth',0.5,'displaystyle','stairs','edgecolor','k','normalization','probability')
 
-subplot(248); hold on; title('4057 high surface'); ylim([-1 1.25]); xlim([0 10])
-[dur_highsurf_4057,maxtab,mintab] = dutycycleplot_phase([eg047a.T(high(1:end-1),1) eg047a.T(high(2:end),1)],eg047a.ph,fs);
-text(0.5,-.8,strcat(num2str(nanmean(dur_highsurf_4057(:)),'%.2f'),' \pm ',num2str(nanstd(dur_highsurf_4057(:)),'%.2f')),'FontSize',10)
+subplot(246); hold on; % title('4057 high bottom'); 
+xlim([0 10]); ylim([-1.5 0.75])
+set(gca,'YaxisLocation','right','ytick',[0 0.5],'xtick',[]); box on
+histogram(dur_lowsurf_4057,'binwidth',0.5,'displaystyle','stairs','edgecolor','k','normalization','probability')
+
+subplot(248); hold on; % title('4057 high surface'); 
+xlim([0 10]); ylim([-1.5 0.75])
+set(gca,'YaxisLocation','right','ytick',[0 0.5],'xtick',[]); box on
 histogram(dur_highsurf_4057,'binwidth',0.5,'displaystyle','stairs','edgecolor','k','normalization','probability')
 
-print('PhaseDutyCycle_4057','-dtiff','-r300')
-
-
+print('PhaseDutyCycle_4057_2','-dsvg','-r300')
 return
 
 %% make figure
