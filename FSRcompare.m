@@ -42,11 +42,6 @@ for i = 1:length(rw015a.T);
     ii = find(maxtab(:,1) > rw015a.T(i,1)*fs & maxtab(:,1) < rw015a.T(i,1)*fs+end_desc(i));
     plot(maxtab(ii,1),maxtab(ii,2),'*')
     
-    % calculate mean amplitude (in radians)
-    % mn_amp_d(i) = mean(amp(ii));
-    % calculate mean amplitude in m
-    % mn_amp_dm(i) = mean(abs(sin(rad2deg(amp(ii))*(2/3)*10)));
-    
     % calculate mean frequency
     count = size(ii,1);
     dur = end_desc(i)/fs;
@@ -59,11 +54,6 @@ for i = 1:length(rw015a.T);
     ii = find(maxtab(:,1) > rw015a.T(i,1)*fs+start_asc(i) & maxtab(:,1) < rw015a.T(i,2)*fs);
     plot(maxtab(ii,1),maxtab(ii,2),'*')
     
-    %     % calculate mean amplitude (in radians)
-    %     % mn_amp_a(i) = mean(amp(ii(1:end-1))); % because last one is always big kick
-    %     % calculate mean amplitude in m
-    %     % mn_amp_am(i) = mean(abs(sin(rad2deg(amp(ii))*(2/3)*10)));
-    
     %     % calculate mean frequency
     count = size(ii,1);
     dur = (rw015a.T(i,2)*fs - (rw015a.T(i,1)*fs+start_asc(i)))/fs;
@@ -74,15 +64,18 @@ for i = 1:length(rw015a.T);
     ii = find(maxtab(:,1) > rw015a.T(i,1)*fs+end_desc(i) & maxtab(:,1) < rw015a.T(i,1)*fs+start_asc(i));
     plot(maxtab(ii,1),maxtab(ii,2),'*')
     
-    %     % calculate mean amplitude (in radians)
-    %     % mn_amp_b(i) = mean(amp(ii(1:end-1))); % because last one is always big kick
-    %     % calculate mean amplitude in m
-    %     % mn_amp_bm(i) = mean(abs(sin(rad2deg(amp(ii))*(2/3)*10)));
-    %
-    %     % calculate mean frequency
+    % calculate mean frequency
     count = size(ii,1);
     dur = (start_asc(i) - end_desc(i))/fs;
     hz_b(i) = count/dur;
+    
+    % calculate mean vertical speed
+    v = vertical(rw015a.p,fs);
+    
+    desc_vspeed_3911(i) = mean(v(rw015a.T(i,1)*fs:rw015a.T(i,1)*fs+end_desc(i)));            % checked indices
+    desc_maxspeed_3911(i) = max(v(rw015a.T(i,1)*fs:rw015a.T(i,1)*fs+end_desc(i)));
+    asc_vspeed_3911(i) = mean(abs(v(rw015a.T(i,1)*fs+start_asc(i):rw015a.T(i,2)*fs)));       % checked indices
+    asc_maxspeed_3911(i) = max(abs(v(rw015a.T(i,1)*fs+start_asc(i):rw015a.T(i,2)*fs)));
 end
 
 %% replace zeros with NaNs
@@ -269,6 +262,14 @@ for i = 1:length(eg047a.T)
     count = size(ii,1);
     dur = (start_asc(i) - end_desc(i))/fs;
     hz_b(i) = count/dur;
+    
+    % calculate mean vertical speed
+    v = vertical(eg047a.p,fs);
+    
+    desc_vspeed_4057(i) = mean(v(eg047a.T(i,1)*fs:eg047a.T(i,1)*fs+end_desc(i)));            % checked indices
+    desc_maxspeed_4057(i) = max(v(eg047a.T(i,1)*fs:eg047a.T(i,1)*fs+end_desc(i)));
+    asc_vspeed_4057(i) = mean(abs(v(eg047a.T(i,1)*fs+start_asc(i):eg047a.T(i,2)*fs)));       % checked indices
+    asc_maxspeed_4057(i) = max(abs(v(eg047a.T(i,1)*fs+start_asc(i):eg047a.T(i,2)*fs)));
 end
 
 % at the surface
@@ -356,10 +357,26 @@ hz_b_4057 = hz_b;
 hz_a_4057 = hz_a;
 hz_s_4057 = hz_s;
 
-keep hz_d_4057 hz_b_4057 hz_a_4057 hz_s_4057 hz_d_3911 hz_b_3911 hz_a_3911 hz_s_3911 
+% keep hz_d_4057 hz_b_4057 hz_a_4057 hz_s_4057 hz_d_3911 hz_b_3911 hz_a_3911 hz_s_3911 
 return
 
 %% Run stats
 FSRstats
 
+%% Plot Frequency vs. Mean Vertical Speed
 
+figure(10); clf; hold on
+plot(asc_vspeed_4057(high),hz_a_4057(high),'b^')
+plot(asc_vspeed_4057(low),hz_a_4057(low),'k^')
+plot(desc_vspeed_4057(low),hz_d_4057(low),'kv')
+plot(desc_vspeed_4057(high),hz_d_4057(high),'bv')
+
+plot(asc_vspeed_3911(1:53),hz_a_3911(1:53),'b^','markerfacecolor','b')
+plot(asc_vspeed_3911(54:end),hz_a_3911(54:end),'k^','markerfacecolor','k')
+plot(desc_vspeed_3911(54:end),hz_d_3911(54:end),'kv','markerfacecolor','k')
+plot(desc_vspeed_3911(1:53),hz_d_3911(1:53),'bv','markerfacecolor','b')
+xlabel('Mean vertical speed (m/s)'); ylabel('Frequency (Hz)')
+adjustfigurefont
+
+cd /Users/julievanderhoop/Documents/MATLAB/Eg4057/AnalysisFigs
+print -dsvg FreqSpeed
