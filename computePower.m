@@ -126,9 +126,23 @@ print('Eg3911_PTPO.eps','-depsc','-r300')
 % [nanmean(P_ah/0.25) nanstd(P_ah/0.25)]
 
 %% Plot power vs. speed
-figure; hold on
+% calculate expected from theoretical
+power_lowdrag = (Dtot_lowdrag.*U)./nanmean(eta_low(:));
+power_lowdrag_low = (Dtot_low_lower.*U)./nanmean(eta_low(:));
+power_lowdrag_up = (Dtot_low_upper.*U)./nanmean(eta_low(:));
+
+power_highdrag = (Dtot_highdrag.*U)./nanmean(eta_high(:));
+power_highdrag_low = (Dtot_high_lower.*U)./nanmean(eta_high(:));
+power_highdrag_up = (Dtot_high_upper.*U)./nanmean(eta_high(:));
+
+
+figure(30); hold on
+plot(U,power_lowdrag,'k'); plot(U,power_lowdrag_low,'k:'); plot(U,power_lowdrag_up,'k:')
+plot(U,power_highdrag,'b'); plot(U,power_highdrag_low,'b:'); plot(U,power_highdrag_up,'b:')
 plot(asc_maxspeed(low),P_al,'k^')
 plot(asc_maxspeed(high),P_ah,'b^')
 scatter(desc_maxspeed(high),P_dh,'bv','filled')
 scatter(desc_maxspeed(low),P_dl,'kv','filled')
 xlabel('Speed (m/s)'); ylabel('Power (W)')
+xlim([0 1.5]); ylim([0 2000])
+adjustfigurefont
