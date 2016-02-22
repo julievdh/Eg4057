@@ -26,37 +26,11 @@ P_dl = (Dtot_lowdrag(ind_a(low)).*U(ind_a(low)))'./eta_low(:,1);
 P_dl_lower = (Dtot_low_lower(ind_a(low)).*U(ind_a(low)))'./eta_low(:,1);
 P_dl_upper = (Dtot_low_upper(ind_a(low)).*U(ind_a(low)))'./eta_low(:,1);
 
-%%
-% figure(6); clf
-% subplot(221); hold on
-% histogram(P_ah)
-% histogram(P_ah_lower)
-% histogram(P_ah_upper)
-% title('Ascent High')
-% 
-% subplot(222); hold on
-% histogram(P_dh)
-% histogram(P_dh_lower)
-% histogram(P_dh_upper)
-% title('Descent High')
-% 
-% subplot(223); hold on
-% histogram(P_al)
-% histogram(P_al_lower)
-% histogram(P_al_upper)
-% title('Ascent High')
-% 
-% subplot(224); hold on
-% histogram(P_dl)
-% histogram(P_dl_lower)
-% histogram(P_dl_upper)
-% title('Descent High')
-
 figure(7); clf
 subplot(121); hold on
 setjit1 = rand(length(low),1)/4; setjit2 = rand(length(low),1)/4;
 setjit3 = rand(length(high),1)/4; setjit4 = rand(length(high),1)/4;
-% error bars?
+% error bars
 for i = 1:length(low)
 plot([0+setjit1(i) 0+setjit1(i)],[P_al_lower(i) P_al_upper(i)],'k')
 plot([0-setjit2(i) 0-setjit2(i)],[P_dl_lower(i) P_dl_upper(i)],'k')
@@ -77,11 +51,11 @@ scatter(ones(length(high),1)-setjit4,P_dh,[],'bv','Filled')
 % [nanmean(P_dh) nanstd(P_dh)]
 % [nanmean(P_ah) nanstd(P_ah)]
 
-xlim([-0.5 1.5]); ylim([0 4500])
+xlim([-0.5 1.5]); ylim([0 1800])
 set(gca,'xtick',[0 1],'xticklabels',{'Low Drag','High Drag'})
-ylabel('Estimated Thrust Power (W), P = (D*U)/\eta_p')
+ylabel('Thrust Power (W), P = (D*U)/\eta_p')
 box on
-text(-.4,1160,'A','FontSize',14,'FontWeight','Bold')
+text(-.4,1700,'A','FontSize',14,'FontWeight','Bold')
 
 
 %% stats
@@ -93,31 +67,31 @@ finc_d = nanmean(P_dh)/nanmean(P_dl); % and same number if P_dh/0.25 and P_dl/0.
 finc_a = nanmean(P_ah)/nanmean(P_dl);
 
 %% 
-subplot(122); hold on
-setjit1 = rand(length(low),1)/4; setjit2 = rand(length(low),1)/4;
-setjit3 = rand(length(high),1)/4; setjit4 = rand(length(high),1)/4;
-% error bars?
-for i = 1:length(low)
-plot([0+setjit1(i) 0+setjit1(i)],[P_al_lower(i)/0.25 P_al_upper(i)/0.25],'k') % aerobic efficiency
-plot([0-setjit2(i) 0-setjit2(i)],[P_dl_lower(i)/0.25 P_dl_upper(i)/0.25],'k')
-end
-for i = 1:length(high)
-plot([1+setjit3(i) 1+setjit3(i)],[P_ah_lower(i)/0.25 P_ah_upper(i)/0.25],'b')
-plot([1-setjit4(i) 1-setjit4(i)],[P_dh_lower(i)/0.25 P_dh_upper(i)/0.25],'b')
-end
-% plot triangles
-scatter(zeros(length(low),1)+setjit1,P_al/0.25,[],'k^','MarkerFaceColor','w')
-scatter(zeros(length(low),1)-setjit2,P_dl/0.25,[],'kv','Filled')
-scatter(ones(length(high),1)+setjit3,P_ah/0.25,[],'b^','MarkerFaceColor','w')
-scatter(ones(length(high),1)-setjit4,P_dh/0.25,[],'bv','Filled')
-
-xlim([-0.5 1.5])
-set(gca,'xtick',[0 1],'xticklabels',{'Low Drag','High Drag'})
-ylabel('Estimated Power (W), P = (D*U)/(\eta_p*\eta_m)') % includes chemical efficiency
-box on
-adjustfigurefont
-text(-.4,4350,'B','FontSize',14,'FontWeight','Bold')
-print('Eg3911_PTPO.eps','-depsc','-r300')
+%subplot(122); hold on
+% setjit1 = rand(length(low),1)/4; setjit2 = rand(length(low),1)/4;
+% setjit3 = rand(length(high),1)/4; setjit4 = rand(length(high),1)/4;
+% % error bars?
+% for i = 1:length(low)
+% plot([0+setjit1(i) 0+setjit1(i)],[P_al_lower(i)/0.25 P_al_upper(i)/0.25],'k') % aerobic efficiency
+% plot([0-setjit2(i) 0-setjit2(i)],[P_dl_lower(i)/0.25 P_dl_upper(i)/0.25],'k')
+% end
+% for i = 1:length(high)
+% plot([1+setjit3(i) 1+setjit3(i)],[P_ah_lower(i)/0.25 P_ah_upper(i)/0.25],'b')
+% plot([1-setjit4(i) 1-setjit4(i)],[P_dh_lower(i)/0.25 P_dh_upper(i)/0.25],'b')
+% end
+% % plot triangles
+% scatter(zeros(length(low),1)+setjit1,P_al/0.25,[],'k^','MarkerFaceColor','w')
+% scatter(zeros(length(low),1)-setjit2,P_dl/0.25,[],'kv','Filled')
+% scatter(ones(length(high),1)+setjit3,P_ah/0.25,[],'b^','MarkerFaceColor','w')
+% scatter(ones(length(high),1)-setjit4,P_dh/0.25,[],'bv','Filled')
+% 
+% xlim([-0.5 1.5])
+% set(gca,'xtick',[0 1],'xticklabels',{'Low Drag','High Drag'})
+% ylabel('Estimated Power (W), P = (D*U)/(\eta_p*\eta_m)') % includes chemical efficiency
+% box on
+% adjustfigurefont
+% text(-.4,4350,'B','FontSize',14,'FontWeight','Bold')
+% print('Eg3911_PTPO.eps','-depsc','-r300')
 
 % values for Table 2 in paper
 % [nanmean(P_dl/0.25) nanstd(P_dl/0.25)]
@@ -136,13 +110,26 @@ power_highdrag_low = (Dtot_high_lower.*U)./nanmean(eta_high(:));
 power_highdrag_up = (Dtot_high_upper.*U)./nanmean(eta_high(:));
 
 
-figure(30); hold on
+subplot(122); hold on
 plot(U,power_lowdrag,'k'); plot(U,power_lowdrag_low,'k:'); plot(U,power_lowdrag_up,'k:')
 plot(U,power_highdrag,'b'); plot(U,power_highdrag_low,'b:'); plot(U,power_highdrag_up,'b:')
-plot(asc_maxspeed(low),P_al,'k^')
-plot(asc_maxspeed(high),P_ah,'b^')
+% error bars
+for i = 1:length(low)
+plot([asc_maxspeed(low(i)) asc_maxspeed(low(i))],[P_al_lower(i) P_al_upper(i)],'k')
+plot([desc_maxspeed(low(i)) desc_maxspeed(low(i))],[P_dl_lower(i) P_dl_upper(i)],'k')
+end
+for i = 1:length(high)
+plot([asc_maxspeed(high(i)) asc_maxspeed(high(i))],[P_ah_lower(i) P_ah_upper(i)],'b')
+plot([desc_maxspeed(high(i)) desc_maxspeed(high(i))],[P_dh_lower(i) P_dh_upper(i)],'b')
+end
+plot(asc_maxspeed(low),P_al,'k^','markerfacecolor','w')
+plot(asc_maxspeed(high),P_ah,'b^','markerfacecolor','w')
 scatter(desc_maxspeed(high),P_dh,'bv','filled')
 scatter(desc_maxspeed(low),P_dl,'kv','filled')
-xlabel('Speed (m/s)'); ylabel('Power (W)')
-xlim([0 1.5]); ylim([0 2000])
+xlabel('Speed (m/s)'); ylabel('Thrust Power (W), P = (D*U)/\eta_p')
+xlim([0 1.5]); ylim([0 1800]); box on
+text(0.09,1700,'B','FontSize',14,'FontWeight','Bold')
 adjustfigurefont
+
+cd /Users/julievanderhoop/Documents/MATLAB/Eg4057/AnalysisFigs
+print('Eg3911_PTspeed.png','-dpng','-r300')
