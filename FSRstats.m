@@ -17,7 +17,7 @@ hz_all = vertcat(hz_all_3911,hz_all_4057);
 indv = vertcat(repmat(3911,length(hz_all_3911),1),repmat(4057,length(hz_all_4057),1));
 
 % make accompanying vector of condition. should be high/low x 4  
-highlow = vertcat(ones(53,1),zeros(101,1)); % condition order for 3911size(
+highlow = vertcat(ones(53,1),zeros(101,1)); % condition order for 3911
 lowhigh = vertcat(zeros(11,1),ones(6,1)); % condition order for 4057
 cond = vertcat(repmat(highlow,4,1),repmat(lowhigh,4,1));
 
@@ -28,6 +28,9 @@ phase_hz = vertcat(-ones(length(hz_d_3911),1),zeros(length(hz_b_3911),1),ones(le
 % three way anova individual, phase, condition
 [p,t,stats] = anovan(hz_all,{indv,phase_hz,cond},'varnames',{'Individual','Phase','Condition'});
 [c,m,h,names] = multcompare(stats,'dim',3);
+
+% print diff mean SD values for conditions, phases, individuals
+[nanmean(hz_all(indv == 3911 & cond == 1 & phase_hz == 2)) nanstd(hz_all(indv == 3911 & cond == 1 & phase_hz == 2))]
 
 return
 
