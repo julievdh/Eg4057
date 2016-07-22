@@ -14,8 +14,8 @@ scatter(desc_maxspeed(low),CT_DE_d_atspeed(low),'kv','filled') % disentangled de
 % plot all mean/SDs
 plot([0.1 0.1],[mean(CT_E_d_atspeed(high))-std(CT_E_d_atspeed(high)) mean(CT_E_d_atspeed(high))+std(CT_E_d_atspeed(high))],'b')
 plot(0.1,mean(CT_E_d_atspeed(high)),'bv','markerfacecolor','b') % entangled descent
-plot([0.15 0.15],[mean(CT_E_a_atspeed(high))-std(CT_E_a_atspeed(high)) mean(CT_E_a_atspeed(high))+std(CT_E_a_atspeed(high))],'b')
-plot(0.15,mean(CT_E_a_atspeed(high)),'b^','markerfacecolor','w') % entangled ascent
+plot([0.15 0.15],[nanmean(CT_E_a_atspeed(high))-nanstd(CT_E_a_atspeed(high)) nanmean(CT_E_a_atspeed(high))+nanstd(CT_E_a_atspeed(high))],'b')
+plot(0.15,nanmean(CT_E_a_atspeed(high)),'b^','markerfacecolor','w') % entangled ascent
 plot([0.2 0.2],[mean(CT_DE_d_atspeed(low))-std(CT_DE_d_atspeed(low)) mean(CT_DE_d_atspeed(low))+std(CT_DE_d_atspeed(low))],'k')
 plot(0.2,mean(CT_DE_d_atspeed(low)),'kv','markerfacecolor','k')
 plot([0.25 0.25],[mean(CT_DE_a_atspeed(low))-std(CT_DE_a_atspeed(low)) mean(CT_DE_a_atspeed(low))+std(CT_DE_a_atspeed(low))],'k')
@@ -39,8 +39,8 @@ scatter(desc_maxspeed(low),ni_DE_d_atspeed(low),'kv','filled')
 % plot all mean/SDs
 plot([0.1 0.1],[mean(ni_E_d_atspeed(high))-std(ni_E_d_atspeed(high)) mean(ni_E_d_atspeed(high))+std(ni_E_d_atspeed(high))],'b')
 plot(0.1,mean(ni_E_d_atspeed(high)),'bv','markerfacecolor','b') % entangled descent
-plot([0.15 0.15],[mean(ni_E_a_atspeed(high))-std(ni_E_a_atspeed(high)) mean(ni_E_a_atspeed(high))+std(ni_E_a_atspeed(high))],'b')
-plot(0.15,mean(ni_E_a_atspeed(high)),'b^','markerfacecolor','w') % entangled ascent
+plot([0.15 0.15],[nanmean(ni_E_a_atspeed(high))-nanstd(ni_E_a_atspeed(high)) nanmean(ni_E_a_atspeed(high))+nanstd(ni_E_a_atspeed(high))],'b')
+plot(0.15,nanmean(ni_E_a_atspeed(high)),'b^','markerfacecolor','w') % entangled ascent
 plot([0.2 0.2],[mean(ni_DE_d_atspeed(low))-std(ni_DE_d_atspeed(low)) mean(ni_DE_d_atspeed(low))+std(ni_DE_d_atspeed(low))],'k')
 plot(0.2,mean(ni_DE_d_atspeed(low)),'kv','markerfacecolor','k')
 plot([0.25 0.25],[mean(ni_DE_a_atspeed(low))-std(ni_DE_a_atspeed(low)) mean(ni_DE_a_atspeed(low))+std(ni_DE_a_atspeed(low))],'k')
