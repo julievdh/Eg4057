@@ -77,15 +77,17 @@ Dtot_low_upper = whaleDf*1.1 + 20.34 + 7.5*1.1;
 % animal across range of speeds
 
 % plot
-figure(1); clf; hold on
+figure(1); clf
+subplot(121); hold on
 h1 = plot(U,Dtot_highdrag,'b'); plot(U,Dtot_high_lower,'b:',U,Dtot_high_upper,'b:');
 h2 = plot(U,Dtot_lowdrag,'k'); plot(U,Dtot_low_lower,'k:',U,Dtot_low_upper,'k:');
 h3 = plot(U,whaleDf); 
 h4 = plot(U,whaleDf_lower,':',U,whaleDf_upper,':');
 set([h3; h4],'color',[0.75 0.75 0.75])
 xlabel('Speed (m/s)'); ylabel('Drag (N)')
-legend([h1 h2 h3],'Entangled','Disentangled','Not Entangled','Location','NW')
-adjustfigurefont
+legend_h = legend([h1 h2 h3],'High Drag','Low Drag','Not Entangled');
+text(0.15,1130,'A','FontSize',20,'FontWeight','Bold')
+adjustfigurefont; xlim([0 2.5]); ylim([0 1200])
 print('Eg3911_Drag.eps','-depsc','-r300')
 
 % drag stats
@@ -192,7 +194,7 @@ PlotCTni
 % [mean(CT_DE_d_atspeed(low)) std(CT_DE_d_atspeed(low))]
 % [mean(CT_DE_a_atspeed(low)) std(CT_DE_a_atspeed(low))]
 % foldinc_d = mean(CT_E_d_atspeed)/mean(CT_DE_d_atspeed(low))
-% foldinc_a = mean(CT_E_a_atspeed)/mean(CT_DE_a_atspeed(low))
+% foldinc_a = nanmean(CT_E_a_atspeed)/mean(CT_DE_a_atspeed(low))
 
 condition = [ones(1,53) zeros(1,101) ones(1,53) zeros(1,101)];
 portion = [repmat(-1,1,154) repmat(1,1,154)];
@@ -204,13 +206,13 @@ allCT = vertcat(CT_E_d_atspeed',CT_DE_d_atspeed(low)',CT_E_a_atspeed',CT_DE_a_at
 % average non-entangled CT across the same range of speeds
 % disp('mean SD average non-entangled CT descent')
 % [mean(CT_NE_a(3:13)) std(CT_NE_d(3:13))]; % descent
-% disp('mean SD average non-entangled CT descent')
+% disp('mean SD average non-entangled CT ascent')
 % [mean(CT_NE_a(1:8)) std(CT_NE_a(1:8))]; % ascent
 foldinc_ne = [mean(CT_DE_d_atspeed(low))/mean(CT_NE_d(3:13))  mean(CT_DE_a_atspeed(low))/mean(CT_NE_a(1:8))]
 
 %%
 [mean(ni_E_d_atspeed) std(ni_E_d_atspeed)];
-[mean(ni_E_a_atspeed) std(ni_E_a_atspeed)];
+[nanmean(ni_E_a_atspeed) nanstd(ni_E_a_atspeed)];
 [mean(ni_DE_d_atspeed(low)) std(ni_DE_d_atspeed(low))];
 [mean(ni_DE_a_atspeed(low)) std(ni_DE_a_atspeed(low))];
 
@@ -388,3 +390,6 @@ efficiencyStats
 % power = D*U/efficiency
 computePower
 
+% SAVE DATA FOR ANALYSIS IN R
+cd /Users/julievanderhoop/Documents/MATLAB/Eg4057/
+save('allCT.mat','condition','portion','allCT','allni','allst','alleta','all_pt','-v6')

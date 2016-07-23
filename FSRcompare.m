@@ -1,4 +1,6 @@
 % Compare fluke stroke rate of two entangled whale tags
+clear all
+cd /Users/julievanderhoop/Documents/MATLAB/Eg4057/
 
 % load tags
 rw015a = load('rw11_015aprh.mat');
@@ -52,7 +54,7 @@ for i = 1:length(rw015a.T);
     
     % find fluke strokes
     ii = find(maxtab(:,1) > rw015a.T(i,1)*fs+start_asc(i) & maxtab(:,1) < rw015a.T(i,2)*fs);
-    plot(maxtab(ii,1),maxtab(ii,2),'*')
+    plot(maxtab(ii,1),maxtab(ii,2),'o')
     
     %     % calculate mean frequency
     count = size(ii,1);

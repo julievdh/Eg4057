@@ -18,8 +18,8 @@ scatter(zeros(length(low),1)+rand(length(low),1)/4,St_a(low),[],'k^')
 scatter(ones(length(high),1)+rand(length(high),1)/4,St_a(high),[],'b^')
 set(gca,'xtick',[0 1],'xticklabels',{'Low Drag','High Drag'})
 ylabel('Strouhal Number, \itSt')
-text(-0.4240,1.53,'A','FontSize',14,'FontWeight','Bold')
-box on; ylim([0 1.6]); xlim([-0.5 1.5])
+text(-0.4240,1.62,'A','FontSize',14,'FontWeight','Bold')
+box on; ylim([0 1.7]); xlim([-0.5 1.5])
 
 % plot efficiencies 
 subplot(122); hold on

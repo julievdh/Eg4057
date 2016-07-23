@@ -3,7 +3,8 @@
 % August/September 2015
 
 % get fluke stroke frequency, amplitude, speeds, St for every dive
-Strouhal; close all
+% Strouhal; close all
+load('eg3911_Stvars')
 
 low = 54:154;   % dives in low drag
 high = 1:53;    % dives in high drag

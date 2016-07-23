@@ -51,7 +51,7 @@ scatter(ones(length(high),1)-setjit4,P_dh,[],'bv','Filled')
 % [nanmean(P_dh) nanstd(P_dh)]
 % [nanmean(P_ah) nanstd(P_ah)]
 
-xlim([-0.5 1.5]); ylim([0 1800])
+% xlim([-0.5 1.5]); ylim([0 1800])
 set(gca,'xtick',[0 1],'xticklabels',{'Low Drag','High Drag'})
 ylabel('Thrust Power (W), P = (D*U)/\eta_p')
 box on
@@ -64,7 +64,7 @@ all_pt = vertcat(P_dh,P_dl,P_ah,P_al);
 % [p,t,stats] = anovan(all_pt,{condition portion},'varnames',{'Condition';'Dive Portion'});
 % [p,t,stats] = anovan(all_pt/0.25,{condition portion},'varnames',{'Condition';'Dive Portion'});
 finc_d = nanmean(P_dh)/nanmean(P_dl); % and same number if P_dh/0.25 and P_dl/0.25
-finc_a = nanmean(P_ah)/nanmean(P_dl);
+finc_a = nanmean(P_ah)/nanmean(P_al);
 
 %% 
 %subplot(122); hold on
@@ -99,6 +99,11 @@ finc_a = nanmean(P_ah)/nanmean(P_dl);
 % [nanmean(P_dh/0.25) nanstd(P_dh/0.25)]
 % [nanmean(P_ah/0.25) nanstd(P_ah/0.25)]
 
+% All Descents vs. All Ascents
+nanmean([P_dl; P_dh]);
+nanmean([P_al; P_ah]);
+nanmean([P_al; P_ah])/nanmean([P_dl; P_dh]);
+
 %% Plot power vs. speed
 % calculate expected from theoretical
 power_lowdrag = (Dtot_lowdrag.*U)./nanmean(eta_low(:));
@@ -127,7 +132,7 @@ plot(asc_maxspeed(high),P_ah,'b^','markerfacecolor','w')
 scatter(desc_maxspeed(high),P_dh,'bv','filled')
 scatter(desc_maxspeed(low),P_dl,'kv','filled')
 xlabel('Speed (m/s)'); ylabel('Thrust Power (W), P = (D*U)/\eta_p')
-xlim([0 1.5]); ylim([0 1800]); box on
+% xlim([0 1.5]); ylim([0 1800]); box on
 text(0.09,1700,'B','FontSize',14,'FontWeight','Bold')
 adjustfigurefont
 
