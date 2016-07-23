@@ -96,6 +96,9 @@ scatter(zeros(length(hz_all(phase_hz == 2 & cond == 1 & indv == 3911)),1)+95-ran
 scatter(zeros(length(hz_all(phase_hz == 2 & cond == 1 & indv == 4057)),1)+95-rand(length(hz_all(phase_hz == 2 & cond == 1 & indv == 4057)),1)*4,...
     hz_all(phase_hz == 2 & cond == 1 & indv == 4057),'bs') % entangled surf 4057
 
+text(2.6,0.4,'Low Drag','rotation',90,'FontSize',12)
+text(7.7,0.4,'High Drag','rotation',90,'color','b','FontSize',12)
+
 adjustfigurefont
 cd /Users/julievanderhoop/Documents/MATLAB/Eg4057/AnalysisFigs
 print -dpdf DivePhaseHz

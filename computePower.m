@@ -45,17 +45,27 @@ scatter(zeros(length(low),1)-setjit2,P_dl,[],'kv','Filled')
 scatter(ones(length(high),1)+setjit3,P_ah,[],'b^','MarkerFaceColor','w')
 scatter(ones(length(high),1)-setjit4,P_dh,[],'bv','Filled')
 
+% plot overall mean/SDs
+plot([-0.4 -0.4],[nanmean(P_dl)-nanstd(P_dl) nanmean(P_dl)+nanstd(P_dl)],'k')
+plot(-0.4,nanmean(P_dl),'kv','markerfacecolor','k') % disentangled descent
+plot([0.4 0.4],[nanmean(P_al)-nanstd(P_al) nanmean(P_al)+nanstd(P_al)],'k')
+plot(0.4,nanmean(P_al),'k^','markerfacecolor','w') % disentangled ascent
+plot([0.6 0.6],[nanmean(P_dh)-nanstd(P_dh) nanmean(P_dh)+nanstd(P_dh)],'b')
+plot(0.6,nanmean(P_dh),'bv','markerfacecolor','b') % entangled descent
+plot([1.4 1.4],[nanmean(P_ah)-nanstd(P_ah) nanmean(P_ah)+nanstd(P_ah)],'b')
+plot(1.4,nanmean(P_ah),'b^','markerfacecolor','w') % entangled ascent
+
 % values for Table 2 in paper
 % [nanmean(P_dl) nanstd(P_dl)]
 % [nanmean(P_al) nanstd(P_al)]
 % [nanmean(P_dh) nanstd(P_dh)]
 % [nanmean(P_ah) nanstd(P_ah)]
 
-% xlim([-0.5 1.5]); ylim([0 1800])
+xlim([-0.5 1.5]); ylim([0 4200])
 set(gca,'xtick',[0 1],'xticklabels',{'Low Drag','High Drag'})
 ylabel('Thrust Power (W), P = (D*U)/\eta_p')
 box on
-text(-.4,1700,'A','FontSize',14,'FontWeight','Bold')
+text(-.4,4000,'A','FontSize',14,'FontWeight','Bold')
 
 
 %% stats
@@ -132,8 +142,8 @@ plot(asc_maxspeed(high),P_ah,'b^','markerfacecolor','w')
 scatter(desc_maxspeed(high),P_dh,'bv','filled')
 scatter(desc_maxspeed(low),P_dl,'kv','filled')
 xlabel('Speed (m/s)'); ylabel('Thrust Power (W), P = (D*U)/\eta_p')
-% xlim([0 1.5]); ylim([0 1800]); box on
-text(0.09,1700,'B','FontSize',14,'FontWeight','Bold')
+xlim([0 1.5]); ylim([0 4200]); box on
+text(0.09,4000,'B','FontSize',14,'FontWeight','Bold')
 adjustfigurefont
 
 cd /Users/julievanderhoop/Documents/MATLAB/Eg4057/AnalysisFigs
