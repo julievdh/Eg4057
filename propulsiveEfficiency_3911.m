@@ -167,6 +167,7 @@ set(h,'color',[0.5 0.5 0.5])
 title('Ascent')
 xlabel('Speed (m/s)'); ylabel('Ideal Efficiency, n_i')
 adjustfigurefont
+cd /Users/julievanderhoop/Documents/MATLAB/Eg4057/AnalysisFigs
 print('Eg3911_IdealEfficiency.eps','-depsc','-r300')
 
 %% Get ideal efficiency for actual speeds of descent and ascent
@@ -201,7 +202,7 @@ portion = [repmat(-1,1,154) repmat(1,1,154)];
 allCT = vertcat(CT_E_d_atspeed',CT_DE_d_atspeed(low)',CT_E_a_atspeed',CT_DE_a_atspeed(low)');
 % boxplot(allCT,{condition portion});
 % two-way ANOVA
-[p,t,stats] = anovan(allCT,{condition portion},'model','interaction','varnames',{'Condition';'Dive Portion'});
+% [p,t,stats] = anovan(allCT,{condition portion},'model','interaction','varnames',{'Condition';'Dive Portion'});
 
 % average non-entangled CT across the same range of speeds
 % disp('mean SD average non-entangled CT descent')

@@ -37,16 +37,14 @@ subplot(122); hold on
 % low drag descent
 setjit4 = rand(length(low),1)/4;
 scatter(zeros(length(low),1)-setjit4,eta_low(:,1),[],'kv','filled')
-plot([-0.4 -0.4],[nanmean(eta_low(:,1))-nanstd(eta_low(:,1)) nanmean(eta_low(:,1))+nanstd(eta_low(:,1))],'k')
-plot(-0.4,nanmean(eta_low(:,1)),'kv','markerfacecolor','k') 
 
 %ii = find(alpha_low(:,1) == 109 | alpha_low(:,1) == 159); % find harmonic
 %scatter(zeros(length(ii),1)-setjit4(ii),eta_low(ii,1),[],'rv')
 % high drag descent
 setjit4 = rand(length(high),1)/4;
 scatter(ones(length(high),1)-setjit4,eta_high(:,1),[],'bv','filled')
-plot([0.6 0.6],[nanmean(eta_high(:,1))-nanstd(eta_high(:,1)) nanmean(eta_high(:,1))+nanstd(eta_high(:,1))],'b')
-plot(0.6,nanmean(eta_high(:,1)),'bv','markerfacecolor','b') 
+plot([0.4 0.4],[nanmean(eta_high(:,1))-nanstd(eta_high(:,1)) nanmean(eta_high(:,1))+nanstd(eta_high(:,1))],'b')
+plot(0.4,nanmean(eta_high(:,1)),'bv','markerfacecolor','b') 
 
 %ii = find(alpha_high(:,1) == 109 | alpha_high(:,1) == 159); % find harmonic
 %scatter(ones(length(ii),1)-setjit4(ii),eta_high(ii,1),[],'rv')
