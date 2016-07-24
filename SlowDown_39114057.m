@@ -1,61 +1,53 @@
+% Instead of POWER (becauses uses efficiency that we later derive, use just
+% DRAG)
 
-% fit curves to low and high power data
-[low3911(1), low3911(2)] = curve_fit(U,power_lowdrag);
-[high3911(1), high3911(2)] = curve_fit(U,power_highdrag);
+% find nearest ascent/descent speeds in speed vector
+load('rw015a_descasc')
+ind_aU = nearest(U', asc_vspeed_3911'); % find indices for ascent
+ind_dU = nearest(U', desc_vspeed_3911'); % find indices for descent
 
-u_HR = 0.1:0.01:1.5; % high resolution speed vector
+% set drag conditions
+high = 1:53; low = 54:154; 
 
+% fit high drag
+ph = polyfit(Dtot_highdrag,U,2);
+yh = polyval(ph,Dtot_highdrag);
 figure(90); clf; hold on
-xlim([0 1.5]); ylim([0 4000])
-% plot(U,power_highdrag)
-% plot(U,power_lowdrag)
-plot(u_HR,low3911(1).*u_HR.^low3911(2))
-plot(u_HR,high3911(1).*u_HR.^high3911(2))
+plot(Dtot_highdrag,U,'o',Dtot_highdrag,yh)
+ylabel('Speed'); xlabel('Drag (N)')
+pn = polyfit(whaleDf,U,2);
+yn = polyval(pn,whaleDf);
+plot(whaleDf,U,'o',whaleDf,yn)
 
-% make high res curves
-low_HR = low3911(1).*u_HR.^low3911(2);
-high_HR = high3911(1).*u_HR.^high3911(2);
-ind_aHR = nearest(u_HR', asc_vspeed'); % find indices for ascent
-ind_dHR = nearest(u_HR', desc_vspeed'); % find indices for descent
+% find all drag values at descent and ascent speeds
+test_dh = polyval(ph,Dtot_highdrag(ind_dU(high))); % HIGH DRAG VALUES FOR DESCENTS -- OBSERVED
+test_dn = polyval(pn,whaleDf(ind_dU(low))); % LOW DRAG VALUES FOR DESCENTS --
+%OBSERVED
+test_dEXP = polyval(ph,whaleDf(ind_dU(low))); % EXPECTED
 
-% plot at ascent speeds
-plot(u_HR(ind_aHR),high_HR(ind_aHR),'ko')
-plot(u_HR(ind_aHR),low_HR(ind_aHR),'ko')
-plot(u_HR(ind_dHR),high_HR(ind_dHR),'ko')
-plot(u_HR(ind_dHR),low_HR(ind_dHR),'ko')
+test_ah = polyval(ph,Dtot_highdrag(ind_aU(high))); % OBSERVED HIGH DRAG
+test_an = polyval(pn,whaleDf(ind_aU(low))); % OBSERVED LOW DRAG
+test_aEXP = polyval(ph,whaleDf(ind_aU(low))); % EXPECTED
+%%
+plot(Dtot_highdrag(ind_dU(high)),test_dh,'g*')
+plot(whaleDf(ind_dU(low)),test_dn,'g*')
+plot(whaleDf(ind_dU(low)),test_dEXP,'r*')
+plot(Dtot_highdrag(ind_aU(high)),test_ah,'b*') % observed high drag
+plot(Dtot_highdrag(ind_aU(low)),test_an,'b*') % observed low drag
+plot(whaleDf(ind_aU(low)),test_aEXP,'k*')
 
-kx_a = nearest(high_HR',low_HR(ind_aHR)'); % find nearest value of high drag power for low drag
-kx_d = nearest(high_HR',low_HR(ind_dHR)'); % find nearest value of high drag power for low drag
+dEXP = [mean(test_dEXP) std(test_dEXP)];
+ii = find(test_aEXP > 0); 
+aEXP = [mean(test_aEXP(ii)) std(test_aEXP(ii))];
 
-for i = 1:length(kx_a)
-    % ascents
-    %plot(u_HR(ind_aHR(i)),low_HR(ind_aHR(i)),'c*')
-    %plot(u_HR(kx_a(i)),high_HR(kx_a(i)),'b*')
-    %plot([u_HR(ind_aHR(i)) u_HR(kx_a(i))],[low_HR(ind_aHR(i)) low_HR(ind_aHR(i))])
-    % descent
-    plot(u_HR(ind_dHR(i)),low_HR(ind_dHR(i)),'c*')
-    plot(u_HR(kx_d(i)),high_HR(kx_d(i)),'b*')
-    plot([u_HR(ind_dHR(i)) u_HR(kx_d(i))],[low_HR(ind_dHR(i)) low_HR(ind_dHR(i))]) 
-end
+e_preduc(:,1) = (mean(desc_vspeed_3911(low) - mean(test_dEXP))./mean(desc_vspeed_3911(low)));
+e_preduc(:,2) = (mean(asc_vspeed_3911(low) - mean(test_aEXP(ii)))./mean(desc_vspeed_3911(low)));
 
-obs_speed = [u_HR(ind_dHR)' u_HR(ind_aHR)'];
-slow_speed = [u_HR(kx_d)' u_HR(kx_a)'];
+o_preduc(:,1) = (mean(desc_vspeed_3911(low))-mean(desc_vspeed_3911(high)))./mean(desc_vspeed_3911(low));
+o_preduc(:,2) = (mean(asc_vspeed_3911(low))-mean(asc_vspeed_3911(high)))./mean(asc_vspeed_3911(low));
 
-high = 1:53; low = 54:154;
-[mean(obs_speed(low,:)) std(obs_speed(low,:))] % mean descent and ascent /SD for observed (to check)
-[mean(slow_speed(low,:)) std(slow_speed(low,:))] % mean descent and ascent /SD reduced speeds
-
-% e_preduc(:,1) = abs(obs_speed(high,1)-slow_speed(high,1))./obs_speed(high,1); % expected percent reduction on descent
-% e_preduc(:,2) = abs(obs_speed(high,2)-slow_speed(high,2))./obs_speed(high,2); % expected percent reduction on ascent
-% 
-% o_preduc(:,1) = (mean(desc_vspeed(low))-mean(desc_vspeed(high)))./mean(desc_vspeed(low));
-% o_preduc(:,2) = (mean(asc_vspeed(low))-mean(asc_vspeed(high)))./mean(asc_vspeed(low));
-
-
-%% 
-keep eta_low eta_high
-
-% 4057
+return
+%% 4057
 %% 1. Drag estimates
 
 % length, m
@@ -131,14 +123,17 @@ Dtot_high_upper = whaleDf_E*1.1 + 105.3021*1.07 + 7.5*1.1;
 % animal across range of speeds
 
 % plot
-figure(1); clf; hold on
+figure(1);
+subplot(122); hold on
 h1 = plot(U,Dtot_highdrag,'b'); plot(U,Dtot_high_lower,'b:',U,Dtot_high_upper,'b:');
 h2 = plot(U,Dtot_lowdrag,'k'); plot(U,Dtot_low_lower,'k:',U,Dtot_low_upper,'k:');
 h3 = plot(U,whaleDf); 
 h4 = plot(U,whaleDf_lower,':',U,whaleDf_upper,':');
 set([h3; h4],'color',[0.75 0.75 0.75])
 xlabel('Speed (m/s)'); ylabel('Drag (N)')
-legend([h1 h2 h3],'Entangled','Disentangled','Not Entangled','Location','NW')
+% legend([h1 h2 h3],'High Drag','Low Drag','Not Entangled','Location','NW')
+text(0.15,1130,'B','FontSize',20,'FontWeight','Bold')
+xlim([0 2.5])
 adjustfigurefont
 print('Eg4057_Drag.eps','-depsc','-r300')
 
@@ -204,28 +199,28 @@ ind_d = nearest(U', desc_vspeed_4057');
 
 %%
 
-ind_aHR = nearest(u_HR', asc_vspeed_4057'); % find indices for ascent
-ind_dHR = nearest(u_HR', desc_vspeed_4057'); % find indices for descent
+ind_aU = nearest(u_HR', asc_vspeed_4057'); % find indices for ascent
+ind_dU = nearest(u_HR', desc_vspeed_4057'); % find indices for descent
 
 % plot at ascent speeds
-plot(u_HR(ind_aHR),high_HR(ind_aHR),'ko')
-plot(u_HR(ind_aHR),low_HR(ind_aHR),'ko')
-plot(u_HR(ind_dHR),high_HR(ind_dHR),'ko')
-plot(u_HR(ind_dHR),low_HR(ind_dHR),'ko')
+plot(u_HR(ind_aU),high_HR(ind_aU),'ko')
+plot(u_HR(ind_aU),low_HR(ind_aU),'ko')
+plot(u_HR(ind_dU),high_HR(ind_dU),'ko')
+plot(u_HR(ind_dU),low_HR(ind_dU),'ko')
 
-kx_a = nearest(high_HR',low_HR(ind_aHR)'); % find nearest value of high drag power for low drag
-kx_d = nearest(high_HR',low_HR(ind_dHR)'); % find nearest value of high drag power for low drag
+kx_a = nearest(high_HR',low_HR(ind_aU)'); % find nearest value of high drag power for low drag
+kx_d = nearest(high_HR',low_HR(ind_dU)'); % find nearest value of high drag power for low drag
 
     % ascents
-    plot(u_HR(ind_aHR(low)),low_HR(ind_aHR(low)),'c*')
+    plot(u_HR(ind_aU(low)),low_HR(ind_aU(low)),'c*')
     plot(u_HR(kx_a(low)),high_HR(kx_a(low)),'b*')
-    plot([u_HR(ind_aHR(low)) u_HR(kx_a(low))],[low_HR(ind_aHR(low)) low_HR(ind_aHR(low))])
+    plot([u_HR(ind_aU(low)) u_HR(kx_a(low))],[low_HR(ind_aU(low)) low_HR(ind_aU(low))])
     % descent
-    plot(u_HR(ind_dHR(i)),low_HR(ind_dHR(i)),'c*')
+    plot(u_HR(ind_dU(i)),low_HR(ind_dU(i)),'c*')
     plot(u_HR(kx_d(i)),high_HR(kx_d(i)),'b*')
-    plot([u_HR(ind_dHR(i)) u_HR(kx_d(i))],[low_HR(ind_dHR(i)) low_HR(ind_dHR(i))]) 
+    plot([u_HR(ind_dU(i)) u_HR(kx_d(i))],[low_HR(ind_dU(i)) low_HR(ind_dU(i))]) 
 
-obs_speed = [u_HR(ind_dHR)' u_HR(ind_aHR)'];
+obs_speed = [u_HR(ind_dU)' u_HR(ind_aU)'];
 slow_speed = [u_HR(kx_d)' u_HR(kx_a)'];
 %%
 [mean(obs_speed(low,:)) std(obs_speed(low,:))] % mean descent and ascent /SD for observed (to check)
