@@ -45,10 +45,17 @@ e_preduc(:,2) = (mean(asc_vspeed_3911(low) - mean(test_aEXP))./mean(desc_vspeed_
 o_preduc(:,1) = (mean(desc_vspeed_3911(low))-mean(desc_vspeed_3911(high)))./mean(desc_vspeed_3911(low));
 o_preduc(:,2) = (mean(asc_vspeed_3911(low))-mean(asc_vspeed_3911(high)))./mean(asc_vspeed_3911(low));
 
+[mean(desc_vspeed_3911(low)) std(desc_vspeed_3911(low))];
+[mean(desc_vspeed_3911(high)) std(desc_vspeed_3911(high))];
+[mean(asc_vspeed_3911(low)) std(asc_vspeed_3911(low))];
+[mean(asc_vspeed_3911(high)) std(asc_vspeed_3911(high))];
+
+[h,p,ci,stats] = ttest2(asc_vspeed_3911(low),asc_vspeed_3911(high));
+[h,p,ci,stats] = ttest2(desc_vspeed_3911(low),desc_vspeed_3911(high));
+
 return
 %% 4057
 %% 1. Drag estimates
-
 % length, m
 whaleAge = 3;
 l = 1011.033+320.501*log10(whaleAge); % MOORE ET AL 2004 in cm;
@@ -149,32 +156,6 @@ print('Eg4057_Drag.eps','-depsc','-r300')
 % pinc = mean((Dtot_highdrag-whaleDf)./whaleDf);
 % pdec = mean((Dtot_lowdrag-Dtot_highdrag)./Dtot_highdrag);
 
-%% calculate Power
-power_lowdrag = (Dtot_lowdrag.*U)./nanmean(eta_low(:));
-power_lowdrag_low = (Dtot_low_lower.*U)./nanmean(eta_low(:));
-power_lowdrag_up = (Dtot_low_upper.*U)./nanmean(eta_low(:));
-
-power_highdrag = (Dtot_highdrag.*U)./nanmean(eta_high(:));
-power_highdrag_low = (Dtot_high_lower.*U)./nanmean(eta_high(:));
-power_highdrag_up = (Dtot_high_upper.*U)./nanmean(eta_high(:));
-
-% fit curves to low and high power data
-[low4057(1), low4057(2)] = curve_fit(U,power_lowdrag);
-[high4057(1), high4057(2)] = curve_fit(U,power_highdrag);
-
-u_HR = 0.1:0.01:1.5; % high resolution speed vector
-
-figure(90); clf; hold on
-xlim([0 1.5]); ylim([0 4000])
-% plot(U,power_highdrag)
-% plot(U,power_lowdrag)
-plot(u_HR,low4057(1).*u_HR.^low4057(2))
-plot(u_HR,high4057(1).*u_HR.^high4057(2))
-
-%% make high res curves
-low_HR = low4057(1).*u_HR.^low4057(2);
-high_HR = high4057(1).*u_HR.^high4057(2);
-
 %% get vertical speeds
 % calculate mean vertical speed
 eg047a = load('eg14_047aprh.mat'); fs = 5;
@@ -198,35 +179,41 @@ ind_d = nearest(U', desc_vspeed_4057');
 
 %%
 
-ind_aU = nearest(u_HR', asc_vspeed_4057'); % find indices for ascent
-ind_dU = nearest(u_HR', desc_vspeed_4057'); % find indices for descent
+ind_aU = nearest(U', asc_vspeed_4057'); % find indices for ascent
+ind_dU = nearest(U', desc_vspeed_4057'); % find indices for descent
 
-% plot at ascent speeds
-plot(u_HR(ind_aU),high_HR(ind_aU),'ko')
-plot(u_HR(ind_aU),low_HR(ind_aU),'ko')
-plot(u_HR(ind_dU),high_HR(ind_dU),'ko')
-plot(u_HR(ind_dU),low_HR(ind_dU),'ko')
+% fit high drag
+ph = polyfit(Dtot_highdrag,U,2);
+yh = polyval(ph,Dtot_highdrag);
+figure(90); clf; hold on
+plot(Dtot_highdrag,U,'o',Dtot_highdrag,yh)
+ylabel('Speed'); xlabel('Drag (N)')
+pn = polyfit(Dtot_lowdrag,U,2);
+yn = polyval(pn,Dtot_lowdrag);
+plot(Dtot_lowdrag,U,'o',Dtot_lowdrag,yn)
 
-kx_a = nearest(high_HR',low_HR(ind_aU)'); % find nearest value of high drag power for low drag
-kx_d = nearest(high_HR',low_HR(ind_dU)'); % find nearest value of high drag power for low drag
+% find all drag values at descent and ascent speeds
+test_dh = polyval(ph,Dtot_highdrag(ind_dU(high))); % HIGH DRAG VALUES FOR DESCENTS -- OBSERVED
+test_dn = polyval(pn,Dtot_lowdrag(ind_dU(low))); % LOW DRAG VALUES FOR DESCENTS --
+%OBSERVED
+test_dEXP = polyval(ph,Dtot_lowdrag(ind_dU(low))); % EXPECTED
 
-    % ascents
-    plot(u_HR(ind_aU(low)),low_HR(ind_aU(low)),'c*')
-    plot(u_HR(kx_a(low)),high_HR(kx_a(low)),'b*')
-    plot([u_HR(ind_aU(low)) u_HR(kx_a(low))],[low_HR(ind_aU(low)) low_HR(ind_aU(low))])
-    % descent
-    plot(u_HR(ind_dU(i)),low_HR(ind_dU(i)),'c*')
-    plot(u_HR(kx_d(i)),high_HR(kx_d(i)),'b*')
-    plot([u_HR(ind_dU(i)) u_HR(kx_d(i))],[low_HR(ind_dU(i)) low_HR(ind_dU(i))]) 
-
-obs_speed = [u_HR(ind_dU)' u_HR(ind_aU)'];
-slow_speed = [u_HR(kx_d)' u_HR(kx_a)'];
+test_ah = polyval(ph,Dtot_highdrag(ind_aU(high))); % OBSERVED HIGH DRAG
+test_an = polyval(pn,Dtot_lowdrag(ind_aU(low))); % OBSERVED LOW DRAG
+test_aEXP = polyval(ph,Dtot_lowdrag(ind_aU(low))); % EXPECTED
 %%
-[mean(obs_speed(low,:)) std(obs_speed(low,:))] % mean descent and ascent /SD for observed (to check)
-[mean(slow_speed(low,:)) std(slow_speed(low,:))] % mean descent and ascent /SD reduced speeds
+plot(Dtot_highdrag(ind_dU(high)),test_dh,'g*')
+plot(Dtot_lowdrag(ind_dU(low)),test_dn,'g*')
+plot(Dtot_lowdrag(ind_dU(low)),test_dEXP,'r*')
+plot(Dtot_highdrag(ind_aU(high)),test_ah,'b*') % observed high drag
+plot(Dtot_highdrag(ind_aU(low)),test_an,'b*') % observed low drag
+plot(Dtot_lowdrag(ind_aU(low)),test_aEXP,'k*')
 
-% e_preduc(:,1) = abs(obs_speed(low,1)-slow_speed(low,1))./obs_speed(low,1); % expected percent reduction on descent
-% e_preduc(:,2) = abs(obs_speed(low,2)-slow_speed(low,2))./obs_speed(low,2); % expected percent reduction on ascent
-% 
-% o_preduc(:,1) = (mean(desc_vspeed_4057(low))-mean(desc_vspeed_4057(high)))./mean(desc_vspeed_4057(low));
-% o_preduc(:,2) = (mean(asc_vspeed_4057(low))-mean(asc_vspeed_4057(high)))./mean(asc_vspeed_4057(low));
+dEXP = [mean(test_dEXP) std(test_dEXP)];
+aEXP = [mean(test_aEXP) std(test_aEXP)];
+
+e_preduc(:,1) = (mean(desc_vspeed_4057(low) - mean(test_dEXP))./mean(desc_vspeed_4057(low)));
+e_preduc(:,2) = (mean(asc_vspeed_4057(low) - mean(test_aEXP))./mean(desc_vspeed_4057(low)));
+
+o_preduc(:,1) = (mean(desc_vspeed_4057(low))-mean(desc_vspeed_3911(high)))./mean(desc_vspeed_4057(low));
+o_preduc(:,2) = (mean(asc_vspeed_4057(low))-mean(asc_vspeed_3911(high)))./mean(asc_vspeed_4057(low));
