@@ -53,7 +53,6 @@ o_preduc(:,2) = (mean(asc_vspeed_3911(low))-mean(asc_vspeed_3911(high)))./mean(a
 [h,p,ci,stats] = ttest2(asc_vspeed_3911(low),asc_vspeed_3911(high));
 [h,p,ci,stats] = ttest2(desc_vspeed_3911(low),desc_vspeed_3911(high));
 
-return
 %% 4057
 %% 1. Drag estimates
 % length, m
@@ -62,7 +61,7 @@ l = 1011.033+320.501*log10(whaleAge); % MOORE ET AL 2004 in cm;
 l = l/100; % convert to m
 
 % speed, ms-1
-U = 0.3:0.1:2.5;
+U = 0.01:0.1:2.5;
 
 % kinematic viscosity of seawater, m2s-1
 v = 10^-6;
@@ -206,14 +205,14 @@ plot(Dtot_highdrag(ind_dU(high)),test_dh,'g*')
 plot(Dtot_lowdrag(ind_dU(low)),test_dn,'g*')
 plot(Dtot_lowdrag(ind_dU(low)),test_dEXP,'r*')
 plot(Dtot_highdrag(ind_aU(high)),test_ah,'b*') % observed high drag
-plot(Dtot_highdrag(ind_aU(low)),test_an,'b*') % observed low drag
-plot(Dtot_lowdrag(ind_aU(low)),test_aEXP,'k*')
+plot(Dtot_lowdrag(ind_aU(low)),test_an,'b*') % observed low drag
+plot(Dtot_lowdrag(ind_aU(low)),test_aEXP,'k*') % EXPECTED 
 
 dEXP = [mean(test_dEXP) std(test_dEXP)];
 aEXP = [mean(test_aEXP) std(test_aEXP)];
 
 e_preduc(:,1) = (mean(desc_vspeed_4057(low) - mean(test_dEXP))./mean(desc_vspeed_4057(low)));
-e_preduc(:,2) = (mean(asc_vspeed_4057(low) - mean(test_aEXP))./mean(desc_vspeed_4057(low)));
+e_preduc(:,2) = (mean(asc_vspeed_4057(low) - mean(test_aEXP))./mean(asc_vspeed_4057(low)));
 
-o_preduc(:,1) = (mean(desc_vspeed_4057(low))-mean(desc_vspeed_3911(high)))./mean(desc_vspeed_4057(low));
-o_preduc(:,2) = (mean(asc_vspeed_4057(low))-mean(asc_vspeed_3911(high)))./mean(asc_vspeed_4057(low));
+% o_preduc(:,1) = abs(mean(desc_vspeed_4057(low))-mean(desc_vspeed_3911(high)))./mean(desc_vspeed_4057(low));
+% o_preduc(:,2) = abs(mean(asc_vspeed_4057(low))-mean(asc_vspeed_3911(high)))./mean(asc_vspeed_4057(low));
