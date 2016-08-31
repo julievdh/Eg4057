@@ -76,7 +76,7 @@ Cf = 0.072*Re.^(-1/5);
 rho = 1025;
 
 % estimated whale mass
-M = 7000;
+M = 3169.39+1773.666*whaleAge;
 
 % estimated wetted surface area
 Sw = 0.08*M.^0.65;
@@ -152,8 +152,8 @@ print('Eg4057_Drag.eps','-depsc','-r300')
 % [h,p,ci,stats] = ttest(whaleDf,Dtot_highdrag);
 % [h,p,ci,stats] = ttest(Dtot_lowdrag,Dtot_highdrag);
 
-% pinc = mean((Dtot_highdrag-whaleDf)./whaleDf);
-% pdec = mean((Dtot_lowdrag-Dtot_highdrag)./Dtot_highdrag);
+% pinc = (mean(Dtot_lowdrag)-mean(whaleDf))./mean(whaleDf);
+% pinc2 = (mean(Dtot_highdrag)-mean(Dtot_lowdrag))./mean(Dtot_lowdrag);
 
 %% get vertical speeds
 % calculate mean vertical speed
