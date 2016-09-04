@@ -100,8 +100,8 @@ print('Eg3911_Drag.eps','-depsc','-r300')
 [h,p,ci,stats] = ttest(whaleDf,Dtot_highdrag);
 [h,p,ci,stats] = ttest(Dtot_lowdrag,Dtot_highdrag);
 
-pinc = mean((Dtot_highdrag-whaleDf)./whaleDf);
-pdec = mean((Dtot_lowdrag-Dtot_highdrag)./Dtot_highdrag);
+pinc = [mean((Dtot_highdrag-whaleDf)./whaleDf) std((Dtot_highdrag-whaleDf)./whaleDf)];
+pdec = [mean((Dtot_lowdrag-Dtot_highdrag)./Dtot_highdrag) std((Dtot_lowdrag-Dtot_highdrag)./Dtot_highdrag)];
 
 %% 2. Coefficient of Thrust based on Drag estimates
 ThrustCoefficient_3911
@@ -379,8 +379,8 @@ for i = 1:length(low)
         end
     end
 end
-
-print('Eg3911_eta_est','-dtiff','-r300')
+set(gcf,'paperpositionmode','auto')
+print('Eg3911_eta_est','-dpdf','-r300')
 
 
 %% Take efficiency and look at change in efficiency with entanglement

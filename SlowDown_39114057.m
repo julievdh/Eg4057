@@ -120,10 +120,10 @@ whaleDf_E = whaleDf*ye;
 %% 
 Dtot_lowdrag = whaleDf_E + 82 + 7.5; % low drag
 Dtot_highdrag = whaleDf_E + 124 + 7.5; % with telemetry buoy (high drag)
-Dtot_low_lower = whaleDf_E*0.9 + 82*0.93 + 7.5*0.9; % uncertainty due to gear drag estimates and oscillation parameter (use EstDrag)
-Dtot_low_upper = whaleDf_E*1.1 + 82*1.07 + 7.5*1.1;
-Dtot_high_lower = whaleDf_E*0.9 + 124*0.93 + 7.5*0.9;
-Dtot_high_upper = whaleDf_E*1.1 + 124.3021*1.07 + 7.5*1.1;
+Dtot_low_lower = whaleDf_E*0.9 + 82*0.9 + 7.5*0.9; % uncertainty due to gear drag estimates and oscillation parameter (use EstDrag)
+Dtot_low_upper = whaleDf_E*1.1 + 82*1.1 + 7.5*1.1;
+Dtot_high_lower = whaleDf_E*0.9 + 124*0.9 + 7.5*0.9;
+Dtot_high_upper = whaleDf_E*1.1 + 124.3021*1.1 + 7.5*1.1;
 % Dtot, Dtot_lower and Dtot_upper is the total entangled drag on each
 % animal across range of speeds
 
@@ -140,7 +140,7 @@ xlabel('Speed (m/s)'); ylabel('Drag (N)')
 text(0.15,1130,'B','FontSize',20,'FontWeight','Bold')
 xlim([0 2.5])
 adjustfigurefont
-print('Eg4057_Drag.eps','-depsc','-r300')
+print('Eg4057_Drag.svg','-dsvg','-r300')
 
 %% drag stats
 % two sample t to compare nonentangled and entangled drag, and entangled
@@ -152,6 +152,7 @@ print('Eg4057_Drag.eps','-depsc','-r300')
 % [h,p,ci,stats] = ttest(whaleDf,Dtot_highdrag);
 % [h,p,ci,stats] = ttest(Dtot_lowdrag,Dtot_highdrag);
 
+% these numbers are for Supplemental Figure 1
 % pinc = (mean(Dtot_lowdrag)-mean(whaleDf))./mean(whaleDf);
 % pinc2 = (mean(Dtot_highdrag)-mean(Dtot_lowdrag))./mean(Dtot_lowdrag);
 
